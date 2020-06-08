@@ -2,17 +2,16 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  build-and-test:
+  seek-and-publish-ts-modules:
     executor:
       name: node/default
     steps:
       - checkout
       - node/with-cache:
           steps:
-            - run: cd ./modules/typescript/aws-lambdas-multi-handler
-            - run: npm install
-            - run: npm test
+            - run: cd /home/circleci/project/tools/npm-publisher/ && npm install
+            - run: node /home/circleci/project/tools/npm-publisher
 workflows:
-    build-and-test:
+    publish-changed-ts-modules:
       jobs:
-        - build-and-test
+        - seek-and-publish-ts-modules
