@@ -1,0 +1,20 @@
+{
+  "name": "@updraft/aws-lambdas-multi-handler",
+  "version": "1.0.0",
+  "description": "CDK Module for deploying multiple lambda functions from one codebase (multiple handlers are exported from the index file)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-lambda": "^1.41.0",
+    "@aws-cdk/aws-route53": "^1.41.0",
+    "@aws-cdk/core": "^1.41.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.3"
+  }
+}
