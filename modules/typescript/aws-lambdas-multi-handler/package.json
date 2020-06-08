@@ -7,8 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm install && npm run build"
   },
   "dependencies": {
     "@aws-cdk/aws-lambda": "^1.41.0",
@@ -18,5 +17,5 @@
   "devDependencies": {
     "typescript": "^3.9.3"
   },
-  "gitHead": "e868cf857abe0253bb0a02d19d767199c8c8614b"
+  "gitHead": "45e4b151548df28991db10df80a31f521a38fcdf"
 }
