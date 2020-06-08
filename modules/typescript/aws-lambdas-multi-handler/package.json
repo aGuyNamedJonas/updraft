@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@aws-cdk/aws-lambda": "^1.41.0",
@@ -18,5 +18,5 @@
   "devDependencies": {
     "typescript": "^3.9.3"
   },
-  "gitHead": "46ffa3e5afbdf317138523b8556892bb5b01cd2f"
+  "gitHead": "e868cf857abe0253bb0a02d19d767199c8c8614b"
 }
