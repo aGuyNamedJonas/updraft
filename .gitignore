@@ -1,0 +1,3 @@
+# NPM ignores
+node_modules
+lib
