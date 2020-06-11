@@ -3,9 +3,6 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   seek-and-publish-ts-modules:
-    branches:
-      only:
-        - master
     executor:
       name: node/default
     steps:
@@ -17,5 +14,9 @@ jobs:
 workflows:
     publish-changed-ts-modules:
       jobs:
-        - seek-and-publish-ts-modules
-          context: updraft
+        - seek-and-publish-ts-modules:
+            filters:
+              branches:
+                only:
+                  - master
+            context: updraft
