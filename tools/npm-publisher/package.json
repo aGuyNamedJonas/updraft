@@ -1,0 +1,12 @@
+{
+  "name": "npm-publisher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "parse-diff": "^0.7.0"
+  }
+}

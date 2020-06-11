@@ -1,0 +1,22 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  seek-and-publish-ts-modules:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: cd /home/circleci/project/tools/npm-publisher/ && npm install
+            - run: node /home/circleci/project/tools/npm-publisher
+workflows:
+    publish-changed-ts-modules:
+      jobs:
+        - seek-and-publish-ts-modules:
+            filters:
+              branches:
+                only:
+                  - master
+            context: updraft
