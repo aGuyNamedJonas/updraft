@@ -77,8 +77,9 @@ const printVersionChanges = (tsModuleVersionUpgrades) => {
 
 const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   const publishPackageToNpm = async ({ fileName, filePath, version }) => {
+    const modulePath = path.join(__dirname, '../../', filePath)
     try {
-      await exec(`cd ${filePath} && npm install && npm run build && npm publish --access public`)
+      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`, { env: process.env })
     } catch (error) {
       printModuleAndVersion({ fileName, filePath, version, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
       throw new Error(error)
