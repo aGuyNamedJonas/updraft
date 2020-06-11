@@ -92,7 +92,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   try {
     await Promise.all(publishing)
   } catch (error) {
-    return
+    throw new Error(error)
   }
 
   console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? '' : `${tsModuleVersionUpgrades.length} modules successfully published to NPM`))
@@ -101,8 +101,6 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 const main = async () => {
   const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
-
-  // TODO: Add "npm publish --access public" for all upgraded ts repos
   printVersionChanges(tsModulesVersionUpgrades)
   publishVersionChanges(tsModulesVersionUpgrades)
 }
