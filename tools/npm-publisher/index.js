@@ -77,8 +77,9 @@ const printVersionChanges = (tsModuleVersionUpgrades) => {
 
 const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   const publishPackageToNpm = async ({ fileName, filePath, version }) => {
+    const modulePath = path.join(__dirname, '../../', filePath)
     try {
-      await exec(`cd ${filePath} && npm install && npm run build && npm publish --access public`)
+      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`, { env: process.env })
     } catch (error) {
       printModuleAndVersion({ fileName, filePath, version, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
       throw new Error(error)
@@ -91,7 +92,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   try {
     await Promise.all(publishing)
   } catch (error) {
-    return
+    throw new Error(error)
   }
 
   console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? '' : `${tsModuleVersionUpgrades.length} modules successfully published to NPM`))
@@ -100,8 +101,6 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 const main = async () => {
   const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
-
-  // TODO: Add "npm publish --access public" for all upgraded ts repos
   printVersionChanges(tsModulesVersionUpgrades)
   publishVersionChanges(tsModulesVersionUpgrades)
 }
