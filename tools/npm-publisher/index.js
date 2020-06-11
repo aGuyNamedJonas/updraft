@@ -98,7 +98,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 }
 
 const main = async () => {
-  const fileChanges = await getCurrentCommitDiff('origin/master...')
+  const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
 
   // TODO: Add "npm publish --access public" for all upgraded ts repos

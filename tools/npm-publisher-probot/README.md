@@ -1,5 +1,9 @@
 # npm-publisher-probot
 
+### WIP: This will be a helper to assist contributors in adding / updating modules that fulfill all requirements to be successfully republished to their module registries.
+
+
+
 > A GitHub App built with [Probot](https://github.com/probot/probot) that Publishes modules in updraft/modules/typescript to NPM
 
 ## Setup
