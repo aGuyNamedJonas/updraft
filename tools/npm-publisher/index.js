@@ -97,7 +97,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   try {
     await Promise.all(publishing)
   } catch (error) {
-    throw new Error(error)
+    process.exit(1)
   }
 
   console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? '' : `${tsModuleVersionUpgrades.length} modules successfully published to NPM`))
