@@ -1,9 +1,14 @@
 const { promisify } = require('util')
-const exec = promisify(require('child_process').exec)
+const asyncExec = promisify(require('child_process').exec)
 const fs = require('fs')
 const path = require('path')
 const parse = require('parse-diff')
 const chalk = require('chalk')
+
+const exec = async (cmd) => {
+  console.log(chalk.green('*** Executing Command:\n'), cmd, '\n')
+  return asyncExec(cmd)
+}
 
 const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
   const diffRaw = await exec(`git --no-pager diff ${diffInstructions}`)
