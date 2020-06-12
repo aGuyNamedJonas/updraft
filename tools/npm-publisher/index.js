@@ -1,13 +1,51 @@
 const { promisify } = require('util')
-const asyncExec = promisify(require('child_process').exec)
+const { spawn } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const parse = require('parse-diff')
 const chalk = require('chalk')
 
-const exec = async (cmd) => {
-  console.log(chalk.green('*** Executing Command:\n'), cmd, '\n')
-  return asyncExec(cmd)
+const exec = async (cmd, opts = {}) => {
+  console.log(chalk.green('*** Executing Command:'))
+  console.log('cmd: ', cmd)
+  console.log('')
+
+  // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+  const defaultOpts = {
+    shell: true,
+    cwd: undefined,
+    env: process.env,
+  }
+
+  const childProc = spawn(cmd, { ...defaultOpts, opts })
+  let stdout = ''
+  let stderr = ''
+  childProc.stdout.on('data', (data) => {
+    console.log(data.toString())
+    stdout += data
+  })
+
+  childProc.stderr.on('data', (data) => {
+    console.error(chalk.red(data.toString()))
+    stderr += data
+  })
+
+  return new Promise((resolve, reject) => {
+    childProc.on('error', (error) => {
+      console.log(chalk.red('Error:' + error.toString()))
+      reject(error)
+    })
+
+    childProc.on('close', (code) => {
+      console.log(`child process exited with code ${code}`)
+      if (code === 0) {
+        resolve({ stdout, stderr })
+        return
+      }
+
+      reject(new Error(`Command failed with exit code ${code}:\n${stderr}`))
+    })
+  })
 }
 
 const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
@@ -84,7 +122,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   const publishPackageToNpm = async ({ fileName, filePath, version }) => {
     const modulePath = path.join(__dirname, '../../', filePath)
     try {
-      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`, { env: process.env })
+      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`)
     } catch (error) {
       printModuleAndVersion({ fileName, filePath, version, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
       throw new Error(error)
@@ -97,6 +135,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   try {
     await Promise.all(publishing)
   } catch (error) {
+    console.log(chalk.red('Some or all publishing to NPM failed (see output)'))
     process.exit(1)
   }
 
