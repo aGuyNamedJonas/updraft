@@ -118,6 +118,8 @@ const printVersionChanges = (tsModuleVersionUpgrades) => {
   tsModuleVersionUpgrades.forEach(printModuleAndVersion)
 }
 
+const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc')
+
 const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   const publishPackageToNpm = async ({ fileName, filePath, version }) => {
     const modulePath = path.join(__dirname, '../../', filePath)
@@ -145,6 +147,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 const main = async () => {
   const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
+  await authenticateNpm()
   printVersionChanges(tsModulesVersionUpgrades)
   publishVersionChanges(tsModulesVersionUpgrades)
 }
