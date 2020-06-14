@@ -6,10 +6,6 @@ const parse = require('parse-diff')
 const chalk = require('chalk')
 
 const exec = async (cmd, opts = {}) => {
-  console.log(chalk.green('*** Executing Command:'))
-  console.log('cmd: ', cmd)
-  console.log('')
-
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
   const defaultOpts = {
     shell: true,
@@ -21,23 +17,19 @@ const exec = async (cmd, opts = {}) => {
   let stdout = ''
   let stderr = ''
   childProc.stdout.on('data', (data) => {
-    console.log(data.toString())
     stdout += data
   })
 
   childProc.stderr.on('data', (data) => {
-    console.error(chalk.red(data.toString()))
     stderr += data
   })
 
   return new Promise((resolve, reject) => {
     childProc.on('error', (error) => {
-      console.log(chalk.red('Error:' + error.toString()))
       reject(error)
     })
 
     childProc.on('close', (code) => {
-      console.log(`child process exited with code ${code}`)
       if (code === 0) {
         resolve({ stdout, stderr })
         return
