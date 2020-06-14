@@ -1,9 +1,44 @@
 const { promisify } = require('util')
-const exec = promisify(require('child_process').exec)
+const { spawn } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const parse = require('parse-diff')
 const chalk = require('chalk')
+
+const exec = async (cmd, opts = {}) => {
+  // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+  const defaultOpts = {
+    shell: true,
+    cwd: undefined,
+    env: process.env,
+  }
+
+  const childProc = spawn(cmd, { ...defaultOpts, opts })
+  let stdout = ''
+  let stderr = ''
+  childProc.stdout.on('data', (data) => {
+    stdout += data
+  })
+
+  childProc.stderr.on('data', (data) => {
+    stderr += data
+  })
+
+  return new Promise((resolve, reject) => {
+    childProc.on('error', (error) => {
+      reject(error)
+    })
+
+    childProc.on('close', (code) => {
+      if (code === 0) {
+        resolve({ stdout, stderr })
+        return
+      }
+
+      reject(new Error(`Command failed with exit code ${code}:\n${stderr}`))
+    })
+  })
+}
 
 const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
   const diffRaw = await exec(`git --no-pager diff ${diffInstructions}`)
@@ -75,11 +110,13 @@ const printVersionChanges = (tsModuleVersionUpgrades) => {
   tsModuleVersionUpgrades.forEach(printModuleAndVersion)
 }
 
+const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc')
+
 const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   const publishPackageToNpm = async ({ fileName, filePath, version }) => {
     const modulePath = path.join(__dirname, '../../', filePath)
     try {
-      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`, { env: process.env })
+      await exec(`cd ${modulePath} && npm install && npm run build && npm publish --access public`)
     } catch (error) {
       printModuleAndVersion({ fileName, filePath, version, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
       throw new Error(error)
@@ -92,7 +129,8 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
   try {
     await Promise.all(publishing)
   } catch (error) {
-    throw new Error(error)
+    console.log(chalk.red('Some or all publishing to NPM failed (see output)'))
+    process.exit(1)
   }
 
   console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? '' : `${tsModuleVersionUpgrades.length} modules successfully published to NPM`))
@@ -101,6 +139,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 const main = async () => {
   const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
+  await authenticateNpm()
   printVersionChanges(tsModulesVersionUpgrades)
   publishVersionChanges(tsModulesVersionUpgrades)
 }
