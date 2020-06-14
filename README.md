@@ -1,6 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/aGuyNamedJonas/updraft/master/design/updraft-logo-text-color.svg" alt="Sublime's custom image"/>
+</p>
 
-# UPDRAFT
-![Updraft Logo](/design/updraft-logo-text-color.svg)
-### Cloud Development Kit (CDK) Modules - Easy access to scalable cloud infrastructure for all developers
+> Cloud Development Kit (CDK) modules - Easy access to scalable cloud infrastructure for all developers
 
 WIP
