@@ -1,19 +1,13 @@
 #!/usr/bin/env node
-const fs = require('fs')
 const { program } = require('commander')
 import exampleHandler from './programs/example'
 import checkHandler from './programs/check'
 import initHandler from './programs/init'
-
-const getVersionFromPackage = () => {
-  const packageRaw = fs.readFileSync('../package.json')
-  const { version } = JSON.parse(packageRaw)
-  return version
-}
+const { version } = require('../package.json')
 
 const commands = [
   {
-    command: 'example <udpraft-module> [path]',
+    command: 'example <udpraft-module>',
     description: 'download runnable examples for updraft modules',
     handler: exampleHandler,
   },
@@ -30,7 +24,7 @@ const commands = [
 ]
 
 program
-  .version(getVersionFromPackage())
+  .version(version)
   .name('updraft')
   .description('CLI of the updraft project - easily get up & running with examples, initialize a new module for yourself, or get help checking your updraft module before submitting it as a PR.')
 
@@ -41,4 +35,4 @@ commands.forEach(({ command, description, handler }) => {
     .action(handler)
 })
 
-program.parse(process.argv)
+program.parseAsync(process.argv)
