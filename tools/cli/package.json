@@ -1,0 +1,20 @@
+{
+  "name": "@updraft/cli",
+  "version": "1.0.0",
+  "description": "CLI for the updraft project",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx ts-node ./src/index.ts",
+    "build": "npx tsc ./src/index.ts --outDir build",
+    "watch": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^1.19.1",
+    "npx": "^10.2.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
