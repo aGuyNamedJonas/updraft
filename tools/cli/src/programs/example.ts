@@ -2,11 +2,8 @@ import { spawn } from 'child_process'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as chalk from 'chalk'
-import { fstat, mkdir } from 'fs/promises'
-
-// function execute(command, callback){
-//   exec(command, function(error, stdout, stderr){ callback(stdout) })
-// }
+var inquirer = require('inquirer');
+const newGithubIssueUrl = require('new-github-issue-url')
 
 const exec = async (cmd, cb = (data: string) => {}) => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
@@ -63,10 +60,10 @@ const listDirs = (path) => {
 }
 
 const exampleHandler = async (updraftModule) => {
-  console.log(chalk.green(`Retrieving examples for ${updraftModule}...`))
+  console.log('')
+  console.log(`Retrieving examples for ${chalk.green(updraftModule)}...`)
   const callerPath = process.cwd()
   const tmpDir = path.join(process.env.TMPDIR, 'updraft')
-  // console.log(`Installing ${updraftModule} to tmpdir:\n`, tmpDir, '\n')
   mkDir(tmpDir)
   process.chdir(tmpDir)
   await exec(`npm install --prefix ${tmpDir} ${updraftModule}`)
@@ -76,8 +73,45 @@ const exampleHandler = async (updraftModule) => {
   if (examplesExist) {
     examples = await listDirs('./examples') as any []
   }
-  console.log(examplesExist ? chalk.green(`${examples.length} examples found for ${updraftModule}`) : chalk.yellow(`No examples found for ${updraftModule}`))
-  console.log(JSON.stringify(examples, null, 2))
+  console.log(examplesExist ? chalk.green(`${examples.length} examples found`) : chalk.yellow(`No examples found for ${updraftModule}`))
+  console.log('')
+  if (!examplesExist) {
+    const moduleRequestUrl = newGithubIssueUrl({
+      user: 'aGuyNamedJonas',
+      repo: 'updraft',
+      title: `[EXAMPLE REQUEST] ${updraftModule}`,
+      body: `Dear maintainer of this module,\nHere are three incredibly charming reasons why I think it would be a lovely idea if you could add examples to your amazing updraft module "${updraftModule}".\n1. <Insert charming reason No. 1>\n2. <Insert charming reason No. 2>\n3. <Insert charming reason No. 3>\n\nNow that I think about it, I actually noticed that I can be an Open Source Contributor, too - so I might actually get to work on this myself.\n\nThanks again for your work on this module & have a splendid day!`
+    });
+
+    console.log(chalk.blue(`No examples found? Here's what you can do:`))
+    console.log(chalk.green(`#1 Upvote the example-request issue:`))
+    console.log(`https://github.com/aGuyNamedJonas/updraft/issues?q=is%3Aissue+is%3Aopen+%5BEXAMPLE+REQUEST%5D+${updraftModule}\n`)
+    console.log(chalk.green(`#2 Create an example-request issue:`))
+    console.log(`${moduleRequestUrl}\n`)
+    console.log(chalk.green(`#3 Contribute the examples yourself:`))
+    console.log(`https://github.com/aGuyNamedJonas/updraft/CONTRIBUTING.md\n`)
+
+    process.exit(0)
+  }
+
+  console.log('')
+
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'theme',
+        message: 'Which example do you want to download?',
+        choices: [
+          ...examples,
+          new inquirer.Separator(),
+          `I don't know, help me out here!`,
+        ]
+      },
+    ])
+    .then(answers => {
+      console.log(JSON.stringify(answers, null, '  '));
+    });
 }
 
 export default exampleHandler

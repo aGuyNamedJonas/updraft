@@ -15,6 +15,8 @@
     "@types/node": "^14.0.13",
     "chalk": "^4.1.0",
     "commander": "^5.1.0",
+    "inquirer": "^7.2.0",
+    "new-github-issue-url": "^0.2.1",
     "nodemon": "^1.19.1",
     "npx": "^10.2.0",
     "ts-node": "^8.3.0",
