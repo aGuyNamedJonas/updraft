@@ -3,6 +3,7 @@ const { program } = require('commander')
 import exampleHandler from './programs/example'
 import checkHandler from './programs/check'
 import initHandler from './programs/init'
+import publishHandler from './programs/publish'
 const { version } = require('../package.json')
 
 const commands = [
@@ -13,20 +14,25 @@ const commands = [
   },
   {
     command: 'init [path]',
-    description: 'bootstrap a new updraft module',
+    description: 'start a new updraft module',
     handler: initHandler,
   },
   {
     command: 'check [path]',
-    description: 'get your updraft module ready for PR submission',
+    description: 'get your updraft module ready for PR',
     handler: checkHandler,
+  },
+  {
+    command: 'publish [path] [diff-target]',
+    description: 're-publish updated modules in path',
+    handler: publishHandler,
   },
 ]
 
 program
   .version(version)
   .name('updraft')
-  .description('CLI of the updraft project - easily get up & running with examples, initialize a new module for yourself, or get help checking your updraft module before submitting it as a PR.')
+  .description('Easily get up & running with runnable examples for updraft modules, start a new updraft module or get your updraft module ready for PR submission.')
 
 commands.forEach(({ command, description, handler }) => {
   program
