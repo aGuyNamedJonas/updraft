@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import * as chalk from 'chalk'
 var inquirer = require('inquirer');
 const newGithubIssueUrl = require('new-github-issue-url')
+const opn = require('opn')
 
 const exec = async (cmd, cb = (data: string) => {}) => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
@@ -61,7 +62,7 @@ const listDirs = (path) => {
 
 const exampleHandler = async (updraftModule) => {
   console.log('')
-  console.log(`Retrieving examples for ${chalk.green(updraftModule)}...`)
+  console.log(`Retrieving examples for:\n${chalk.green(updraftModule)}`)
   const callerPath = process.cwd()
   const tmpDir = path.join(process.env.TMPDIR, 'updraft')
   mkDir(tmpDir)
@@ -73,8 +74,8 @@ const exampleHandler = async (updraftModule) => {
   if (examplesExist) {
     examples = await listDirs('./examples') as any []
   }
-  console.log(examplesExist ? chalk.green(`${examples.length} examples found`) : chalk.yellow(`No examples found for ${updraftModule}`))
   console.log('')
+  console.log(examplesExist ? chalk.green(`${examples.length} examples found`) : chalk.yellow(`No examples found for ${updraftModule}`))
   if (!examplesExist) {
     const moduleRequestUrl = newGithubIssueUrl({
       user: 'aGuyNamedJonas',
@@ -96,22 +97,51 @@ const exampleHandler = async (updraftModule) => {
 
   console.log('')
 
-  inquirer
+  const HELP_ME_DECIDE = `Open Github, to help me decide`
+  const { selectedExample } = await inquirer
     .prompt([
       {
         type: 'list',
-        name: 'theme',
+        name: 'selectedExample',
         message: 'Which example do you want to download?',
         choices: [
           ...examples,
           new inquirer.Separator(),
-          `I don't know, help me out here!`,
+          HELP_ME_DECIDE,
         ]
       },
     ])
-    .then(answers => {
-      console.log(JSON.stringify(answers, null, '  '));
-    });
+
+  if (selectedExample === HELP_ME_DECIDE) {
+    const openGithubUrl = `https://github.com/aGuyNamedJonas/updraft/tree/master/modules/${updraftModule.replace('@updraft', 'typescript')}`
+    opn(openGithubUrl)
+    process.exit(0)
+  }
+
+  const { targetPath } = await inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'targetPath',
+        message: 'Name of folder to copy example to:',
+        default: selectedExample
+      }
+    ])
+
+  const exampleSourcePath = path.join(process.env.TMPDIR, 'updraft', 'node_modules', updraftModule, 'examples', selectedExample, '*')
+  const exampleDestinationPath = path.join(callerPath, targetPath)
+  process.chdir(callerPath)
+  await exec(`mkdir -p ${exampleDestinationPath} && cp -r ${exampleSourcePath} ${exampleDestinationPath}`)
+  process.chdir(exampleDestinationPath)
+  await exec(`npm install`)
+  console.log('')
+  console.log(chalk.green(`Download & Installation successful!`))
+  console.log('')
+  console.log(`Get started:`)
+  console.log(`${chalk.cyan(`cd ./${targetPath} && npm run deploy`)}`)
+  console.log('')
+  console.log(chalk.yellow('Happy Hacking!'))
+  console.log('')
 }
 
 export default exampleHandler

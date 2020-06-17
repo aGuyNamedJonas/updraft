@@ -19,6 +19,7 @@
     "new-github-issue-url": "^0.2.1",
     "nodemon": "^1.19.1",
     "npx": "^10.2.0",
+    "opn": "^6.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
