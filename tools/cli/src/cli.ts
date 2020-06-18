@@ -21,6 +21,9 @@ const commands = [
     command: 'check [path]',
     description: 'get your updraft module ready for PR',
     handler: checkHandler,
+    options: [
+      { flag: '--scope <npm-scope>', desc: 'NPM Scope to use', defaultValue: '@updraft' }
+    ]
   },
   {
     command: 'publish [path] [diff-target]',
@@ -34,11 +37,15 @@ program
   .name('updraft')
   .description('Easily get up & running with runnable examples for updraft modules, start a new updraft module or get your updraft module ready for PR submission.')
 
-commands.forEach(({ command, description, handler }) => {
+commands.forEach(({ command, description, handler, options = [] }) => {
   program
     .command(command)
     .description(description)
     .action(handler)
+
+  options.forEach(({ flag, desc, defaultValue = undefined }) => {
+    program.option(flag, desc, defaultValue)
+  })
 })
 
 program.parseAsync(process.argv)
