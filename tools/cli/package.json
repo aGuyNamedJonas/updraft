@@ -1,6 +1,6 @@
 {
   "name": "@updraft/cli",
-  "description": "Get quickstart templates for updraft moudles, initialize your own updraft module, or chek your module before submitting it as a PR.",
+  "description": "Get quickstart templates for updraft modules, initialize your own updraft module, or run checks to get your module ready for PR submission.",
   "version": "0.0.0",
   "author": "aGuyNamedJonas @aGuyNamedJonas",
   "bin": {
