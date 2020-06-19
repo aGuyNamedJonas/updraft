@@ -13,7 +13,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: cd /home/circleci/project/tools/npm-publisher/ && npm install
-            - run: node /home/circleci/project/tools/npm-publisher
+            - run: cd /home/circleci/project/ && node ./tools/npm-publisher
 workflows:
     publish-changed-ts-modules:
       jobs:
