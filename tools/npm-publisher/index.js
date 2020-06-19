@@ -46,13 +46,20 @@ const exec = async (cmd, opts = {}) => {
 const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
   const diffRaw = await exec(`git --no-pager diff ${diffInstructions}`)
   const diff = diffRaw.stdout.trim()
+  console.log(chalk.yellow('DEBUG: '), 'diff: ', diff)
   const files = parse(diff)
+  console.log(chalk.yellow('DEBUG: '), 'JSON.stringify(files, null, 2): ', JSON.stringify(files, null, 2))
   return files
 }
 
 const filterTypescriptModuleChanges = (fileChanges) => {
   const filterTsModulePackageChanges = (fileChange) => {
+    console.log(chalk.yellow('DEBUG: '), 'fileChange.to: ', fileChange.to)
+    console.log(chalk.yellow('DEBUG: '), 'fileChange.to.match(basePathMatcher): ', fileChange.to.match(basePathMatcher))
+
     const isTypescriptModule = fileChange.to.match(basePathMatcher)
+    console.log(chalk.yellow('DEBUG: '), 'isTypescriptModule: ', isTypescriptModule)
+
     const isChangeToPackageJson = fileChange.to.endsWith('package.json')
 
     return isTypescriptModule && isChangeToPackageJson
