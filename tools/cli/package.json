@@ -1,29 +1,57 @@
 {
   "name": "@updraft/cli",
-  "version": "1.0.0",
-  "description": "CLI for the updraft project",
-  "main": "bin/index.js",
-  "scripts": {
-    "start": "npx ts-node ./src/cli.ts",
-    "build": "npx tsc ./src/cli.ts --outDir bin",
-    "watch": "nodemon"
+  "description": "Get quickstart templates for updraft moudles, initialize your own updraft module, or chek your module before submitting it as a PR.",
+  "version": "0.0.0",
+  "author": "aGuyNamedJonas @aGuyNamedJonas",
+  "bin": {
+    "updraft": "./bin/run"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bugs": "https://github.com/aGuyNamedJonas/updraft/issues",
   "dependencies": {
-    "@types/node": "^14.0.13",
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
     "chalk": "^4.1.0",
-    "commander": "^5.1.0",
     "inquirer": "^7.2.0",
     "new-github-issue-url": "^0.2.1",
-    "nodemon": "^1.19.1",
-    "npx": "^10.2.0",
     "opn": "^6.0.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "tslib": "^1"
   },
-  "bin": {
-    "updraft": "bin/cli.js"
-  }
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@types/node": "^10",
+    "globby": "^10",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/aGuyNamedJonas/updraft",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "updraft",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "aGuyNamedJonas/updraft",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
 }

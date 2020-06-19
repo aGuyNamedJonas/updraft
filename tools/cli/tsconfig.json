@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "isolatedModules": false
-  }
+    "declaration": true,
+    "importHelpers": true,
+    "module": "commonjs",
+    "outDir": "lib",
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2017"
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
