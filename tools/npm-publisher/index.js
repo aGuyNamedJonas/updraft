@@ -5,6 +5,9 @@ const path = require('path')
 const parse = require('parse-diff')
 const chalk = require('chalk')
 
+const basePath = 'modules/typescript/'
+const basePathMatcher = /(\/\w*)*\/typescript\/\w*\/package\.json/g
+
 const exec = async (cmd, opts = {}) => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
   const defaultOpts = {
@@ -49,7 +52,7 @@ const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
 
 const filterTypescriptModuleChanges = (fileChanges) => {
   const filterTsModulePackageChanges = (fileChange) => {
-    const isTypescriptModule = fileChange.to.startsWith('modules/typescript/')
+    const isTypescriptModule = fileChange.to.match(basePathMatcher)
     const isChangeToPackageJson = fileChange.to.endsWith('package.json')
 
     return isTypescriptModule && isChangeToPackageJson
@@ -88,10 +91,9 @@ const filterTypescriptModuleChanges = (fileChanges) => {
 }
 
 const printModuleAndVersion = ({ fileName, filePath, version, successMessage = null, errorMessage = null }) => {
-  const prefix = 'modules/typescript/'
   const suffix = '/package.json'
   const fullPath = path.join(filePath, fileName)
-  const moduleName = fullPath.substring(prefix.length, fullPath.indexOf(suffix))
+  const moduleName = fullPath.substring(basePath.length, fullPath.indexOf(suffix))
   console.log(moduleName, chalk.green('~> ' + version))
 
   if (successMessage) {
@@ -106,7 +108,7 @@ const printModuleAndVersion = ({ fileName, filePath, version, successMessage = n
 }
 
 const printVersionChanges = (tsModuleVersionUpgrades) => {
-  console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? 'No modules upgrades in /modules/typescript/ detected' : `${tsModuleVersionUpgrades.length} module upgrade in /modules/typescript/ detected`))
+  console.log(chalk.yellow(tsModuleVersionUpgrades.length === 0 ? `No modules upgrades in ${basePath} detected` : `${tsModuleVersionUpgrades.length} module upgrade in ${basePath} detected`))
   tsModuleVersionUpgrades.forEach(printModuleAndVersion)
 }
 
