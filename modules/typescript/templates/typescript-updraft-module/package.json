@@ -1,0 +1,6 @@
+{
+  "name": "@updraft/templates",
+  "description": "Templates to start building CDK Modules with updraft",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts"
+}

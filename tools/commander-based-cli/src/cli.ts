@@ -35,7 +35,7 @@ const commands = [
 program
   .version(version)
   .name('updraft')
-  .description('Easily get up & running with runnable examples for updraft modules, start a new updraft module or get your updraft module ready for PR submission.')
+  .description('Easily get up & running with templates (runnable examples) for updraft modules, start a new updraft module or get your updraft module ready for PR submission.')
 
 commands.forEach(({ command, description, handler, options = [] }) => {
   program
