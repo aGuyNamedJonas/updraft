@@ -146,7 +146,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 }
 
 const main = async () => {
-  const fileChanges = await getCurrentCommitDiff('master...')
+  const fileChanges = await getCurrentCommitDiff('')
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
   await authenticateNpm()
   printVersionChanges(tsModulesVersionUpgrades)
