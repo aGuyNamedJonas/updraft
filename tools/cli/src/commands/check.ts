@@ -290,7 +290,7 @@ const checkHandler = (modulePath = '.') => {
 }
 
 export default class Templates extends Command {
-  static description = 'Get your updraft module ready for PR submission.\nThis command is used to green-light your module submissions.'
+  static description = 'Get your updraft module ready for PR submission\nThis command is used to green-light your module submissions.'
 
   static examples = [
     `$ updraft check
