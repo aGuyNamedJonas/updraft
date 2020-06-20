@@ -10,6 +10,7 @@ const basePathMatcher = /.*typescript\/\w*(-\w*)*\/package\.json/g
 
 const exec = async (cmd, opts = {}) => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+  console.log(chalk.yellow('DEBUG: '), `Executing:`, cmd)
   const defaultOpts = {
     shell: true,
     cwd: undefined,
@@ -146,7 +147,7 @@ const publishVersionChanges = async (tsModuleVersionUpgrades) => {
 }
 
 const main = async () => {
-  const fileChanges = await getCurrentCommitDiff('')
+  const fileChanges = await getCurrentCommitDiff()
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges)
   await authenticateNpm()
   printVersionChanges(tsModulesVersionUpgrades)
