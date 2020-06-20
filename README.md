@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/aGuyNamedJonas/updraft/master/design/updraft-logo-text-color.svg" alt="Sublime's custom image"/>
 </p>
 
-> Cloud Development Kit (CDK) modules - Easy access to scalable cloud infrastructure for all developers
+> Cloud Development Kit (CDK) Modules - Easy to use cloud-infrastructure building blocks for developers
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
