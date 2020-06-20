@@ -268,20 +268,23 @@ const printResults = (results: RulesResult[]) => {
   }
 }
 
-const checkHandler = (modulePath = '.') => {
-  const packageJsonPath = path.join(process.cwd(), modulePath, 'package.json')
+const checkHandler = (packageFilePath: string) => {
+  const { name } = require(packageFilePath)
+  console.log(chalk.bold(`CHECKING ${name}`))
+  console.log(chalk.grey(packageFilePath))
+  console.log('')
 
   try {
-    fs.accessSync(packageJsonPath, fs.constants.R_OK)
+    fs.accessSync(packageFilePath, fs.constants.R_OK)
   } catch (error) {
-    console.log(chalk.red(`Cannot read package.json file:\n${packageJsonPath}\n`))
+    console.log(chalk.red(`Cannot read package.json file:\n${packageFilePath}\n`))
     console.log('Error: ', error.toString())
     process.exit(1)
   }
 
-  const packageJsonFile = fs.readFileSync(packageJsonPath, { encoding: 'utf-8' })
+  const packageJsonFile = fs.readFileSync(packageFilePath, { encoding: 'utf-8' })
   const packageJson = JSON.parse(packageJsonFile)
-  const packageResults = checkPackage(packageJson, packageJsonPath)
+  const packageResults = checkPackage(packageJson, packageFilePath)
 
   const testResults = [
     ...packageResults,
@@ -323,17 +326,26 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
     const {args, flags} = this.parse(Templates)
     const { modulePath } = args
     const { multimode } = flags
+
+    console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
+    console.log(chalk.green(path.resolve(modulePath)))
+    console.log('')
+
     if (multimode) {
-      console.log(`Checking updraft modules in path:`)
-      console.log(chalk.green(path.resolve(path.join(modulePath, 'package.json'))))
+      console.log(chalk.yellow(`Checking for changes based on "git diff origin/master..."`))
+      const moduleChanges = await getVersionUpgrades(process.cwd(), 'diff origin/master...')
+      console.log(moduleChanges.length > 0
+                  ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
+                  : chalk.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
+                 )
       console.log('')
-      const moduleChanges = await getVersionUpgrades(process.cwd())
-      console.log('Module changes: ', JSON.stringify(moduleChanges, null, 2))
+
+      for (let { modulePackage } of moduleChanges) {
+        await checkHandler(modulePackage)
+      }
     } else {
-      console.log(`Checking updraft module in path:`)
-      console.log(chalk.green(path.resolve(path.join(modulePath, 'package.json'))))
-      console.log('')
-      await checkHandler(modulePath)
+      const packageFilePath = path.join(process.cwd(), modulePath, 'package.json')
+      await checkHandler(packageFilePath)
     }
   }
 }
