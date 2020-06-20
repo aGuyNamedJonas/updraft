@@ -1,0 +1,59 @@
+{
+  "name": "@updraft/cli",
+  "description": "Download quickstart templates for updraft modules, initialize your own updraft module, or run checks to get your module ready for PR submission.",
+  "version": "0.0.4",
+  "author": "aGuyNamedJonas @aGuyNamedJonas",
+  "bin": {
+    "updraft": "./bin/run"
+  },
+  "bugs": "https://github.com/aGuyNamedJonas/updraft/issues",
+  "dependencies": {
+    "@oclif/command": "^1.6.1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
+    "chalk": "^4.1.0",
+    "cli-ux": "^5.4.6",
+    "inquirer": "^7.2.0",
+    "new-github-issue-url": "^0.2.1",
+    "opn": "^6.0.0",
+    "parse-diff": "^0.7.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@types/node": "^10",
+    "globby": "^10",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/aGuyNamedJonas/updraft",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "updraft",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "aGuyNamedJonas/updraft",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
+}

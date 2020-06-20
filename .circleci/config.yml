@@ -5,7 +5,7 @@ dependencies:
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  seek-and-publish-ts-modules:
+  republish-typescript-module:
     executor:
       name: node/default
     steps:
@@ -14,10 +14,25 @@ jobs:
           steps:
             - run: cd /home/circleci/project/tools/npm-publisher/ && npm install
             - run: cd /home/circleci/project/ && node ./tools/npm-publisher
+  republish-cli:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: sudo npm install --global @updraft/cli
+            - run: cd /home/circleci/project/tools/ && updraft publish
 workflows:
-    publish-changed-ts-modules:
+    respublish-modules-and-tools:
       jobs:
-        - seek-and-publish-ts-modules:
+        - republish-typescript-module:
+            filters:
+              branches:
+                only:
+                  - master
+            context: updraft
+        - republish-cli:
             filters:
               branches:
                 only:

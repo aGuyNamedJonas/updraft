@@ -1,0 +1,4 @@
+{
+  "name": "@updraft/creator-templates",
+  "description": "Templates to start building CDK Modules with updraft"
+}
