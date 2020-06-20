@@ -2,6 +2,7 @@ import {Command, flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'chalk'
+import getVersionUpgrades from '../versionUpgrades'
 
 const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
 
@@ -303,6 +304,10 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
 
   static flags = {
     help: flags.help({char: 'h'}),
+    multimode: flags.boolean({
+      default: false,
+      description: 'runs checks on first layer of subfolders in PATH',
+    })
   }
 
   static args = [
@@ -310,16 +315,25 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
       name: 'modulePath',
       default: './',
       required: false,
-      description: 'path of the module to check - defaults to current directory'
+      description: 'path of the module(s) to check - defaults to current directory'
     },
   ]
 
   async run() {
     const {args, flags} = this.parse(Templates)
     const { modulePath } = args
-    console.log(`Checking updraft module in path:`)
-    console.log(chalk.green(path.resolve(path.join(modulePath, 'package.json'))))
-    console.log('')
-    await checkHandler(modulePath)
+    const { multimode } = flags
+    if (multimode) {
+      console.log(`Checking updraft modules in path:`)
+      console.log(chalk.green(path.resolve(path.join(modulePath, 'package.json'))))
+      console.log('')
+      const moduleChanges = await getVersionUpgrades(process.cwd())
+      console.log('Module changes: ', JSON.stringify(moduleChanges, null, 2))
+    } else {
+      console.log(`Checking updraft module in path:`)
+      console.log(chalk.green(path.resolve(path.join(modulePath, 'package.json'))))
+      console.log('')
+      await checkHandler(modulePath)
+    }
   }
 }
