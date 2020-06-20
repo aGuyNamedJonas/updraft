@@ -43,10 +43,10 @@ const exec = async (cmd, opts = {}) => {
   })
 }
 
-const getCurrentCommitDiff = async (diffInstructions = 'HEAD~1...') => {
-  const diffRaw = await exec(`git --no-pager diff ${diffInstructions}`)
+const getCurrentCommitDiff = async (diffCommand = 'show') => {
+  const diffRaw = await exec(`git --no-pager ${diffCommand}`)
   const diff = diffRaw.stdout.trim()
-  console.log(chalk.yellow('DEBUG: '), 'diff: ', diff)
+  console.log(chalk.yellow('DEBUG: '), `git --no-pager ${diffCommand}\n`, diff)
   const files = parse(diff)
   console.log(chalk.yellow('DEBUG: '), 'JSON.stringify(files, null, 2): ', JSON.stringify(files, null, 2))
   return files
