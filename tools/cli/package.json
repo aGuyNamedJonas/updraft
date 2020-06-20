@@ -1,14 +1,14 @@
 {
   "name": "@updraft/cli",
   "description": "Download quickstart templates for updraft modules, initialize your own updraft module, or run checks to get your module ready for PR submission.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "aGuyNamedJonas @aGuyNamedJonas",
   "bin": {
     "updraft": "./bin/run"
   },
   "bugs": "https://github.com/aGuyNamedJonas/updraft/issues",
   "dependencies": {
-    "@oclif/command": "^1",
+    "@oclif/command": "^1.6.1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
     "chalk": "^4.1.0",

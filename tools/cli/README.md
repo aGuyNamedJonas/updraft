@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.1 darwin-x64 node-v14.3.0
+@updraft/cli/0.0.2 darwin-x64 node-v14.3.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
@@ -60,7 +60,7 @@ EXAMPLES
   Checks the updraft module in the folder "./aws-my-amazing-module"
 ```
 
-_See code: [src/commands/check.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.1/src/commands/check.ts)_
+_See code: [src/commands/check.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.2/src/commands/check.ts)_
 
 ## `updraft help [COMMAND]`
 
@@ -99,7 +99,7 @@ EXAMPLES
   Get started with a typescript udpraft module
 ```
 
-_See code: [src/commands/init.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.1/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.2/src/commands/init.ts)_
 
 ## `updraft publish [MODULEPATH] [DIFFCMD]`
 
@@ -139,7 +139,7 @@ EXAMPLES
   master branch (if you want to do special publish thing in branches other than the master)
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.1/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.2/src/commands/publish.ts)_
 
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
@@ -168,5 +168,5 @@ EXAMPLES
   Installs the "echo" example into your current folder without prompting
 ```
 
-_See code: [src/commands/templates.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.1/src/commands/templates.ts)_
+_See code: [src/commands/templates.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.2/src/commands/templates.ts)_
 <!-- commandsstop -->
