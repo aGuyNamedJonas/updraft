@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import { spawn } from 'child_process'
 
-export const exec = async (cmd: string, cb = (data: string) => {}) => {
+export const exec = async (cmd: string, cb = (data: string) => {}): Promise<{ stdout: string, stderr: string }> => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
   const defaultOpts = {
     shell: true,

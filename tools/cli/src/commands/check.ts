@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as chalk from 'chalk'
 import getVersionUpgrades from '../versionUpgrades'
 
-const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
+// const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
 
 const opts = {
   packageScope: '@updraft',
@@ -12,6 +12,9 @@ const opts = {
   repositoryBasepath: 'https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/',
   license: 'MIT',
   licensePath: 'https://github.com/aGuyNamedJonas/updraft/blob/master/LICENSE',
+  main: 'lib/index.js',
+  types: 'lib/index.d.ts',
+
 }
 
 enum STATUS {
@@ -176,7 +179,7 @@ const checkPackage = (packageJson, packageJsonPath) => {
 
   results.push(
     assertWarn(
-      main === templatePackageJson.main,
+      main === opts.main,
       `Main is as recommended`,
       `We recommend that the package.json field "main" matches that of our template for updraft modules:\n${chalk.underline('https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/templates/ts-updraft-module')}`,
       simplicity('We recommend to use our template for creating new updraft modules. This makes starting new modules really fast, and provides a common structure which makes it easier for others to help improve modules.')
@@ -185,7 +188,7 @@ const checkPackage = (packageJson, packageJsonPath) => {
 
   results.push(
     assertWarn(
-      types === templatePackageJson.types,
+      types === opts.types,
       `Types is as recommended`,
       `We recommend that the package.json field "types" matches that of our template for updraft modules:\n${chalk.underline('https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/templates/ts-updraft-module')}`,
       simplicity('We recommend to use our template for creating new updraft modules. This makes starting new modules really fast, and provides a common structure which makes it easier for others to help improve modules.')

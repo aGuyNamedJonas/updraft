@@ -46,7 +46,7 @@ const filterTypescriptModuleChanges = (fileChanges, repoBasePath, pathMatcher) =
 
     const allChanges = []
     chunks.forEach(chunk => allChanges.push(chunk.changes))
-    const changes = allChanges.flat()
+    const changes = (allChanges as any).flat()
 
     return { fileName, filePath, changes }
   }

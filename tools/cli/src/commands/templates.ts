@@ -79,7 +79,7 @@ Installs the "echo" example into your current folder without prompting
       ])
 
     if (selectedTemplate === HELP_ME_DECIDE) {
-      const openGithubUrl = `https://github.com/aGuyNamedJonas/updraft/tree/master/modules/${module.replace('@updraft', 'typescript')}`
+      const openGithubUrl = `https://github.com/aGuyNamedJonas/updraft/tree/master/modules/${selectedTemplate.replace('@updraft', 'typescript')}`
       opn(openGithubUrl)
       return null
     }
@@ -101,8 +101,8 @@ Installs the "echo" example into your current folder without prompting
     return targetPath
   }
 
-  async installTemplate(selectedTemplate: string, callerPath: string, dstPath: string) {
-    const exampleSourcePath = path.join(process.env.TMPDIR, 'updraft', 'node_modules', module, 'templates', selectedTemplate, '*')
+  async installTemplate(moduleName: string, selectedTemplate: string, callerPath: string, dstPath: string) {
+    const exampleSourcePath = path.join(process.env.TMPDIR, 'updraft', 'node_modules', moduleName, 'templates', selectedTemplate, '*')
     const exampleDestinationPath = path.join(callerPath, dstPath)
     process.chdir(callerPath)
     await exec(`mkdir -p ${exampleDestinationPath} && cp -r ${exampleSourcePath} ${exampleDestinationPath}`)
@@ -145,7 +145,7 @@ Installs the "echo" example into your current folder without prompting
     }
 
     const targetPath = path ? path : await this.promptDestination(selectedTemplate)
-    await this.installTemplate(selectedTemplate, callerPath, targetPath)
+    await this.installTemplate(module, selectedTemplate, callerPath, targetPath)
   }
 }
 
