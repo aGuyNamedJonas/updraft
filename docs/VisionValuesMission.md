@@ -22,6 +22,18 @@ Provide building blocks to effortlessly build complex cloud-infrastructure with 
 
 👉🏻 Make this more about removing entry barriers to the world of scalable, affordable cloud-infrastructure / delivering apps to a global audience
 # The Stories behind the values
+**Empowerment**  
+I'm sick and tired of the abuse of power that's constantly happening around this world. It makes me feel so helpless watching it play out time and time again because it doesn't feel like I as an individual can do much of anything to *really* keep it from happening again.  
+
+And these abuses of power are everywhere. From the abuse of power of the world ecnonomy in [TODO: Review if this fits! fast fashion](https://www.youtube.com/watch?v=xGF3ObOBbac) to the sexual abuse through [individuals](https://open.spotify.com/episode/3MFuxqQwCZSst5Jef9QDbp) and [groups](https://www.youtube.com/watch?v=xcCj1zNpKoM) to the systematic abuse of power [TODO: Review if this fits! over minorities](https://www.youtube.com/watch?v=Mqrhn8khGLM).
+
+The list is endless, because for every individual example that I'm highlighting, I'm committing an injustice against thousands of other horrible examples of disempowerment that might be even more worthy to point people's attention to.
+
+The point of all of this is that **Empowerment** to me seems like one of the few ways of how I personally might ever be able to help balance out the scales of power.  
+Tech is the future of a lot of things - making it accessible to more people than before, by empowering them to run their own cloud infrastructure is the kind of *empowerement* that I can help achieve with the skillset that I have.  
+
+To tell you the truth, I don't know if this will ever empower anyone who wasn't empowered before. So I don't know if we'll ever meet this goal. But I think it's worth a shot. So I really hope you're onboard for that.
+
 **Simplicity**  
 I believe that only simple tools can solve complex problems. My favorite example for this are [binary trees](https://en.wikipedia.org/wiki/Binary_tree): It's simple to explain - you have nodes which represent values, right of that node are all the nodes that have a higher value, left of the node are all the nodes of lower value.
 
@@ -51,13 +63,6 @@ By drastically reducing the entry barrier to using world-class, modern cloud-inf
 On a personal note: I hate feeling left-out - not being able to understand something. I never considered myself the best logical-thinker (and I have met many people who are far better at this than I am). And yet I love the feeling of being able to perform the complete package - have the skills to build frontends, backend, and even run this stuff in the cloud. It's an incredibly feeling to get to work with systems that have no problem at all bringing your app - your own creative work - to millions of users everyday.
 
 That's some powerful stuff we get to work with here - let's bring that same power to many more people, by removing the entry barriers for them.
-
-📌 TODO: Refine this one - find great resources to share here.
-
-**Empowerment**  
-"I could never do that" "I have no idea what you're doing there" "Wow that looks incredibly hard" - I'm tired of people putting me on a pedastol (and themselves at the feet of it through that) just because they think they could never learn programming. I watched people having to study so much harder than I have in fields like medicine and other engineering disciplines.
-
-TODO
 
 
 
