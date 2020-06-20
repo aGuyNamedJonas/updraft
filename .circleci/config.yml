@@ -23,8 +23,17 @@ jobs:
           steps:
             - run: sudo npm install --global @updraft/cli
             - run: cd /home/circleci/project/tools/ && updraft publish
+  check-module-submission:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: sudo npm install --global @updraft/cli
+            - run: cd /home/circleci/project/modules/typescript/ && updraft check --multimode .
 workflows:
-    respublish-modules-and-tools:
+    republish-modules-and-tools:
       jobs:
         - republish-typescript-module:
             filters:
@@ -37,4 +46,6 @@ workflows:
               branches:
                 only:
                   - master
+            context: updraft
+        - check-module-submission:
             context: updraft
