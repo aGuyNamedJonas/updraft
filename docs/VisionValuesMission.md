@@ -13,12 +13,14 @@ Empower people to deliver their apps to a global audience
 Provide building blocks to effortlessly build complex cloud-infrastructure with ease - in the programming language environment developers already know.
 
 # Values
+
+**Empowerment** We specifically build updraft to empower people all around the world to bring the positive change to the world that they envision.
+
 **Simplicity** Simplicity is the high art of making the complex easy. It's a continuous effort, and only when something is easy to understand and easy to use does it start to be *simple*.
 
 **No entry barriers** We strive to make it so easy for people to use, contribute to, and create updraft modules [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make the CDK and updraft modules available for as many programming languages and infrastructure providers as maintainably possible.
 
-**Empowerment** We specifically build updraft to empower people all around the world to bring the positive change to the world that they envision.
-
+👉🏻 Make this more about removing entry barriers to the world of scalable, affordable cloud-infrastructure / delivering apps to a global audience
 # The Stories behind the values
 **Simplicity**  
 I believe that only simple tools can solve complex problems. My favorite example for this are [binary trees](https://en.wikipedia.org/wiki/Binary_tree): It's simple to explain - you have nodes which represent values, right of that node are all the nodes that have a higher value, left of the node are all the nodes of lower value.
