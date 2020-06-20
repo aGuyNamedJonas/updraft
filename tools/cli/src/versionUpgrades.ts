@@ -7,9 +7,9 @@ import { exec } from './shared'
 const getCurrentCommitDiff = async (diffCommand = 'show') => {
   const diffRaw = await exec(`git --no-pager ${diffCommand}`)
   const diff = diffRaw.stdout.trim()
-  console.log(chalk.yellow('DEBUG: '), `git --no-pager ${diffCommand}\n`, diff)
+  // console.log(chalk.yellow('DEBUG: '), `git --no-pager ${diffCommand}\n`, diff)
   const files = parse(diff)
-  console.log(chalk.yellow('DEBUG: '), 'JSON.stringify(files, null, 2): ', JSON.stringify(files, null, 2))
+  // console.log(chalk.yellow('DEBUG: '), 'JSON.stringify(files, null, 2): ', JSON.stringify(files, null, 2))
   return files
 }
 
@@ -27,12 +27,12 @@ const getPathMatcher = (searchPathAbs: string) => {
 const filterTypescriptModuleChanges = (fileChanges, repoBasePath, pathMatcher) => {
   const filterTsModulePackageChanges = (fileChange) => {
     const absChangePath = path.join(repoBasePath, fileChange.to)
-    console.log(chalk.yellow('DEBUG: '), 'absChangePath: ', absChangePath)
-    console.log(chalk.yellow('DEBUG: '), 'pathMatcher: ', pathMatcher)
-    console.log(chalk.yellow('DEBUG: '), 'absChangePath.match(pathMatcher): ', absChangePath.match(pathMatcher))
+    // console.log(chalk.yellow('DEBUG: '), 'absChangePath: ', absChangePath)
+    // console.log(chalk.yellow('DEBUG: '), 'pathMatcher: ', pathMatcher)
+    // console.log(chalk.yellow('DEBUG: '), 'absChangePath.match(pathMatcher): ', absChangePath.match(pathMatcher))
 
     const isTypescriptModule = absChangePath.match(pathMatcher)
-    console.log(chalk.yellow('DEBUG: '), 'isTypescriptModule: ', isTypescriptModule)
+    // console.log(chalk.yellow('DEBUG: '), 'isTypescriptModule: ', isTypescriptModule)
 
     const isChangeToPackageJson = fileChange.to.endsWith('package.json')
 
@@ -73,10 +73,10 @@ const filterTypescriptModuleChanges = (fileChanges, repoBasePath, pathMatcher) =
   return tsModulesVersionUpgrades
 }
 
-const getVersionUpgrades = async (absSearchPath: string) => {
+const getVersionUpgrades = async (absSearchPath: string, diffCommand = 'diff origin/master...') => {
   const repoBasePath = await getRepoPasePath()
   const pathMatcher = getPathMatcher(absSearchPath)
-  const fileChanges = await getCurrentCommitDiff()
+  const fileChanges = await getCurrentCommitDiff(diffCommand)
   const tsModulesVersionUpgrades = filterTypescriptModuleChanges(fileChanges, repoBasePath, pathMatcher)
   return tsModulesVersionUpgrades
 }
