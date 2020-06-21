@@ -18,21 +18,28 @@ Provide building blocks to effortlessly build complex cloud-infrastructure with 
 
 **Simplicity** Simplicity is the high art of making the complex easy. It's a continuous effort, and only when something is easy to understand and easy to use does it start to be *simple*.
 
-**No entry barriers** We strive to make it so easy for people to use, contribute to, and create updraft modules [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make the CDK and updraft modules available for as many programming languages and infrastructure providers as maintainably possible.
+**No entry barriers** We strive to make it so easy for any developer to use modern, scalable cloud-infrastructure [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make CDK and updraft modules available for as many developers, programming languages and infrastructure providers as maintainably possible.
 
-👉🏻 Make this more about removing entry barriers to the world of scalable, affordable cloud-infrastructure / delivering apps to a global audience
 # The Stories behind the values
+The following stories are the highly personal reasons why I think the above values and this project itself, is important. The following stories are a very intimate look into what drives me - and it feels pretty risky sharing these. But I hope they help you identify with what updraft is trying to accomplish. If you have any reactions, thoughts, or your own personal story that you would like to respond with, please leave them in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52).
+
+
 **Empowerment**  
 I'm sick and tired of the abuse of power that's constantly happening around this world. It makes me feel so helpless watching it play out time and time again because it doesn't feel like I as an individual can do much of anything to *really* keep it from happening again.  
 
-And these abuses of power are everywhere. From the abuse of power of the world ecnonomy in [TODO: Review if this fits! fast fashion](https://www.youtube.com/watch?v=xGF3ObOBbac) to the sexual abuse through [individuals](https://open.spotify.com/episode/3MFuxqQwCZSst5Jef9QDbp) and [groups](https://www.youtube.com/watch?v=xcCj1zNpKoM) to the systematic abuse of power [TODO: Review if this fits! over minorities](https://www.youtube.com/watch?v=Mqrhn8khGLM).
+These abuses of power are everywhere. From the abuse of power of the world econonomy in [TODO: Review if this fits! fast fashion](https://www.youtube.com/watch?v=xGF3ObOBbac) to the [sexual abuse through individuals](https://open.spotify.com/episode/3MFuxqQwCZSst5Jef9QDbp) and [groups](https://www.youtube.com/watch?v=xcCj1zNpKoM) to [racially motivated abuse of power](https://www.youtube.com/watch?v=Mqrhn8khGLM).
 
 The list is endless, because for every individual example that I'm highlighting, I'm committing an injustice against thousands of other horrible examples of disempowerment that might be even more worthy to point people's attention to.
 
-The point of all of this is that **Empowerment** to me seems like one of the few ways of how I personally might ever be able to help balance out the scales of power.  
-Tech is the future of a lot of things - making it accessible to more people than before, by empowering them to run their own cloud infrastructure is the kind of *empowerement* that I can help achieve with the skillset that I have.  
+The point of all of this is that *Empowerment* to me seems like one of the few ways of how I personally might ever be able to help balance out the scales of power.  
 
-To tell you the truth, I don't know if this will ever empower anyone who wasn't empowered before. So I don't know if we'll ever meet this goal. But I think it's worth a shot. So I really hope you're onboard for that.
+What's crazy is that I'm writing these lines, fully aware of how much I sound like every tech-startup in silicon valley that's "changing the world" because they managed to make an already luxurious life for people even more luxurious. And yeah I get it - many of these niceties that we have in our lifes today, curteousy of modern tech, actually *did change* what the world looks like. Just not for everyone.
+
+And that's my point: I truly believe that this project can bring access to using *modern cloud infrastructure* to everyone. Everyone around the world.
+
+I definitely hope this project will empower people to change things for the better that were previously unable to do that. Whether that's ever going to happen is anyone's guess - but I think it's worth trying.
+
+👉🏻 Also tired of seing people being robbed of their power? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
 
 **Simplicity**  
 I believe that only simple tools can solve complex problems. My favorite example for this are [binary trees](https://en.wikipedia.org/wiki/Binary_tree): It's simple to explain - you have nodes which represent values, right of that node are all the nodes that have a higher value, left of the node are all the nodes of lower value.
@@ -52,33 +59,19 @@ Simple tools on the other hand, make a the creative expression they enable acces
 
 👉🏻 Read more: [The Untold Story of Ableton Live—the Program That Transformed Electronic Music Performance Forever](https://www.vice.com/en_us/article/78je3z/ableton-live-history-interview-founders-berhard-behles-robert-henke)
 
+👉🏻 Also in love with elegantly-simple things? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
+
 **No entry barriers**  
 Entry barriers make it hard for people getting in - and often entry barriers can lead to keeping new people (consciously) out.
 
 Entry barriers at its core are often part of what is wrong with this world.  
-Entry barriers based on somebody's sex are part of the problem of sexism, entry barriers based on somebody's skin-color is part of the problem of racism, entry barriers based on somebody's geographic location and socio-economic upbringing is part of a global economic inequality.
+Entry barriers based on somebody's sex are part of the problem of sexism, entry barriers based on somebody's skin-color is part of the problem of racism, entry barriers based on somebody's geographic location and socio-economic upbringing is part of the problems caused by a global economic inequality.
 
 By drastically reducing the entry barrier to using world-class, modern cloud-infrastructure that largely is free to start out with - and reducing that entry barrier for anyone with an access to Github and the willigness to learn this stuff - we hope to make up for some of the atrocious entry barriers that cause suffering today.
 
-On a personal note: I hate feeling left-out - not being able to understand something. I never considered myself the best logical-thinker (and I have met many people who are far better at this than I am). And yet I love the feeling of being able to perform the complete package - have the skills to build frontends, backend, and even run this stuff in the cloud. It's an incredibly feeling to get to work with systems that have no problem at all bringing your app - your own creative work - to millions of users everyday.
+Personally, I hate the feeling of being left out, and of being made to feel like I don't belong. I've had this happen to me so many times in my life, I can't even count it. What really hurt though is when this happened on the job, working as a developer.  We had someone join the team who ended up putting so many entry barriers in my way, I started questioning my own abilities as a developer. Endless pull request reviews, rewriting of my code *for me*, instead of pair-programming *with me*, giving me the feeling of never quite being able to get it right. It got me close to quitting that job (and I had actually hired that person - the irony!).
 
-That's some powerful stuff we get to work with here - let's bring that same power to many more people, by removing the entry barriers for them.
-
-
-
-
+👉🏻 Also had experiences like that in the past? Help us lower the entry barrier in cloud-infrastructure - [help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
 
 ------
-Sharing the personal stories that inform values is inspired by the amazing book [Tribal Leadership](https://www.triballeadership.net/).
-
-
-
-Entry barriers never served the people trying to get in, they only ever served to keep people out.
-
-
-
-
-
-and people who make me feel small by showing me how much better they are than me in using hard to use tools. This has not happened much in the past, but when it has, it was always deeply painful and made me question my abilities as a developer, my choice of profession and quite frankly my own intelligence. Hard to use tools are the perfect breeding ground for people who make other people feel small.
-
-but you know these kind of people: People who for some twisted reason make it their mission to constantly prove you wrong. And their most powerful weapon is to dive into something
+Sharing the personal stories that inform the values behind this project is inspired by the amazing [Tribal Leadership (Dave Logan et. al.)](https://www.triballeadership.net/). Sharing these stories in the most intimate and honest way possible, is inspired by the powerful [Daring Greatly (Brené Brown)](https://www.amazon.de/Daring-Greatly-Courage-Vulnerable-Transforms/dp/0241257409/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&dchild=1&keywords=daring+greatly&qid=1592725525&sr=8-1)
