@@ -1,0 +1,24 @@
+{
+  "name": "@updraft/aws-api-gw-lambdas",
+  "version": "0.0.1",
+  "description": "CDK Module to setup an API Gateway and map it to lambda handlers (CORS, Domain Support)",
+  "repository": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/aws-api-gw-multi-lambda",
+  "homepage": "https://github.com/aGuyNamedJonas/updraft",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.41.0",
+    "@aws-cdk/aws-certificatemanager": "^1.41.0",
+    "@aws-cdk/aws-lambda": "^1.41.0",
+    "@aws-cdk/aws-route53-targets": "^1.41.0",
+    "@aws-cdk/core": "^1.41.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.3"
+  }
+}
