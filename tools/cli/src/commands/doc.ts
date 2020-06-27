@@ -3,7 +3,10 @@ import * as colors from 'colors'
 import * as os from 'os'
 import * as path from 'path'
 import * as ts from 'typescript'
+import * as fs from 'fs'
 import * as tsdoc from '@microsoft/tsdoc'
+import { TSDocParser, ParserContext, DocComment } from '@microsoft/tsdoc';
+import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
 
 /**
  * Returns true if the specified SyntaxKind is part of a declaration form.
@@ -118,10 +121,13 @@ function walkCompilerAstAndFindComments(node: ts.Node, indent: string, foundComm
   return node.forEachChild(child => walkCompilerAstAndFindComments(child, indent + '  ', foundComments));
 }
 
-function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string): void {
+function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string, filter = null): void {
   let dumpText: string = '';
   if (docNode instanceof tsdoc.DocExcerpt) {
     const content: string = docNode.content.toString();
+    if (filter && content === filter) {
+      console.log('*** Found filter: ', docNode.content.toString(), '\n----')
+    }
     dumpText += colors.gray(`${indent}* ${docNode.excerptKind}=`) + colors.cyan(JSON.stringify(content));
   } else {
     dumpText += `${indent}- ${docNode.kind}`;
@@ -161,10 +167,22 @@ function parseTSDoc(foundComment: IFoundComment): void {
     syntaxKind: tsdoc.TSDocTagSyntaxKind.ModifierTag
   });
 
+  const featureHeadline: tsdoc.TSDocTagDefinition = new tsdoc.TSDocTagDefinition({
+    tagName: '@feature',
+    syntaxKind: tsdoc.TSDocTagSyntaxKind.InlineTag
+  })
+
+  const featureDescription: tsdoc.TSDocTagDefinition = new tsdoc.TSDocTagDefinition({
+    tagName: '@featureDescription',
+    syntaxKind: tsdoc.TSDocTagSyntaxKind.InlineTag
+  })
+
   customConfiguration.addTagDefinitions([
     customInlineDefinition,
     customBlockDefinition,
-    customModifierDefinition
+    customModifierDefinition,
+    featureHeadline,
+    featureDescription
   ]);
 
   console.log(os.EOL + 'Invoking TSDocParser with custom configuration...' + os.EOL);
@@ -195,7 +213,7 @@ function parseTSDoc(foundComment: IFoundComment): void {
   }
 
   console.log(os.EOL + colors.green('Visiting TSDoc\'s DocNode tree') + os.EOL);
-  // dumpTSDocTree(docComment, '');
+  dumpTSDocTree(docComment, '', '@feature');
 }
 
 /**
@@ -252,6 +270,89 @@ export function advancedDemo(): void {
   }
 }
 
+/**
+ * This is a simplistic solution until we implement proper DocNode rendering APIs.
+ */
+export class Formatter {
+
+  public static renderDocNode(docNode: DocNode): string {
+    let result: string = '';
+    if (docNode) {
+      if (docNode instanceof DocExcerpt) {
+        result += docNode.content.toString();
+      }
+      for (const childNode of docNode.getChildNodes()) {
+        result += Formatter.renderDocNode(childNode);
+      }
+    }
+    return result;
+  }
+
+  public static renderDocNodes(docNodes: ReadonlyArray<DocNode>): string {
+    let result: string = '';
+    for (const docNode of docNodes) {
+      result += Formatter.renderDocNode(docNode);
+    }
+    return result;
+  }
+}
+
+export function simpleDemo(): void {
+  console.log(colors.yellow('*** TSDoc API demo: Simple Scenario ***') + os.EOL);
+
+  const inputFilename: string = path.resolve(path.join(__dirname, '..', 'test', 'validateMe.ts'));
+  console.log('Reading assets/simple-input.ts...');
+
+  const inputBuffer: string = fs.readFileSync(inputFilename).toString();
+
+  // NOTE: Optionally, can provide a TSDocConfiguration here
+  const tsdocParser: TSDocParser = new TSDocParser();
+  const parserContext: ParserContext = tsdocParser.parseString(inputBuffer);
+
+  console.log(os.EOL + colors.green('Input Buffer:') + os.EOL);
+  console.log(colors.gray('<<<<<<'));
+  console.log(inputBuffer);
+  console.log(colors.gray('>>>>>>'));
+
+  console.log(os.EOL + colors.green('Extracted Lines:') + os.EOL);
+  console.log(JSON.stringify(parserContext.lines.map(x => x.toString()), undefined, '  '));
+
+  console.log(os.EOL + colors.green('Parser Log Messages:') + os.EOL);
+
+  if (parserContext.log.messages.length === 0) {
+    console.log('No errors or warnings.');
+  } else {
+    for (const message of parserContext.log.messages) {
+      console.log(inputFilename + message.toString());
+    }
+  }
+
+  console.log(os.EOL + colors.green('DocComment parts:') + os.EOL);
+
+  const docComment: DocComment = parserContext.docComment;
+
+  console.log(colors.cyan('Summary: ')
+    + JSON.stringify(Formatter.renderDocNode(docComment.summarySection)));
+
+  if (docComment.remarksBlock) {
+    console.log(colors.cyan('Remarks: ')
+    + JSON.stringify(Formatter.renderDocNode(docComment.remarksBlock.content)));
+  }
+
+  for (const paramBlock of docComment.params.blocks) {
+    console.log(colors.cyan(`Parameter "${paramBlock.parameterName}": `)
+    + JSON.stringify(Formatter.renderDocNode(paramBlock.content)));
+  }
+
+  if (docComment.returnsBlock) {
+    console.log(colors.cyan('Returns: ')
+    + JSON.stringify(Formatter.renderDocNode(docComment.returnsBlock.content)));
+  }
+
+  console.log(colors.cyan('Modifiers: ')
+    + docComment.modifierTagSet.nodes.map(x => x.tagName).join(', '));
+}
+
 export default class Doc extends Command {
   static description = 'Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts\n\nAuto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while you can focus on optimizing the user experience of your own updraft modules.\n\nRun "$ updraft templates @updraft/templates updraft-module-ts" to download the latest example on how to use the tsdoc fields.'
 
@@ -266,6 +367,7 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
 
   async run() {
     const {args, flags} = this.parse(Doc)
-    advancedDemo()
+    // advancedDemo()
+    simpleDemo()
   }
 }

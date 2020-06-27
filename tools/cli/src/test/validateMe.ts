@@ -18,11 +18,12 @@ export class Statistics {
    * Describe 1-5 features that makes your module special
    * --> These describe the reason why you created this module
    * (Uses the aws-api-gw-lambdas as an example)
-   * @feature Custom Domains
-   * @description (optional) Register with your own domain (e.g. `api.example.com`)
+   * @feature
+   * Custom Domains
+   * (optional) Register with your own domain (e.g. `api.example.com`)
    *
    * @feature CORS
-   * @description Add CORS resources and handlers to your API (if you like)
+   * @featureDescription Add CORS resources and handlers to your API (if you like)
    */
   public static getAverage(x: number, y: number): number {
     return (x + y) / 2.0;
