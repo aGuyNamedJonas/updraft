@@ -21,27 +21,26 @@ Provide building blocks to effortlessly build complex cloud-infrastructure with 
 **No entry barriers** We strive to make it so easy for any developer to use modern, scalable cloud-infrastructure [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make CDK and updraft modules available for as many developers, programming languages and infrastructure providers as maintainably possible.
 
 # The Stories behind the values
-The following stories are the highly personal reasons why I think the above values and this project itself, is important. The following stories are a very intimate look into what drives me - and it feels pretty risky sharing these. But I hope they help you identify with what updraft is trying to accomplish. If you have any reactions, thoughts, or your own personal story that you would like to respond with, please leave them in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52).
+The following stories are my personal reasons why I think the above values and *updraft* itself, is important. My hope is that they help you identify with what *updraft* is trying to accomplish. If you have any reactions, thoughts, or your own personal story that you would like to respond with, please leave them in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52).
 
+### Empowerment
+I don't know about you, but at a certain point I started to grow tired of people reacting to my profession as a developer with the self-defeating statement of "oh I could never do that".
 
-**Empowerment**  
-I'm sick and tired of the abuse of power that's constantly happening around this world. It makes me feel so helpless watching it play out time and time again because it doesn't feel like I as an individual can do much of anything to *really* keep it from happening again.  
+Really!? You don't think you could [Stackoverflow](https://insights.stackoverflow.com/survey/2020#technology-what-do-you-do-when-you-get-stuck) your way through a high-paying job with a ton of perks, like Club-Mate fridges and an environment that somehow learned to accept colleagues running around bare-foot (oh the free spirits that they are)!?
 
-These abuses of power are everywhere. From the abuse of power of the world econonomy in [TODO: Review if this fits! fast fashion](https://www.youtube.com/watch?v=xGF3ObOBbac) to the [sexual abuse through individuals](https://open.spotify.com/episode/3MFuxqQwCZSst5Jef9QDbp) and [groups](https://www.youtube.com/watch?v=xcCj1zNpKoM) to [racially motivated abuse of power](https://www.youtube.com/watch?v=Mqrhn8khGLM).
+I mean maybe you actually enjoy being viewed as half-God, half-Mortal. But to me personally that's just wrong. I for one didn't study half as hard in college as any of my friends in medicine had to. And honestly, all the stuff I learned that I use in my job was self-taught anyways. Anybody can learn this. It's not black magic. And it's definitely no different than any of the other engineering disciplines where it comes down to knowing what technical systems to combine in what way under the given requirements.
 
-The list is endless, because for every individual example that I'm highlighting, I'm committing an injustice against thousands of other horrible examples of disempowerment that might be even more worthy to point people's attention to.
+So for all of the people who ever thought "they weren't good at math" because they had bad teachers, or anybody who puts me on a pedastal because I can stare at a screen all day as my job, I want to say the following: Shut up, sit down, and learn this stuff if you like - you can totally do this - stop selling yourself short. Also: If Karlie Kloss (huge fan!) [can teach teenagers to code](https://www.kodewithklossy.com/), you can learn this, too.
 
-The point of all of this is that *Empowerment* to me seems like one of the few ways of how I personally might ever be able to help balance out the scales of power.  
+Aside from that rant of the overhype around the intelligence level of developers, I was always drawn to learning how to setup my own infrastructure because it made me feel empowered. I'm traditionally a frontend guy because I enjoy building tools that inspire creativity. But it never satisfied me to "just do frontend". I also wanted to know how to build the backends, and how to run the damn thing as well. I wanted to at least know how to do it all - it makes me feel like I can do anything.
 
-What's crazy is that I'm writing these lines, fully aware of how much I sound like every tech-startup in silicon valley that's "changing the world" because they managed to make an already luxurious life for people even more luxurious. And yeah I get it - many of these niceties that we have in our lifes today, curteousy of modern tech, actually *did change* what the world looks like. Just not for everyone.
+And *that* exact feeling is what I want to bring to people using updraft. Anyone with an internet connection, a computer and the willigness to learn this stuff, should be empowered to not only learn how to build apps, but also how to deliver them to the world. I hope that *updraft* can create the same sense of empowerement for people I've felt when I learned this stuff for the first time.
 
-And that's my point: I truly believe that this project can bring access to using *modern cloud infrastructure* to everyone. Everyone around the world.
+👉🏻 If you also want to become a Karlie Kloss fan, check out her [YouTube channel](https://www.youtube.com/watch?v=koAgIRz59ZU) or check out her amazing [Kode with Klossy](https://www.kodewithklossy.com/) project
 
-I definitely hope this project will empower people to change things for the better that were previously unable to do that. Whether that's ever going to happen is anyone's guess - but I think it's worth trying.
+In ❤️ with empowering people? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)
 
-👉🏻 Also tired of seing people being robbed of their power? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
-
-**Simplicity**  
+### Simplicity
 I believe that only simple tools can solve complex problems. My favorite example for this are [binary trees](https://en.wikipedia.org/wiki/Binary_tree): It's simple to explain - you have nodes which represent values, right of that node are all the nodes that have a higher value, left of the node are all the nodes of lower value.
 
 Binary trees are used for finding values in a large number of data-points while only having to check very few nodes to find it. For example: If every person on the planet was sorted in a perfectly balanced binary tree, you would only need 33 layers to organize the world-population of [roughly 8 billion people](https://en.wikipedia.org/wiki/World_population). What that means is that you only have to ask 33 people for their first name and last name to find *anyone* by their name alone.
@@ -57,21 +56,24 @@ The opposite of that is hard to use tools which make me question whether the cre
 
 Simple tools on the other hand, make a the creative expression they enable accessible to more people than ever before.
 
-👉🏻 Read more: [The Untold Story of Ableton Live—the Program That Transformed Electronic Music Performance Forever](https://www.vice.com/en_us/article/78je3z/ableton-live-history-interview-founders-berhard-behles-robert-henke)
+In ❤️ with elegantly-simple things? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)
 
-👉🏻 Also in love with elegantly-simple things? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
+### No entry barriers
+Entry barriers suck. In it's most tame form it's a steep learning curve, in it's most harmful forms it keeps people out - and can even be used to discriminate against people by keeping them out on purpose.
 
-**No entry barriers**  
-Entry barriers make it hard for people getting in - and often entry barriers can lead to keeping new people (consciously) out.
+I had this funny epiphany the other day: I was really frustrated by trying to setup an API Gateway with my IoC (Infrastructure as Code) setup and despite multiple different approaches it couldn't get it to work in over a week. I was really fuming when my fiancee Anni and me did our workout that day, outside of our apartment building in a little park, when I realized how crazy it was to work with modern cloud infrastructure. Being able to see my room from where we worked out, I realized what it meant to get to work with globally scaling infrastructure: Typing a few commands into my laptop, these commands would travel down into an underground cable, went through a physical line that stretches across the bottom of the ocean and finally sets a configuration in Virgina, USA to setup some certificate.
 
-Entry barriers at its core are often part of what is wrong with this world.  
-Entry barriers based on somebody's sex are part of the problem of sexism, entry barriers based on somebody's skin-color is part of the problem of racism, entry barriers based on somebody's geographic location and socio-economic upbringing is part of the problems caused by a global economic inequality.
+At that moment all of my frustration vanished and gave way to a sense of awe that I often forget in my day-to-day work as a developer. We get to work with amazing technology, that spans the whole globe.
 
-By drastically reducing the entry barrier to using world-class, modern cloud-infrastructure that largely is free to start out with - and reducing that entry barrier for anyone with an access to Github and the willigness to learn this stuff - we hope to make up for some of the atrocious entry barriers that cause suffering today.
+People used to have to buy expensive hardware to get to make their apps available to the internet like that. Plus in my mind, this tech is largely democratized. With the free tiers available from every large public cloud provider, anyone with an internet connection can use this stuff.
 
-Personally, I hate the feeling of being left out, and of being made to feel like I don't belong. I've had this happen to me so many times in my life, I can't even count it. What really hurt though is when this happened on the job, working as a developer.  We had someone join the team who ended up putting so many entry barriers in my way, I started questioning my own abilities as a developer. Endless pull request reviews, rewriting of my code *for me*, instead of pair-programming *with me*, giving me the feeling of never quite being able to get it right. It got me close to quitting that job (and I had actually hired that person - the irony!).
+To me that's one of the best examples of how an entry barrier got completely erradicated. All you need is a computer, an internet connection and the willingness to learn this stuff (let me know in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52) where I might be wrong about that assessment).
 
-👉🏻 Also had experiences like that in the past? Help us lower the entry barrier in cloud-infrastructure - [help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)!
+It gives me great joy to think that hopefully somebody in the future will find updraft, and realize that cloud infrastructure isn't that hard to use after all. Hopefully they get to have the same mind-blowing realization about the scale of the technology they get to work with.
+
+👉🏻 For a different and really cool example of tech lowering the entry barrier, checkout [The Untold Story of Ableton Live—the Program That Transformed Electronic Music Performance Forever](https://www.vice.com/en_us/article/78je3z/ableton-live-history-interview-founders-berhard-behles-robert-henke)
+
+In ❤️ with cloud-computing? [Help us build updraft](https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md)
 
 ------
-Sharing the personal stories that inform the values behind this project is inspired by the amazing [Tribal Leadership (Dave Logan et. al.)](https://www.triballeadership.net/). Sharing these stories in the most intimate and honest way possible, is inspired by the powerful [Daring Greatly (Brené Brown)](https://www.amazon.de/Daring-Greatly-Courage-Vulnerable-Transforms/dp/0241257409/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&dchild=1&keywords=daring+greatly&qid=1592725525&sr=8-1)
+Sharing the personal stories that inform the values behind this project is inspired by the amazing [Tribal Leadership (Dave Logan et. al.)](https://www.triballeadership.net/)
