@@ -7,6 +7,9 @@ import * as fs from 'fs'
 import * as tsdoc from '@microsoft/tsdoc'
 import { TSDocParser, ParserContext, DocComment } from '@microsoft/tsdoc';
 import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
+import Templates from './check'
+import { exec } from 'child_process'
+import getVersionUpgrades from '../versionUpgrades'
 
 /**
  * Returns true if the specified SyntaxKind is part of a declaration form.
@@ -116,7 +119,7 @@ function walkCompilerAstAndFindComments(node: ts.Node, indent: string, foundComm
     }
   }
 
-  console.log(`${indent}- ${ts.SyntaxKind[node.kind]}${foundCommentsSuffix}`);
+  // console.log(`${indent}- ${ts.SyntaxKind[node.kind]}${foundCommentsSuffix}`);
 
   return node.forEachChild(child => walkCompilerAstAndFindComments(child, indent + '  ', foundComments));
 }
@@ -130,13 +133,13 @@ function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string): ParsedNode[] {
   let dumpText: string = '';
   if (docNode instanceof tsdoc.DocExcerpt) {
     const content: string = docNode.content.toString();
-    console.log(colors.red(`${indent} Content: ${content}`))
+    // console.log(colors.red(`${indent} Content: ${content}`))
     dumpText += colors.gray(`${indent}* ${docNode.excerptKind}=`) + colors.cyan(JSON.stringify(content));
     parsedNodes.push({ type: docNode.excerptKind, content })
   } else {
     dumpText += `${indent}- ${docNode.kind}`;
   }
-  console.log(dumpText);
+  // console.log(dumpText);
 
   for (const child of docNode.getChildNodes()) {
     const subTreeParsedNodes = dumpTSDocTree(child, indent + '  ')
@@ -146,11 +149,11 @@ function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string): ParsedNode[] {
   return parsedNodes
 }
 
-function parseTSDoc(foundComment: IFoundComment): void {
-  console.log(os.EOL + colors.green('Comment to be parsed:') + os.EOL);
-  console.log(colors.gray('<<<<<<'));
-  console.log(foundComment.textRange.toString());
-  console.log(colors.gray('>>>>>>'));
+function parseTSDoc(foundComment: IFoundComment): ParsedNode[] {
+  // console.log(os.EOL + colors.green('Comment to be parsed:') + os.EOL);
+  // console.log(colors.gray('<<<<<<'));
+  // console.log(foundComment.textRange.toString());
+  // console.log(colors.gray('>>>>>>'));
 
   const customConfiguration: tsdoc.TSDocConfiguration = new tsdoc.TSDocConfiguration();
 
@@ -204,15 +207,15 @@ function parseTSDoc(foundComment: IFoundComment): void {
     author
   ]);
 
-  console.log(os.EOL + 'Invoking TSDocParser with custom configuration...' + os.EOL);
+  // console.log(os.EOL + 'Invoking TSDocParser with custom configuration...' + os.EOL);
   const tsdocParser: tsdoc.TSDocParser = new tsdoc.TSDocParser(customConfiguration);
   const parserContext: tsdoc.ParserContext = tsdocParser.parseRange(foundComment.textRange);
   const docComment: tsdoc.DocComment = parserContext.docComment;
 
-  console.log(os.EOL + colors.green('Parser Log Messages:') + os.EOL);
+  // console.log(os.EOL + colors.green('Parser Log Messages:') + os.EOL);
 
   if (parserContext.log.messages.length === 0) {
-    console.log('No errors or warnings.');
+    // console.log(colors.green('No errors or warnings.'))
   } else {
     const sourceFile: ts.SourceFile = foundComment.compilerNode.getSourceFile();
     for (const message of parserContext.log.messages) {
@@ -225,70 +228,8 @@ function parseTSDoc(foundComment: IFoundComment): void {
     }
   }
 
-  if (parserContext.docComment.modifierTagSet.hasTag(customModifierDefinition)) {
-    console.log(os.EOL + colors.cyan(`The ${customModifierDefinition.tagName} modifier was FOUND.`));
-  } else {
-    console.log(os.EOL + colors.cyan(`The ${customModifierDefinition.tagName} modifier was NOT FOUND.`));
-  }
-
-  console.log(os.EOL + colors.green('Visiting TSDoc\'s DocNode tree') + os.EOL);
   const parsedNodes = dumpTSDocTree(docComment, '');
-  console.log('------')
-  console.log(JSON.stringify(parsedNodes.filter(({ type }) => type === 'BlockTag'), null, 2))
-}
-
-/**
- * The advanced demo invokes the TypeScript compiler and extracts the comment from the AST.
- * It also illustrates how to define custom TSDoc tags using TSDocConfiguration.
- */
-export function advancedDemo(): void {
-  console.log(colors.yellow('*** TSDoc API demo: Advanced Scenario ***') + os.EOL);
-
-  const inputFilename: string = path.resolve(path.join(process.cwd(), 'index.ts'));
-  const compilerOptions: ts.CompilerOptions = {
-    'target': ts.ScriptTarget.ES5
-  };
-
-  // Compile the input
-  console.log('Invoking the TypeScript compiler to analyze assets/advanced-input.ts...');
-
-  const program: ts.Program = ts.createProgram([ inputFilename ], compilerOptions);
-
-  // Report any compiler errors
-  const compilerDiagnostics: ReadonlyArray<ts.Diagnostic> = program.getSemanticDiagnostics();
-  if (compilerDiagnostics.length > 0) {
-    for (const diagnostic of compilerDiagnostics) {
-      const message: string = ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL);
-      if (diagnostic.file) {
-        const location: ts.LineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-        const formattedMessage: string = `${diagnostic.file.fileName}(${location.line + 1},${location.character + 1}):`
-          + ` [TypeScript] ${message}`;
-        console.log(colors.red(formattedMessage));
-      } else {
-        console.log(colors.red(message));
-      }
-    }
-  } else {
-    console.log('No compiler errors or warnings.');
-  }
-
-  const sourceFile: ts.SourceFile | undefined = program.getSourceFile(inputFilename);
-  if (!sourceFile) {
-    throw new Error('Error retrieving source file');
-  }
-
-  console.log(os.EOL + colors.green('Scanning compiler AST for first code comment...') + os.EOL);
-
-  const foundComments: IFoundComment[] = [];
-
-  walkCompilerAstAndFindComments(sourceFile, '', foundComments);
-
-  if (foundComments.length === 0) {
-    console.log(colors.red('Error: No code comments were found in the input file'));
-  } else {
-    // For the purposes of this demo, only analyze the first comment that we found
-    parseTSDoc(foundComments[0]);
-  }
+  return parsedNodes
 }
 
 /**
@@ -318,6 +259,300 @@ export class Formatter {
   }
 }
 
+type ParsedTag = {
+  tagType: string,
+  content: string,
+}
+const groupByTags = (nodes: ParsedNode[]): ParsedTag[] => {
+  let condensedNodes = [] as ParsedTag[]
+  let currentTag = 'default'
+  let currentContent = ''
+
+  nodes.forEach(({ type, content }, index) => {
+    if (type === 'BlockTag') {
+      condensedNodes[currentTag] = currentContent.trim()
+      condensedNodes.push({ tagType: currentTag, content: currentContent.trim() })
+      currentTag = content
+      currentContent = ''
+      return
+    }
+
+    // Add the content of the current node
+    // console.log('Adding content: ', JSON.stringify({ type, content }, null, 2))
+    currentContent += content
+  })
+
+  condensedNodes.push({ tagType: currentTag, content: currentContent.trim() })
+  return condensedNodes
+}
+
+const extractTsDoc = (fileName): ParsedTag[] => {
+  const compilerOptions: ts.CompilerOptions = {
+    'target': ts.ScriptTarget.ES5
+  };
+
+  // Compile the input
+  // console.log(`Invoking the TypeScript compiler to analyze ${fileName}...`);
+
+  const program: ts.Program = ts.createProgram([ fileName ], compilerOptions);
+
+  // Report any compiler errors
+  const compilerDiagnostics: ReadonlyArray<ts.Diagnostic> = program.getSemanticDiagnostics();
+  if (compilerDiagnostics.length > 0) {
+    for (const diagnostic of compilerDiagnostics) {
+      const message: string = ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL);
+      if (diagnostic.file) {
+        const location: ts.LineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+        const formattedMessage: string = `${diagnostic.file.fileName}(${location.line + 1},${location.character + 1}):`
+          + ` [TypeScript] ${message}`;
+        console.log(colors.red(formattedMessage));
+      } else {
+        console.log(colors.red(message));
+      }
+    }
+  } else {
+    console.log(colors.green('No compiler errors or warnings.'))
+  }
+
+  const sourceFile: ts.SourceFile | undefined = program.getSourceFile(fileName);
+  if (!sourceFile) {
+    throw new Error('Error retrieving source file');
+  }
+
+  // console.log(os.EOL + colors.green('Scanning compiler AST for first code comment...') + os.EOL);
+
+  const foundComments: IFoundComment[] = [];
+  walkCompilerAstAndFindComments(sourceFile, '', foundComments);
+
+  let parsedNodes = [] as ParsedNode[]
+  if (foundComments.length === 0) {
+    throw new Error('Error: No code comments were found in the input file')
+  } else {
+    // For the purposes of this demo, only analyze the first comment that we found
+    parsedNodes = parseTSDoc(foundComments[0]);
+  }
+
+  // Condense content in nodes
+  const parsedTags = groupByTags(parsedNodes)
+  // console.log('----')
+  // console.log(JSON.stringify(parsedTags, null, 2))
+  return parsedTags
+}
+
+const getTagContent = (parsedTags: ParsedTag[], tagType: string): string | null => {
+  const foundItem = parsedTags.find((parsedTag) => parsedTag.tagType === tagType)
+  if (foundItem === undefined) {
+    return null
+  }
+
+  return foundItem.content
+}
+
+type Feature = {
+  headline: string,
+  description: string,
+  optional: boolean
+}
+
+const getFeaturesFromTags = (parsedTags: ParsedTag[]): Feature[] => {
+  let features = [] as Feature[]
+  let currentFeature = null as Feature | null
+  let previousTagType = ''
+
+  parsedTags.forEach(({ tagType, content }) => {
+    const isFeatureTag = (tagType === '@feature' || tagType === '@optionalFeature')
+    const isDescriptionTag = (tagType === '@featureDescription')
+    const prevIsFeatureTag = (previousTagType === '@feature' || previousTagType === '@optionalFeature')
+
+    if (isFeatureTag && currentFeature !== null) {
+      features.push(currentFeature)
+    }
+
+    if (isFeatureTag) {
+      currentFeature = {
+        headline: content,
+        description: '',
+        optional: (tagType === '@optionalFeature')
+      }
+    }
+
+    if (isDescriptionTag && !prevIsFeatureTag) {
+      throw new Error(`The @featureDescrption tag has to be preceeded by a @feature or @optionalFeature tag`)
+    }
+
+    if (isDescriptionTag && prevIsFeatureTag) {
+      currentFeature.description = content
+    }
+
+    previousTagType = tagType
+  })
+
+  if (currentFeature !== null) {
+    features.push(currentFeature)
+  }
+
+  return features
+}
+
+type ModuleData = {
+  author: string,
+  headline: string,
+  description: string,
+  features: Feature[],
+  example: string,
+  moduleName: string
+}
+
+const consolidateModuleData = (parsedTags: ParsedTag[], packageJson: any): ModuleData => {
+  const author = getTagContent(parsedTags, '@author')
+  const headline = getTagContent(parsedTags, '@headline')
+  const description = getTagContent(parsedTags, '@description')
+  const example = getTagContent(parsedTags, '@example')
+  const features = getFeaturesFromTags(parsedTags)
+
+  if (!author || !headline || !description) {
+    throw new Error('@author, @headline, and @description are required TSDoc fields in index.ts')
+  }
+
+  if (features.length === 0) {
+    console.log(colors.yellow('No @feature or @optionalFeature tags found - consider describing 2-3 features that are special about your udpraft component.'))
+  }
+
+  const { name: moduleName } = packageJson
+
+  return {
+    author,
+    headline,
+    description,
+    features,
+    example,
+    moduleName
+  } as ModuleData
+}
+
+const generateFeatureLine = ({ headline, description, optional }: Feature) => {
+  return `- **✓ ${headline}${optional ? ' (optional)' : ''}**${description === '' ? '' : `  \n${description}`}\n`
+}
+
+const renderReadme = ({ author, description, example, features, moduleName }: ModuleData): string | null => `
+# ${moduleName}
+${description}
+
+${
+  features.length > 0
+  ? `
+## Features
+${features.map(generateFeatureLine).join('')}
+  `
+  : ''
+}
+
+## Install
+\`npm install --save ${moduleName}\`
+
+${
+  example === null
+  ? ''
+  : `
+## Example
+${example}
+  `
+}
+
+## Templates
+To see the available quickstart-templates for this module:
+- Install the *updraft* cli:  
+\`npm install --global @updraft/cli\`
+- Run the \`templates\` command:  
+\`updraft templates ${moduleName}\`
+`
+
+const renderPackageJson = ({ author, headline, features }, existingPackageJson: any): any => {
+  let updatedPackageJson = existingPackageJson
+  updatedPackageJson.author = author
+  updatedPackageJson.description = `${headline}${features.length > 0 ? ` (${features.map(({ headline }) => `✓ ${headline}`).join(', ')})` : ''}`
+  return updatedPackageJson
+}
+
+const docHandler = async (modulePath: string) => {
+  const packageJsonPath = path.join(modulePath, 'package.json')
+  let packageJson = {} as any
+  try {
+    const rawPackageJson = fs.readFileSync(packageJsonPath, { encoding: 'utf8' })
+    packageJson = JSON.parse(rawPackageJson)
+  } catch (error) {
+    console.log(colors.red(`Failed to load package.json file:\n${packageJsonPath}\n${error.toString()}`))
+    return
+  }
+
+  console.log(colors.bold(`Creating DOCS for ${packageJson.name}`))
+  console.log(colors.grey(packageJsonPath))
+  console.log('')
+  console.log(colors.green('✓ Successfully loaded package.json file'))
+
+  const inputFilePath = path.join(modulePath, 'index.ts')
+  let parsedTags = [] as ParsedTag[]
+  try {
+    parsedTags = extractTsDoc(inputFilePath)
+  } catch (error) {
+    console.log(colors.red(`Failed to process component index.ts file:\n${inputFilePath}\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully parsed TSDoc tags from index.ts'))
+
+  let moduleData = {} as ModuleData
+  try {
+    moduleData = consolidateModuleData(parsedTags, packageJson)
+  } catch (error) {
+    console.log(colors.red(`Failed to convert the parsed tags to module data\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Done consolidating module data'))
+
+  let readme = ''
+  try {
+    readme = renderReadme(moduleData)
+  } catch (error) {
+    console.log(colors.red(`Failed to render README:\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully rendered README'))
+
+  let updatedPackageJson = ''
+  try {
+    updatedPackageJson = renderPackageJson(moduleData, packageJson)
+  } catch (error) {
+    console.log(colors.red(`Failed to render package.json:\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully rendered package.json'))
+
+  const readmeFilePath = path.join(modulePath, 'README.md')
+  try {
+    fs.writeFileSync(readmeFilePath, readme)
+  } catch (error) {
+    console.log(colors.red(`Failed to write README:\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully replaced README.md with rendererd README'))
+
+  try {
+    fs.writeFileSync(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2))
+  } catch (error) {
+    console.log(colors.red(`Failed to write package.json:\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully wrote updated package.json'))
+
+  try {
+    await exec(`git add package.json README.md && git commit -m "Update package.json and README.md for ${packageJson.name}"`)
+  } catch (error) {
+    console.log(colors.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
+    return
+  }
+  console.log(colors.green('✓ Successfully committed changes to package.json & README.md'))
+}
+
 export default class Doc extends Command {
   static description = 'Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts\n\nAuto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while you can focus on optimizing the user experience of your own updraft modules.\n\nRun "$ updraft templates @updraft/templates updraft-module-ts" to download the latest example on how to use the tsdoc fields.'
 
@@ -327,12 +562,46 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
 `,
   ]
 
-  static flags = {}
-  static args = []
+  static flags = {
+    help: flags.help({char: 'h'}),
+    multimode: flags.boolean({
+      default: false,
+      description: 'runs checks on first layer of subfolders in PATH',
+    })
+  }
+
+  static args = [
+    {
+      name: 'modulePath',
+      default: './',
+      required: false,
+      description: 'path of the module(s) to check - defaults to current directory'
+    },
+  ]
 
   async run() {
-    const {args, flags} = this.parse(Doc)
-    advancedDemo()
-    // simpleDemo()
+    const {args, flags} = this.parse(Templates)
+    const { modulePath } = args
+    const { multimode } = flags
+
+    console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
+    console.log(colors.green(path.resolve(modulePath)))
+    console.log('')
+
+    if (multimode) {
+      console.log(colors.yellow(`Checking for changes based on "git diff origin/master..."`))
+      const moduleChanges = await getVersionUpgrades(process.cwd(), 'diff origin/master...')
+      console.log(moduleChanges.length > 0
+                  ? colors.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
+                  : colors.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
+                 )
+      console.log('')
+
+      for (let { path: modulePath } of moduleChanges) {
+        await docHandler(modulePath)
+      }
+    } else {
+      await docHandler(path.join(process.cwd(), modulePath))
+    }
   }
 }
