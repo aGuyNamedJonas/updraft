@@ -8,13 +8,15 @@ import * as CertificateManager from '@aws-cdk/aws-certificatemanager'
 
 /**
  * @author Jonas Peeck <hi@aGuyNamedJonas.com>
+ * @headline
+ * Easy to use API GW component with Lambda integration
  * @description
  * Easily setup an API Gateway with endpoints that are handled by lambdas.
  *
- * This can even include multiple lines, because that's how cool we are around here :)
+ * Setting up API Gateways in AWS can be pretty cumbersome - even when using Terraform or Cloudformation.  
+ * This template is here to help on that front - Easily define your API schema and hook it up to your lambdas.
  *
  * @feature Simple API schema
- * @featureDescription It's very straight forward to define your API - as it should be (but often isn't. Thanks API GW - jeez)
  *
  * @feature CORS Support
  * @featureDescription Just set the `CORS` flag for all endpoints that you want `options` handlers to be added for
@@ -23,6 +25,7 @@ import * as CertificateManager from '@aws-cdk/aws-certificatemanager'
  * @featureDescription If you have a Route53 managed domain, simply setup a subdomain for this API (e.g. `api.example.com`)
  *
  * @example
+ * ```typescript
  * new AwsApiGwMultiLambda(this, 'todo-api', {
  *   apiName: 'todos',
  *   apiDescription: 'API to manage todos',
@@ -75,6 +78,7 @@ import * as CertificateManager from '@aws-cdk/aws-certificatemanager'
  *     },
  *   ]
  * })
+ * ```
  */
 
 export enum HTTP_METHODS {
