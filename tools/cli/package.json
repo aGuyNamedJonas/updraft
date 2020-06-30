@@ -1,7 +1,7 @@
 {
   "name": "@updraft/cli",
   "description": "Download quickstart templates for updraft modules, initialize your own updraft module, or run checks to get your module ready for PR submission.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "aGuyNamedJonas @aGuyNamedJonas",
   "bin": {
     "updraft": "./bin/run"
