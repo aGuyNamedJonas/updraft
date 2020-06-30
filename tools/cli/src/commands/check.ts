@@ -247,6 +247,7 @@ const printResults = (results: RulesResult[]) => {
   console.log(chalk.bold('ERRORS'))
   results.filter(filterStatus(STATUS.ERROR)).forEach(printResult)
   console.log('')
+  // TODO: Fix "passed" count (which is wrong)
   console.log(chalk.green(`${successCount} passed`))
   console.log(chalk.yellow((warnCount === 1 ? `1 warning` : `${warnCount} warnings`)))
   console.log(chalk.red((errorCount === 1 ? `1 error` : `${errorCount} errors`)))
