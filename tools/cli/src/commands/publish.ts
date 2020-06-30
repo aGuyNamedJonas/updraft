@@ -34,6 +34,7 @@ const printModuleAndVersion = ({ name, version, modulePackage, successMessage = 
   console.log('')
 }
 
+// TODO: Add error when NPM_TOKEN is not set
 const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc')
 
 const publishVersionChanges = async (moduleChanges, publicAccess: boolean) => {

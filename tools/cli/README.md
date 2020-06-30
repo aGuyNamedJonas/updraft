@@ -1,7 +1,7 @@
 @updraft/cli
 ============
 
-Get quickstart templates for updraft moudles, initialize your own updraft module, or chek your module before submitting it as a PR.
+Get quickstart templates for updraft moudles, initialize your own updraft module, or check your module before submitting it as a PR.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/@updraft/cli.svg)](https://npmjs.org/package/@updraft/cli)
@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.5 darwin-x64 node-v14.3.0
+@updraft/cli/0.0.6 darwin-x64 node-v14.3.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
@@ -61,7 +61,7 @@ EXAMPLES
   Checks the updraft module in the folder "./aws-my-amazing-module"
 ```
 
-_See code: [src/commands/check.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/check.ts)_
+_See code: [lib/commands/check.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.6/lib/commands/check.js)_
 
 ## `updraft doc [MODULEPATH]`
 
@@ -90,7 +90,7 @@ EXAMPLE
   Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
 ```
 
-_See code: [src/commands/doc.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/doc.ts)_
+_See code: [lib/commands/doc.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.6/lib/commands/doc.js)_
 
 ## `updraft help [COMMAND]`
 
@@ -129,7 +129,7 @@ EXAMPLES
   Get started with a typescript udpraft module
 ```
 
-_See code: [src/commands/init.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/init.ts)_
+_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.6/lib/commands/init.js)_
 
 ## `updraft publish [MODULEPATH] [DIFFCMD]`
 
@@ -169,7 +169,7 @@ EXAMPLES
   master branch (if you want to do special publish thing in branches other than the master)
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/publish.ts)_
+_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.6/lib/commands/publish.js)_
 
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
@@ -198,5 +198,5 @@ EXAMPLES
   Installs the "echo" example into your current folder without prompting
 ```
 
-_See code: [src/commands/templates.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/templates.ts)_
+_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.6/lib/commands/templates.js)_
 <!-- commandsstop -->
