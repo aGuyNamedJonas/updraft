@@ -1,7 +1,7 @@
 {
   "name": "@updraft/aws-api-gw-lambdas",
   "version": "0.0.1",
-  "description": "CDK Module to setup an API Gateway and map it to lambda handlers (CORS, Domain Support)",
+  "description": "Easy to use API GW component with Lambda integration (✓ Simple API schema, ✓ CORS Support, ✓ Custom Domains)",
   "repository": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/aws-api-gw-multi-lambda",
   "homepage": "https://github.com/aGuyNamedJonas/updraft",
   "main": "lib/index.js",
@@ -20,5 +20,6 @@
   },
   "devDependencies": {
     "typescript": "^3.9.3"
-  }
+  },
+  "author": "Jonas Peeck <hi@aGuyNamedJonas.com>"
 }
