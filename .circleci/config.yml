@@ -32,6 +32,8 @@ jobs:
           steps:
             - run: sudo npm install --global @updraft/cli
             - run: cd /home/circleci/project/modules/typescript/ && updraft check --multimode
+            - run: cd /home/circleci/project/modules/typescript/ && updraft doc --multimode
+            - run: git push -q -u https://${GITHUB_PERSONAL_TOKEN}@github.com/aGuyNamedJonas/updraft.git ${CIRCLE_BRANCH}
 workflows:
   respublish-modules-and-tools:
     jobs:
