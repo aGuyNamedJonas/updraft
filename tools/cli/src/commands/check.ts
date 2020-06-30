@@ -133,15 +133,6 @@ const checkPackage = (packageJson, packageJsonPath) => {
   )
 
   results.push(
-    assertWarn(
-      description.startsWith('CDK Module '),
-      `Description starts with "CDK Module"`,
-      `We recommend that the package.json field "description" starts with "CDK Module". E.g.: "CDK Module that sets up a static site with cloudfront distribution on AWS"`,
-      simplicity('We want to make sure people understand what an updraft module is - already in the NPM search. And the best and most concise explanation seems to be that updraft modules are "CDK Modules".')
-    )
-  )
-
-  results.push(
     assertError(
       parentFolderName === moduleName,
       `Module name matches folder name`,
