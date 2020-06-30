@@ -1,4 +1,5 @@
 {
   "name": "@updraft/templates",
+  "version": "0.0.3",
   "description": "Templates to start building with updraft"
 }
