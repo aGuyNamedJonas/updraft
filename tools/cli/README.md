@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.4 darwin-x64 node-v14.3.0
+@updraft/cli/0.0.5 darwin-x64 node-v14.3.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
@@ -29,6 +29,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`updraft check [MODULEPATH]`](#updraft-check-modulepath)
+* [`updraft doc [MODULEPATH]`](#updraft-doc-modulepath)
 * [`updraft help [COMMAND]`](#updraft-help-command)
 * [`updraft init`](#updraft-init)
 * [`updraft publish [MODULEPATH] [DIFFCMD]`](#updraft-publish-modulepath-diffcmd)
@@ -60,7 +61,36 @@ EXAMPLES
   Checks the updraft module in the folder "./aws-my-amazing-module"
 ```
 
-_See code: [src/commands/check.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.4/src/commands/check.ts)_
+_See code: [src/commands/check.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/check.ts)_
+
+## `updraft doc [MODULEPATH]`
+
+Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts
+
+```
+USAGE
+  $ updraft doc [MODULEPATH]
+
+ARGUMENTS
+  MODULEPATH  [default: ./] path of the module(s) to check - defaults to current directory
+
+OPTIONS
+  -h, --help   show CLI help
+  --multimode  runs checks on first layer of subfolders in PATH
+
+DESCRIPTION
+  Auto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while 
+  you can focus on optimizing the user experience of your own updraft modules.
+
+  Run "$ updraft templates @updraft/templates updraft-module-ts" to download the latest example on how to use the tsdoc 
+  fields.
+
+EXAMPLE
+  $ updraft doc
+  Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
+```
+
+_See code: [src/commands/doc.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/doc.ts)_
 
 ## `updraft help [COMMAND]`
 
@@ -99,7 +129,7 @@ EXAMPLES
   Get started with a typescript udpraft module
 ```
 
-_See code: [src/commands/init.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.4/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/init.ts)_
 
 ## `updraft publish [MODULEPATH] [DIFFCMD]`
 
@@ -139,7 +169,7 @@ EXAMPLES
   master branch (if you want to do special publish thing in branches other than the master)
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.4/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/publish.ts)_
 
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
@@ -168,5 +198,5 @@ EXAMPLES
   Installs the "echo" example into your current folder without prompting
 ```
 
-_See code: [src/commands/templates.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.4/src/commands/templates.ts)_
+_See code: [src/commands/templates.ts](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.5/src/commands/templates.ts)_
 <!-- commandsstop -->

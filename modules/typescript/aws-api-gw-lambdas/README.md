@@ -1,14 +1,23 @@
-# aws-api-gw-lambda
-Easily register API endpoints to be handled by a lambda functions.
+
+# @updraft/aws-api-gw-lambdas
+Easily setup an API Gateway with endpoints that are handled by lambdas.
+
+Setting up API Gateways in AWS can be pretty cumbersome - even when using Terraform or Cloudformation.
+This template is here to help on that front - Easily define your API schema and hook it up to your lambdas.
+
 
 ## Features
-* Easily define your API ✓
-* CORS Support ✓
-* Supports registering with your domain ✓  
-(e.g. `api.example.com`)
+- **✓ Simple API schema**
+- **✓ CORS Support**  
+Just set the `CORS` flag for all endpoints that you want `options` handlers to be added for
+- **✓ Custom Domains (optional)**  
+If you have a Route53 managed domain, simply setup a subdomain for this API (e.g. `api.example.com`)
+
+  
 
 ## Install
-`npm install --save @updraft/aws-api-gw-lambda`
+`npm install --save @updraft/aws-api-gw-lambdas`
+
 
 ## Example
 ```typescript
@@ -65,13 +74,11 @@ new AwsApiGwMultiLambda(this, 'todo-api', {
   ]
 })
 ```
+  
 
 ## Templates
-### echo
-Sets up lambdas and an API Gateway that echos your GET and your POST request.
-
-*Install*  
-`updraft templates @updraft/aws-api-gw-lambda echo-js`
-
-*Deploy*  
-`cd ./<folder you installed template to> && npm install && npm run deploy`
+To see the available quickstart-templates for this module:
+- Install the *updraft* cli:  
+`npm install --global @updraft/cli`
+- Run the `templates` command:  
+`updraft templates @updraft/aws-api-gw-lambdas`
