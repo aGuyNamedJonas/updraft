@@ -2,9 +2,8 @@
 # @updraft/aws-api-gw-lambdas
 Easily setup an API Gateway with endpoints that are handled by lambdas.
 
-Setting up an API Gateway in AWS is pretty verbose as is (in Terraform and Cloudformation).
-Add CORS handlers and Domain registration to the requirements, and you're staring into a deep, black hole of discomfort.
-Luckily, this module is here to help. Setting up an API Gateway on AWS was never simpler 🚀
+Setting up API Gateways in AWS can be pretty cumbersome - even when using Terraform or Cloudformation.
+This template is here to help on that front - Easily define your API schema and hook it up to your lambdas.
 
 
 ## Features
