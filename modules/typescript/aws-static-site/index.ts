@@ -11,11 +11,12 @@ import { Construct } from '@aws-cdk/core';
 /**
  * @author Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)
  * @headline
- * Easily setup a website on AWS under your own domain
+ * Easily setup a static site on AWS under your own domain
  * @description
- * Easily setup a website on AWS under your own domain.
+ * Easily setup a static site on AWS under your own domain.
  *
  * Uses your local code, so you don't have to upload into a bucket prior to deploying changes.
+ * TODO: Add SPA support
  *
  * @feature Custom Domain
  * @featureDescription Setup any Route53 managed domain to point to this website
