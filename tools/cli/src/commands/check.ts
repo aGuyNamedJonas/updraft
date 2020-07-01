@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'chalk'
 import getVersionUpgrades from '../versionUpgrades'
+import * as colors from 'colors'
 
 // const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
 
@@ -335,7 +336,12 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
                  )
       console.log('')
 
-      for (let { modulePackage } of moduleChanges) {
+      for (let { modulePackage, name } of moduleChanges) {
+        // TODO: Replace this exclusion with glob pattern in a config
+        if (name === '@updraft/templates') {
+          console.log(colors.yellow('Skipping @updraft/templates'))
+          continue
+        }
         await checkHandler(modulePackage)
       }
     } else {
