@@ -40,7 +40,7 @@ const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken
 const publishVersionChanges = async (moduleChanges, publicAccess: boolean) => {
   const publishPackageToNpm = async ({ name, version, modulePackage, path: modulePath }: ModuleChange) => {
     try {
-      await exec(`cd ${modulePath} && npm install && npm publish ${publicAccess ? '--access public' : ''}`)
+      await exec(`cd ${modulePath} && npm install && npm run build && npm publish ${publicAccess ? '--access public' : ''}`)
     } catch (error) {
       printModuleAndVersion({ name, version, modulePackage, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
       throw new Error(error)
