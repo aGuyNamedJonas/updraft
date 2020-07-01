@@ -149,6 +149,11 @@ Installs the "echo" example into your current folder without prompting
     if (!selectedTemplate) {
       // TODO: Decide color vs chalk
       // TODO: Add debug / log statements to every exit condition
+      // TODO: Add setup templates - strings that can be left throughout code, package.json and other files, prompting user input after installation.
+      // Like that it's possible to request data from users after they downloaded a template and guide users through customizing a template.
+      // This system could probably really be a format for template strings that contain the title + description and get automatically replaced by
+      // updraft cli after user provides a value. This could also be built into updraft doc and updraft check, so that users can easily get started with
+      // a module and decide to provide the neccessary infos later on as well.
       console.log(chalk.yellow('No template selected, exiting'))
       this.exit(0)
     }
