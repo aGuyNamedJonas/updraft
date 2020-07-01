@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Construct } from '@aws-cdk/core'
+import { Queue } from '@aws-cdk/aws-sqs'
 
 /**
  * @author Jonas Peeck <hi@aGuyNamedJonas.com> (https://aguynamedjonas.com)
@@ -27,7 +28,7 @@ export type AwsWebhookProcessorProps = {}
 class AwsWebhookProcessor extends Construct {
   constructor(parent: Construct, name: string, props: AwsWebhookProcessorProps) {
     super(parent, name)
-    // << Insert your implementation here >>
+    new Queue(this, 'processor-queue')
   }
 }
 

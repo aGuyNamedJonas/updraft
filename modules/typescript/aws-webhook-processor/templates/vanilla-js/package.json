@@ -1,0 +1,28 @@
+{
+  "name": "vanilla-js",
+  "version": "0.1.0",
+  "bin": {
+    "vanilla-js": "bin/vanilla-js.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "1.48.0",
+    "@types/jest": "^26.0.3",
+    "@types/node": "14.0.14",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "aws-cdk": "1.48.0",
+    "ts-node": "^8.10.2",
+    "typescript": "~3.9.5"
+  },
+  "dependencies": {
+    "@aws-cdk/core": "1.48.0",
+    "@updraft/aws-webhook-processor": "file:../..",
+    "source-map-support": "^0.5.19"
+  }
+}
