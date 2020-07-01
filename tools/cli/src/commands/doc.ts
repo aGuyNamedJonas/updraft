@@ -545,7 +545,8 @@ const docHandler = async (modulePath: string) => {
   console.log(colors.green('✓ Successfully wrote updated package.json'))
 
   try {
-    await exec(`git add package.json README.md && git commit -m "Update package.json and README.md for ${packageJson.name}"`)
+    process.cwd()
+    await exec(`cd ${modulePath} && git add package.json README.md && git commit -m "Auto-generate update of package.json and README.md for ${packageJson.name}"`)
   } catch (error) {
     console.log(colors.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
     return
