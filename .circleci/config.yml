@@ -12,8 +12,8 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: cd /home/circleci/project/tools/npm-publisher/ && npm install
-            - run: cd /home/circleci/project/ && node ./tools/npm-publisher
+            - run: sudo npm install --global @updraft/cli
+            - run: cd /home/circleci/project/modules/typescript/ && updraft publish --multimode
   republish-cli:
     executor:
       name: node/default
