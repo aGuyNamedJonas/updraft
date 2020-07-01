@@ -599,6 +599,11 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
       console.log('')
 
       for (let { path: modulePath } of moduleChanges) {
+        // TODO: Replace this exclusion with glob pattern in a config
+        if (name === '@updraft/templates') {
+          console.log(colors.yellow('Skipping @updraft/templates'))
+          continue
+        }
         await docHandler(modulePath)
       }
     } else {
