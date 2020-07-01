@@ -1,8 +1,9 @@
 
 # @updraft/aws-static-site
-Easily setup a website on AWS under your own domain.
+Easily setup a static site on AWS under your own domain.
 
 Uses your local code, so you don't have to upload into a bucket prior to deploying changes.
+TODO: Add SPA support
 
 
 ## Features
