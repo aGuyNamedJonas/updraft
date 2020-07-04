@@ -2,7 +2,7 @@ import {Command, flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'chalk'
-import getVersionUpgrades from '../versionUpgrades'
+import detectPackageJsonUpgrades from '../versionUpgrades'
 import * as colors from 'colors'
 
 // const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
@@ -329,7 +329,7 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
 
     if (multimode) {
       console.log(chalk.yellow(`Checking for changes based on "git diff origin/master..."`))
-      const moduleChanges = await getVersionUpgrades(process.cwd(), 'diff origin/master...')
+      const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
       console.log(moduleChanges.length > 0
                   ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
                   : chalk.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')

@@ -1,3 +1,4 @@
+import * as chalk from 'chalk'
 import {Command, flags} from '@oclif/command'
 import * as colors from 'colors'
 import * as os from 'os'
@@ -9,7 +10,10 @@ import { TSDocParser, ParserContext, DocComment } from '@microsoft/tsdoc';
 import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
 import Templates from './check'
 import { exec } from 'child_process'
-import getVersionUpgrades from '../versionUpgrades'
+import detectPackageJsonUpgrades from '../versionUpgrades'
+import { verboseFlag } from '../shared'
+const debug = require('debug')
+const logger = debug('doc')
 
 /**
  * Returns true if the specified SyntaxKind is part of a declaration form.
@@ -568,7 +572,8 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
     multimode: flags.boolean({
       default: false,
       description: 'runs checks on first layer of subfolders in PATH',
-    })
+    }),
+    verbose: verboseFlag
   }
 
   static args = [
@@ -583,7 +588,14 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
   async run() {
     const {args, flags} = this.parse(Templates)
     const { modulePath } = args
-    const { multimode } = flags
+    const { multimode, verbose } = flags
+
+    if (verbose) {
+      console.log(chalk.yellow('Verbose output enabled'))
+      debug.enable('publish, versionUpgrades')
+    }
+
+    logger('Running "doc" command: %O', { args, flags })
 
     console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
     console.log(colors.green(path.resolve(modulePath)))
@@ -591,7 +603,7 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
 
     if (multimode) {
       console.log(colors.yellow(`Checking for changes based on "git diff origin/master..."`))
-      const moduleChanges = await getVersionUpgrades(process.cwd(), 'diff origin/master...')
+      const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
       console.log(moduleChanges.length > 0
                   ? colors.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
                   : colors.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')

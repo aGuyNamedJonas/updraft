@@ -12,6 +12,7 @@
     "@oclif/command": "^1.6.1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
+    "@types/jest": "^26.0.3",
     "chalk": "^4.1.0",
     "cli-ux": "^5.4.6",
     "colors": "^1.4.0",

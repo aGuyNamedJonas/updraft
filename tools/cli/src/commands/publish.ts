@@ -1,7 +1,7 @@
 import * as chalk from 'chalk'
 import * as path from 'path'
 import {Command, flags} from '@oclif/command'
-import getVersionUpgrades from '../versionUpgrades'
+import detectPackageJsonUpgrades from '../versionUpgrades'
 import { exec, verboseFlag } from '../shared'
 const debug = require('debug')
 const logger = debug('publish')
@@ -129,19 +129,19 @@ Publishes all modules that had their version numbers changed in the folder "modu
     console.log(chalk.yellow(`Checking for changes using "git ${diffCmd}"`))
     console.log('')
 
-    const moduleChanges = await getVersionUpgrades(process.cwd(), diffCmd)
-    console.log(moduleChanges.length > 0
-                ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
+    const packageUpgrades = await detectPackageJsonUpgrades(diffCmd)
+    console.log(packageUpgrades.length > 0
+                ? chalk.green(`${packageUpgrades.length} module change${packageUpgrades.length > 1 ? 's' : ''} detected`)
                 : chalk.yellow('No module changes detected.')
                 )
     console.log('')
 
-    if (moduleChanges.length === 0 || dryrun) {
+    if (packageUpgrades.length === 0 || dryrun) {
       process.exit(0)
     }
 
     try {
-      await publish(moduleChanges, publicaccess)
+      await publish(packageUpgrades, publicaccess)
     } catch (error) {
       console.log(chalk.red(`Publication failed:\n${error.toString()}`))
       process.exit(1)
