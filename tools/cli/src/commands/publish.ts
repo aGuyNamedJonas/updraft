@@ -2,7 +2,9 @@ import * as chalk from 'chalk'
 import * as path from 'path'
 import {Command, flags} from '@oclif/command'
 import getVersionUpgrades from '../versionUpgrades'
-import { exec } from '../shared'
+import { exec, verboseFlag } from '../shared'
+const debug = require('debug')
+const logger = debug('publish')
 
 type ModuleChange = {
   name: string,
@@ -82,7 +84,12 @@ Publishes all modules that had their version numbers changed in the folder "modu
     publicaccess: flags.boolean({
       default: true,
       description: 'run the npm publish with the "--access public" flag'
-    })
+    }),
+    dryrun: flags.boolean({
+      default: false,
+      description: 'only check for packages to re-publish, do not actually publish to NPM'
+    }),
+    verbose: verboseFlag
   }
 
   static args = [
@@ -97,13 +104,24 @@ Publishes all modules that had their version numbers changed in the folder "modu
       default: 'show',
       required: false,
       description: 'updraft publish will run "git <diffCmd>" to detect changes to modules in "modulePath".\n\nSee examples for ways of how you can use this!'
-    }
+    },
   ]
 
   async run() {
     const { args, flags } = this.parse(PublishCommand)
     const { modulePath, diffCmd } = args
-    const { publicaccess } = flags
+    const { publicaccess, verbose, dryrun } = flags
+
+    if (verbose) {
+      console.log(chalk.yellow('Verbose output enabled'))
+      debug.enable('publish, versionUpgrades')
+    }
+
+    if (dryrun) {
+      console.log(chalk.yellow('Dry run activated'))
+    }
+
+    logger('Running "publish" command: %O', { args, flags })
 
     console.log(`Checking for changed modules in path:`)
     console.log(chalk.green(path.resolve(modulePath)))
@@ -118,7 +136,7 @@ Publishes all modules that had their version numbers changed in the folder "modu
                 )
     console.log('')
 
-    if (moduleChanges.length === 0) {
+    if (moduleChanges.length === 0 || dryrun) {
       process.exit(0)
     }
 
