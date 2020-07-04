@@ -23,8 +23,12 @@
     "typescript": "^3.9.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
     "@oclif/dev-cli": "^1",
     "@types/node": "^10",
+    "babel-jest": "^26.1.0",
     "globby": "^10",
     "ts-node": "^8"
   },
@@ -54,7 +58,7 @@
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "echo NO TESTS",
+    "test": "jest --watch",
     "version": "oclif-dev readme && git add README.md"
   },
   "types": "lib/index.d.ts"
