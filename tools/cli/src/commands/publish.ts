@@ -1,10 +1,12 @@
 import * as chalk from 'chalk'
 import * as path from 'path'
-import {Command, flags} from '@oclif/command'
+import {flags} from '@oclif/command'
+import Command from './base'
 import detectPackageJsonUpgrades from '../versionUpgrades'
 import { exec, verboseFlag } from '../shared'
 const debug = require('debug')
 const logger = debug('publish')
+const glob = require('glob')
 
 type ModuleChange = {
   name: string,
@@ -112,42 +114,46 @@ Publishes all modules that had their version numbers changed in the folder "modu
     const { modulePath, diffCmd } = args
     const { publicaccess, verbose, dryrun } = flags
 
-    if (verbose) {
-      console.log(chalk.yellow('Verbose output enabled'))
-      debug.enable('publish, versionUpgrades')
-    }
+    glob('./*/package.json', {}, (err, files) => {
+      console.log(chalk.green('Glob files:'), JSON.stringify(files, null, 2))
+    })
 
-    if (dryrun) {
-      console.log(chalk.yellow('Dry run activated'))
-    }
+  //   if (verbose) {
+  //     console.log(chalk.yellow('Verbose output enabled'))
+  //     debug.enable('publish, versionUpgrades')
+  //   }
 
-    logger('Running "publish" command: %O', { args, flags })
+  //   if (dryrun) {
+  //     console.log(chalk.yellow('Dry run activated'))
+  //   }
 
-    console.log(`Checking for changed modules in path:`)
-    console.log(chalk.green(path.resolve(modulePath)))
-    console.log('')
-    console.log(chalk.yellow(`Checking for changes using "git ${diffCmd}"`))
-    console.log('')
+  //   logger('Running "publish" command: %O', { args, flags })
 
-    const packageUpgrades = await detectPackageJsonUpgrades(diffCmd)
-    console.log(packageUpgrades.length > 0
-                ? chalk.green(`${packageUpgrades.length} module change${packageUpgrades.length > 1 ? 's' : ''} detected`)
-                : chalk.yellow('No module changes detected.')
-                )
-    console.log('')
+  //   console.log(`Checking for changed modules in path:`)
+  //   console.log(chalk.green(path.resolve(modulePath)))
+  //   console.log('')
+  //   console.log(chalk.yellow(`Checking for changes using "git ${diffCmd}"`))
+  //   console.log('')
 
-    if (packageUpgrades.length === 0 || dryrun) {
-      process.exit(0)
-    }
+  //   const packageUpgrades = await detectPackageJsonUpgrades(diffCmd)
+  //   console.log(packageUpgrades.length > 0
+  //               ? chalk.green(`${packageUpgrades.length} module change${packageUpgrades.length > 1 ? 's' : ''} detected`)
+  //               : chalk.yellow('No module changes detected.')
+  //               )
+  //   console.log('')
 
-    try {
-      await publish(packageUpgrades, publicaccess)
-    } catch (error) {
-      console.log(chalk.red(`Publication failed:\n${error.toString()}`))
-      process.exit(1)
-    }
+  //   if (packageUpgrades.length === 0 || dryrun) {
+  //     process.exit(0)
+  //   }
 
-    console.log(chalk.green('Publication successfully completed.'))
-    process.exit(0)
+  //   try {
+  //     await publish(packageUpgrades, publicaccess)
+  //   } catch (error) {
+  //     console.log(chalk.red(`Publication failed:\n${error.toString()}`))
+  //     process.exit(1)
+  //   }
+
+  //   console.log(chalk.green('Publication successfully completed.'))
+  //   process.exit(0)
   }
 }
