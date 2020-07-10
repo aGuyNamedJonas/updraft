@@ -11,7 +11,7 @@ import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
 import Templates from './check'
 import { exec } from 'child_process'
 import detectPackageJsonUpgrades from '../versionUpgrades'
-import { verboseFlag } from '../shared'
+import { verboseFlag } from '../lib/shared'
 const debug = require('debug')
 const logger = debug('doc')
 

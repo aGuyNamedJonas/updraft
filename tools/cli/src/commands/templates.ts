@@ -5,7 +5,7 @@ import * as chalk from 'chalk'
 var inquirer = require('inquirer');
 // const newGithubIssueUrl = require('new-github-issue-url')
 const opn = require('opn')
-import { exec, mkDir, listDirs } from '../shared'
+import { exec, mkDir, listDirs } from '../lib/shared'
 
 export default class Templates extends Command {
   static description = 'Get up & running with templates - runnable examples for updraft modules, installed directly into your codebase.'

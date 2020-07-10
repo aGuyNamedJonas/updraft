@@ -3,7 +3,9 @@ import * as path from 'path'
 import {flags} from '@oclif/command'
 import Command from './base'
 import detectPackageJsonUpgrades from '../versionUpgrades'
-import { exec, verboseFlag } from '../shared'
+import { exec, verboseFlag } from '../lib/shared'
+import { listFiles } from '../lib/fileHelper'
+import { getDiff } from '../lib/git'
 const debug = require('debug')
 const logger = debug('publish')
 const glob = require('glob')
@@ -114,9 +116,18 @@ Publishes all modules that had their version numbers changed in the folder "modu
     const { modulePath, diffCmd } = args
     const { publicaccess, verbose, dryrun } = flags
 
-    glob('./*/package.json', {}, (err, files) => {
-      console.log(chalk.green('Glob files:'), JSON.stringify(files, null, 2))
-    })
+    // glob('./*/package.json', {}, (err, files) => {
+    //   console.log(chalk.green('Glob files:'), JSON.stringify(files, null, 2))
+    // })
+
+    const filesToCheck = await listFiles('./*/package.json', './templates/**')
+    console.log(chalk.green('Files to check: '), JSON.stringify(filesToCheck, null, 2))
+
+    const diffFiles = await getDiff('diff origin/master...')
+    console.log(chalk.green('All diffed files: '), JSON.stringify(diffFiles, null, 2))
+
+    const diffFilesToCheck = diffFiles.filter(({ fullPath }) => filesToCheck.includes(fullPath))
+    console.log(chalk.green('Packages that have been upgraded: ', JSON.stringify(diffFilesToCheck, null, 2)))
 
   //   if (verbose) {
   //     console.log(chalk.yellow('Verbose output enabled'))
