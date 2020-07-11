@@ -10,7 +10,7 @@ import { TSDocParser, ParserContext, DocComment } from '@microsoft/tsdoc';
 import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
 import Templates from './check'
 import { exec } from 'child_process'
-import detectPackageJsonUpgrades from '../versionUpgrades'
+// import detectPackageJsonUpgrades from '../versionUpgrades'
 import { verboseFlag } from '../lib/shared'
 const debug = require('debug')
 const logger = debug('doc')
@@ -586,40 +586,40 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
   ]
 
   async run() {
-    const {args, flags} = this.parse(Templates)
-    const { modulePath } = args
-    const { multimode, verbose } = flags
+    // const {args, flags} = this.parse(Templates)
+    // const { modulePath } = args
+    // const { multimode, verbose } = flags
 
-    if (verbose) {
-      console.log(chalk.yellow('Verbose output enabled'))
-      debug.enable('publish, versionUpgrades')
-    }
+    // if (verbose) {
+    //   console.log(chalk.yellow('Verbose output enabled'))
+    //   debug.enable('publish, versionUpgrades')
+    // }
 
-    logger('Running "doc" command: %O', { args, flags })
+    // logger('Running "doc" command: %O', { args, flags })
 
-    console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
-    console.log(colors.green(path.resolve(modulePath)))
-    console.log('')
+    // console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
+    // console.log(colors.green(path.resolve(modulePath)))
+    // console.log('')
 
-    if (multimode) {
-      console.log(colors.yellow(`Checking for changes based on "git diff origin/master..."`))
-      const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
-      console.log(moduleChanges.length > 0
-                  ? colors.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
-                  : colors.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
-                 )
-      console.log('')
+    // if (multimode) {
+    //   console.log(colors.yellow(`Checking for changes based on "git diff origin/master..."`))
+    //   const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
+    //   console.log(moduleChanges.length > 0
+    //               ? colors.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
+    //               : colors.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
+    //              )
+    //   console.log('')
 
-      for (let { path: modulePath } of moduleChanges) {
-        // TODO: Replace this exclusion with glob pattern in a config
-        if (name === '@updraft/templates') {
-          console.log(colors.yellow('Skipping @updraft/templates'))
-          continue
-        }
-        await docHandler(modulePath)
-      }
-    } else {
-      await docHandler(path.join(process.cwd(), modulePath))
-    }
+    //   for (let { path: modulePath } of moduleChanges) {
+    //     // TODO: Replace this exclusion with glob pattern in a config
+    //     if (name === '@updraft/templates') {
+    //       console.log(colors.yellow('Skipping @updraft/templates'))
+    //       continue
+    //     }
+    //     await docHandler(modulePath)
+    //   }
+    // } else {
+    //   await docHandler(path.join(process.cwd(), modulePath))
+    // }
   }
 }

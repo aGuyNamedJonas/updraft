@@ -1,75 +1,13 @@
 import * as chalk from 'chalk'
-import * as path from 'path'
 import {flags} from '@oclif/command'
 import Command from './base'
-import detectPackageJsonUpgrades from '../versionUpgrades'
-import { exec, verboseFlag } from '../lib/shared'
+import { exec } from '../lib/exec'
+import { verboseFlag } from '../lib/shared'
 import { listFiles } from '../lib/fileHelper'
 import { getDiff } from '../lib/git'
+import { authenticateNpm, publishPackages, getPackageNameAndVersion } from '../lib/npm'
 const debug = require('debug')
 const logger = debug('publish')
-const glob = require('glob')
-
-type ModuleChange = {
-  name: string,
-  version: string,
-  modulePackage: string,
-  path: string,
-}
-
-type PrintModuleProps = {
-  name: string,
-  version: string,
-  modulePackage: string,
-  successMessage?: string | undefined,
-  errorMessage?: string | undefined
-}
-
-const printModuleAndVersion = ({ name, version, modulePackage, successMessage = undefined, errorMessage = undefined }: PrintModuleProps) => {
-  console.log(name, chalk.green('~> ' + version))
-  console.log(chalk.grey(modulePackage))
-
-  if (successMessage) {
-    console.log(chalk.green(successMessage))
-  }
-
-  if (errorMessage) {
-    console.log(chalk.red(errorMessage))
-  }
-
-  console.log('')
-}
-
-// TODO: Add error when NPM_TOKEN is not set
-const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc')
-
-const publishVersionChanges = async (moduleChanges, publicAccess: boolean) => {
-  const publishPackageToNpm = async ({ name, version, modulePackage, path: modulePath }: ModuleChange) => {
-    try {
-      await exec(`cd ${modulePath} && npm install && npm run build && npm publish ${publicAccess ? '--access public' : ''}`)
-    } catch (error) {
-      printModuleAndVersion({ name, version, modulePackage, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
-      throw new Error(error)
-    }
-
-    printModuleAndVersion({ name, version, modulePackage, successMessage: 'Successfully published to NPM' })
-  }
-
-  const publishing = moduleChanges.map(publishPackageToNpm)
-  try {
-    await Promise.all(publishing)
-  } catch (error) {
-    throw new Error('Some or all publishing to NPM failed:\n' + error.toString())
-  }
-
-  console.log(chalk.yellow(moduleChanges.length === 0 ? '' : `${moduleChanges.length} modules successfully published to NPM`))
-}
-
-const publish = async (moduleChanges: ModuleChange[], publicAccess: boolean) => {
-  await authenticateNpm()
-  moduleChanges.forEach(printModuleAndVersion)
-  await publishVersionChanges(moduleChanges, publicAccess)
-}
 
 export default class PublishCommand extends Command {
   static description = 'publish your changed (updraft) modules to a package registry DO NOT USE THIS!\n\nDo not use this - Unless you want to use this to manage your internal updraft module library (e.g. at your company). This command is used by our CI/CD job to publish your modules to the NPM registry.\n\nBefore publishing modules, you might want to run updraft check to run some basic sanity checks across your udpraft modules.'
@@ -93,6 +31,10 @@ Publishes all modules that had their version numbers changed in the folder "modu
       default: false,
       description: 'only check for packages to re-publish, do not actually publish to NPM'
     }),
+    'skip-npm-auth': flags.boolean({
+      default: false,
+      description: `set this flag to skip NPM authentication (e.g. when you want to use a custom .npmrc instead of setting NPM_TOKEN)`
+    }),
     verbose: verboseFlag
   }
 
@@ -114,20 +56,44 @@ Publishes all modules that had their version numbers changed in the folder "modu
   async run() {
     const { args, flags } = this.parse(PublishCommand)
     const { modulePath, diffCmd } = args
-    const { publicaccess, verbose, dryrun } = flags
-
-    // glob('./*/package.json', {}, (err, files) => {
-    //   console.log(chalk.green('Glob files:'), JSON.stringify(files, null, 2))
-    // })
+    const { publicaccess, verbose, dryrun, 'skip-npm-auth': skipNpmAuth } = flags
 
     const filesToCheck = await listFiles('./*/package.json', './templates/**')
-    console.log(chalk.green('Files to check: '), JSON.stringify(filesToCheck, null, 2))
-
     const diffFiles = await getDiff('diff origin/master...')
-    console.log(chalk.green('All diffed files: '), JSON.stringify(diffFiles, null, 2))
+    const packagesToPublish = diffFiles.filter(({ fullPath }) => filesToCheck.includes(fullPath))
+    const prettyPackagesToPublish = packagesToPublish.map(getPackageNameAndVersion)
 
-    const diffFilesToCheck = diffFiles.filter(({ fullPath }) => filesToCheck.includes(fullPath))
-    console.log(chalk.green('Packages that have been upgraded: ', JSON.stringify(diffFilesToCheck, null, 2)))
+    console.log(
+      prettyPackagesToPublish.length > 0
+      ? chalk.yellow(`Found ${prettyPackagesToPublish.length} package${prettyPackagesToPublish.length === 1 ? '' : 's'} to publish`)
+      : chalk.yellow(`Found no package to publish`)
+    )
+    prettyPackagesToPublish.forEach(({ name, version, fullPath }) => console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath)))
+
+    if (prettyPackagesToPublish.length === 0) {
+      process.exit(0)
+    }
+
+    if (dryrun) {
+      console.log(chalk.yellow('Exiting without publication (--dryrun)'))
+      process.exit(0)
+    }
+
+    if (!skipNpmAuth) {
+      await authenticateNpm()
+    } else {
+      console.log(chalk.yellow('\nSkipping NPM authentication (--skip-npm-auth)\n'))
+    }
+
+    const publishedPackages = await publishPackages(prettyPackagesToPublish, publicaccess)
+
+    const { success, failed } = publishedPackages
+    success.forEach(({ name, version, fullPath }) => console.log(name, chalk.green('~> ' + version + ' published'), '\n', chalk.grey(fullPath)))
+    console.log('')
+    failed.forEach(({ name, version, fullPath, errorMessage }) => console.log(name, chalk.red('~> ' + version + ' publication failed'), '\n', chalk.grey(fullPath), '\n', errorMessage, '\n'))
+    console.log('')
+    console.log(chalk.green('Published ' + success.length))
+    console.log(chalk.red('Failed    ' + failed.length))
 
   //   if (verbose) {
   //     console.log(chalk.yellow('Verbose output enabled'))

@@ -2,7 +2,7 @@ import {Command, flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'chalk'
-import detectPackageJsonUpgrades from '../versionUpgrades'
+// import detectPackageJsonUpgrades from '../versionUpgrades'
 import * as colors from 'colors'
 
 // const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
@@ -323,30 +323,30 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
     const { modulePath } = args
     const { multimode } = flags
 
-    console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
-    console.log(chalk.green(path.resolve(modulePath)))
-    console.log('')
+    // console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
+    // console.log(chalk.green(path.resolve(modulePath)))
+    // console.log('')
 
-    if (multimode) {
-      console.log(chalk.yellow(`Checking for changes based on "git diff origin/master..."`))
-      const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
-      console.log(moduleChanges.length > 0
-                  ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
-                  : chalk.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
-                 )
-      console.log('')
+    // if (multimode) {
+    //   console.log(chalk.yellow(`Checking for changes based on "git diff origin/master..."`))
+    //   const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
+    //   console.log(moduleChanges.length > 0
+    //               ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
+    //               : chalk.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
+    //              )
+    //   console.log('')
 
-      for (let { modulePackage, name } of moduleChanges) {
-        // TODO: Replace this exclusion with glob pattern in a config
-        if (name === '@updraft/templates') {
-          console.log(colors.yellow('Skipping @updraft/templates'))
-          continue
-        }
-        await checkHandler(modulePackage)
-      }
-    } else {
-      const packageFilePath = path.join(process.cwd(), modulePath, 'package.json')
-      await checkHandler(packageFilePath)
-    }
+    //   for (let { modulePackage, name } of moduleChanges) {
+    //     // TODO: Replace this exclusion with glob pattern in a config
+    //     if (name === '@updraft/templates') {
+    //       console.log(colors.yellow('Skipping @updraft/templates'))
+    //       continue
+    //     }
+    //     await checkHandler(modulePackage)
+    //   }
+    // } else {
+    //   const packageFilePath = path.join(process.cwd(), modulePath, 'package.json')
+    //   await checkHandler(packageFilePath)
+    // }
   }
 }
