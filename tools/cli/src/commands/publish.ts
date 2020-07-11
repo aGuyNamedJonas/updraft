@@ -24,8 +24,8 @@ Publishthe module in the current folder, if its package.json file was changed co
 ]
 
   static flags = {
-    ...Command.flags,
-    help: flags.help({char: 'h'}),
+    ...Command.globalFlags,
+    ...Command.changesModulesFlags,
     'public-access': flags.boolean({
       default: true,
       description: 'Run the npm publish with the "--access public" flag'
@@ -41,35 +41,23 @@ Publishthe module in the current folder, if its package.json file was changed co
     verbose: verboseFlag
   }
 
-  static args = [
-    {
-      name: 'diff-cmd',
-      required: false,
-      description: 'Git command to use to detect changes'
-    },
-  ]
+  static args = [...Command.changedModulesArgs]
 
   async run() {
-    const include = this.getConfigValue('include')
-    const exclude = this.getConfigValue('exclude')
     const dryRun = this.getConfigValue('dry-run', false)
     const skipNpmAuth = this.getConfigValue('skip-npm-auth', false)
     const publicAccess = this.getConfigValue('public-access', false)
-    const diffCmd = this.getConfigValue('diff-cmd', 'show')
 
-    const filesToCheck = await listFiles(include, exclude)
-    const diffFiles = await getDiff(diffCmd)
-    const packagesToPublish = diffFiles.filter(({ fullPath }) => filesToCheck.includes(fullPath))
-    const prettyPackagesToPublish = packagesToPublish.map(getPackageNameAndVersion)
+    const changedNpmPackages = await this.getChangedModules()
 
     console.log(
-      prettyPackagesToPublish.length > 0
-      ? chalk.yellow(`Found ${prettyPackagesToPublish.length} package${prettyPackagesToPublish.length === 1 ? '' : 's'} to publish`)
+      changedNpmPackages.length > 0
+      ? chalk.yellow(`Found ${changedNpmPackages.length} package${changedNpmPackages.length === 1 ? '' : 's'} to publish`)
       : chalk.yellow(`Found no package to publish`)
     )
-    prettyPackagesToPublish.forEach(({ name, version, fullPath }) => console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath)))
+    changedNpmPackages.forEach(({ name, version, fullPath }) => console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath)))
 
-    if (prettyPackagesToPublish.length === 0) {
+    if (changedNpmPackages.length === 0) {
       process.exit(0)
     }
 
@@ -89,7 +77,7 @@ Publishthe module in the current folder, if its package.json file was changed co
       console.log(chalk.yellow('\nSkipping NPM authentication (--skip-npm-auth)\n'))
     }
 
-    const publishedPackages = await publishPackages(prettyPackagesToPublish, publicAccess)
+    const publishedPackages = await publishPackages(changedNpmPackages, publicAccess)
 
     const { success, failed } = publishedPackages
     success.forEach(({ name, version, fullPath }) => console.log(name, chalk.green('~> ' + version + ' published'), '\n', chalk.grey(fullPath)))

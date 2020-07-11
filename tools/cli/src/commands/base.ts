@@ -1,16 +1,26 @@
 import * as path from 'path'
-import { getRepoBasePath } from '../lib/git'
+import { getRepoBasePath, getDiff } from '../lib/git'
 import Command, {flags} from '@oclif/command'
 import * as chalk from 'chalk'
-import { fileExists } from '../lib/fileHelper'
+import { fileExists, listFiles } from '../lib/fileHelper'
+import { getPackageNameAndVersion, NpmPackage } from '../lib/npm'
 
 export default abstract class extends Command {
   /**
-   * Flags available in all commands
+   * Flags that should be available in every command
+   *
+   * >> FOR ALL SHARED FLAGS: <<
    * --> Please don't use the "default" attribute, set them in configDefaults instead!
    * (This ensures that we can differentiate between flags & args from the command line vs. from defaults)
    */
-  static flags = {
+  static globalFlags = {
+    help: flags.help({char: 'h'}),
+  }
+
+  /**
+   * Flags available in commands that run based on detecting changed modules (publish, doc, check)
+   */
+  static changesModulesFlags = {
     'include': flags.string({
       description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")'
     }),
@@ -19,11 +29,20 @@ export default abstract class extends Command {
     })
   }
 
+  static changedModulesArgs = [
+    {
+      name: 'diff-cmd',
+      required: false,
+      description: 'Git command to use to detect changes'
+    }
+  ]
+
   private configFile = {}
   private configValues = {}
   private configDefaults = {
     include: './package.json',
     exclude: '',
+    'diff-cmd': 'show',
   }
 
   /**
@@ -75,6 +94,26 @@ export default abstract class extends Command {
     console.log(chalk.gray(cwdConfigFilePath))
     console.log(chalk.gray(repoRootConfigFilePath))
     return {}
+  }
+
+  /**
+   * Returns a list of changed NPM packages, using the provided "diff-cmd"
+   * and filtering with the provided "include" and "exclude" glob patterns.
+   *
+   * Commands that want to use this command should include the changeModuleFlags
+   * and the changedModuleArgs into their flags / args.
+   */
+  async getChangedModules () {
+    const include = this.getConfigValue('include')
+    const exclude = this.getConfigValue('exclude')
+    const diffCmd = this.getConfigValue('diff-cmd')
+
+    const filesToCheck = await listFiles(include, exclude)
+    const diffFiles = await getDiff(diffCmd)
+    const packagesToPublish = diffFiles.filter(({ fullPath }) => filesToCheck.includes(fullPath))
+    const packagesWithNamesAndVersion = packagesToPublish.map(getPackageNameAndVersion)
+
+    return packagesWithNamesAndVersion as NpmPackage[]
   }
 
   async init() {
