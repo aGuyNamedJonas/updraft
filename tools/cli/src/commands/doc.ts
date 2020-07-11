@@ -1,5 +1,6 @@
 import * as chalk from 'chalk'
-import {Command, flags} from '@oclif/command'
+import {flags} from '@oclif/command'
+import Command from './base'
 import * as colors from 'colors'
 import * as os from 'os'
 import * as path from 'path'
@@ -12,6 +13,7 @@ import Templates from './check'
 import { exec } from 'child_process'
 // import detectPackageJsonUpgrades from '../versionUpgrades'
 import { verboseFlag } from '../lib/shared'
+import { NpmPackage } from '../lib/npm'
 const debug = require('debug')
 const logger = debug('doc')
 
@@ -478,8 +480,11 @@ const renderPackageJson = ({ author, headline, features }, existingPackageJson: 
   return updatedPackageJson
 }
 
-const docHandler = async (modulePath: string) => {
-  const packageJsonPath = path.join(modulePath, 'package.json')
+const generateDocs = async (npmPackage: NpmPackage, autoCommit = false) => {
+  const { name, version, fullPath, dir } = npmPackage
+  console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath))
+
+  const packageJsonPath = path.join(dir, 'package.json')
   let packageJson = {} as any
   try {
     const rawPackageJson = fs.readFileSync(packageJsonPath, { encoding: 'utf8' })
@@ -488,13 +493,9 @@ const docHandler = async (modulePath: string) => {
     console.log(colors.red(`Failed to load package.json file:\n${packageJsonPath}\n${error.toString()}`))
     return
   }
-
-  console.log(colors.bold(`Creating DOCS for ${packageJson.name}`))
-  console.log(colors.grey(packageJsonPath))
-  console.log('')
   console.log(colors.green('✓ Successfully loaded package.json file'))
 
-  const inputFilePath = path.join(modulePath, 'index.ts')
+  const inputFilePath = path.join(dir, 'index.ts')
   let parsedTags = [] as ParsedTag[]
   try {
     parsedTags = extractTsDoc(inputFilePath)
@@ -531,7 +532,7 @@ const docHandler = async (modulePath: string) => {
   }
   console.log(colors.green('✓ Successfully rendered package.json'))
 
-  const readmeFilePath = path.join(modulePath, 'README.md')
+  const readmeFilePath = path.join(dir, 'README.md')
   try {
     fs.writeFileSync(readmeFilePath, readme)
   } catch (error) {
@@ -548,14 +549,18 @@ const docHandler = async (modulePath: string) => {
   }
   console.log(colors.green('✓ Successfully wrote updated package.json'))
 
-  try {
-    process.cwd()
-    await exec(`cd ${modulePath} && git add package.json README.md && git commit -m "Auto-generate update of package.json and README.md for ${packageJson.name}"`)
-  } catch (error) {
-    console.log(colors.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
-    return
+  if (autoCommit) {
+    try {
+      process.cwd()
+      await exec(`cd ${dir} && git add package.json README.md && git commit -m "Auto-generate update of package.json and README.md for ${packageJson.name}"`)
+    } catch (error) {
+      console.log(colors.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
+      return
+    }
+    console.log(colors.green('✓ Successfully committed changes to package.json & README.md'))
   }
-  console.log(colors.green('✓ Successfully committed changes to package.json & README.md'))
+
+  console.log('')
 }
 
 export default class Doc extends Command {
@@ -568,58 +573,34 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
   ]
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    multimode: flags.boolean({
-      default: false,
-      description: 'runs checks on first layer of subfolders in PATH',
-    }),
-    verbose: verboseFlag
+    ...Command.globalFlags,
+    ...Command.changedModulesFlags,
+    'auto-commit': flags.boolean({
+      description: 'Set this flag to create a commit with the auto-generated README.md and package.json',
+      required: false,
+    })
   }
 
   static args = [
-    {
-      name: 'modulePath',
-      default: './',
-      required: false,
-      description: 'path of the module(s) to check - defaults to current directory'
-    },
+    ...Command.changedModulesArgs
   ]
 
   async run() {
-    // const {args, flags} = this.parse(Templates)
-    // const { modulePath } = args
-    // const { multimode, verbose } = flags
+    const autoCommit = this.getConfigValue('auto-commit', false)
 
-    // if (verbose) {
-    //   console.log(chalk.yellow('Verbose output enabled'))
-    //   debug.enable('publish, versionUpgrades')
-    // }
+    const changedNpmPackages = await this.getChangedModules()
+    console.log(
+      changedNpmPackages.length > 0
+      ? chalk.yellow(`Found ${changedNpmPackages.length} package${changedNpmPackages.length === 1 ? '' : 's'} to regenerate docs for\n`)
+      : chalk.yellow(`Found no package to regenrate docs for\n`)
+    )
 
-    // logger('Running "doc" command: %O', { args, flags })
+    if (changedNpmPackages.length === 0) {
+      process.exit(0)
+    }
 
-    // console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
-    // console.log(colors.green(path.resolve(modulePath)))
-    // console.log('')
-
-    // if (multimode) {
-    //   console.log(colors.yellow(`Checking for changes based on "git diff origin/master..."`))
-    //   const moduleChanges = await detectPackageJsonUpgrades(process.cwd(), 'diff origin/master...')
-    //   console.log(moduleChanges.length > 0
-    //               ? colors.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
-    //               : colors.yellow('No module changes detected.\n\nIf you want to check individual modules, ignoring git diff change-detection, run updraft check without the --multimode flag')
-    //              )
-    //   console.log('')
-
-    //   for (let { path: modulePath } of moduleChanges) {
-    //     // TODO: Replace this exclusion with glob pattern in a config
-    //     if (name === '@updraft/templates') {
-    //       console.log(colors.yellow('Skipping @updraft/templates'))
-    //       continue
-    //     }
-    //     await docHandler(modulePath)
-    //   }
-    // } else {
-    //   await docHandler(path.join(process.cwd(), modulePath))
-    // }
+    for (let npmPackage of changedNpmPackages) {
+      await generateDocs(npmPackage, autoCommit)
+    }
   }
 }

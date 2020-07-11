@@ -20,7 +20,7 @@ export default abstract class extends Command {
   /**
    * Flags available in commands that run based on detecting changed modules (publish, doc, check)
    */
-  static changesModulesFlags = {
+  static changedModulesFlags = {
     'include': flags.string({
       description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")'
     }),

@@ -25,18 +25,18 @@ Publishthe module in the current folder, if its package.json file was changed co
 
   static flags = {
     ...Command.globalFlags,
-    ...Command.changesModulesFlags,
+    ...Command.changedModulesFlags,
     'public-access': flags.boolean({
-      default: true,
-      description: 'Run the npm publish with the "--access public" flag'
+      description: 'Run the npm publish with the "--access public" flag',
+      required: false,
     }),
     'dry-run': flags.boolean({
-      default: false,
-      description: 'Only check for packages to re-publish, do not actually publish to NPM'
+      description: 'Only check for packages to re-publish, do not actually publish to NPM',
+      required: false,
     }),
     'skip-npm-auth': flags.boolean({
-      default: false,
-      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)`
+      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)`,
+      required: false,
     }),
     verbose: verboseFlag
   }
