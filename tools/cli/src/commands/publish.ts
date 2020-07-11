@@ -9,14 +9,17 @@ const debug = require('debug')
 const logger = debug('publish')
 
 export default class PublishCommand extends Command {
-  static description = 'publish your changed (updraft) modules to a package registry DO NOT USE THIS!\n\nDo not use this - Unless you want to use this to manage your internal updraft module library (e.g. at your company). This command is used by our CI/CD job to publish your modules to the NPM registry.\n\nBefore publishing modules, you might want to run updraft check to run some basic sanity checks across your udpraft modules.'
+  static description = `Publish all changed node modules for which the package.json was modified\nYou only need to use this, if you're planning to use updraft to manage your internal CDK component library. Check out the updraft build scripts for inspiration how we use this command to publish to the public @updraft component library on NPM.`
 
   static examples = [
-    `$ export NPM_TOKEN=<Your NPM token> && updraft publish
-Publishes all (node) modules in the first subfolder of the current folder for which the version number was changed in the last commit (e.g. after a pull-request was merged)\n\nHow we use it: updraft publish ./modules/typescript
+    `$ export NPM_TOKEN=<Your NPM token> && updraft publish --include="./*/package.json" --exclude=""./templates/**""
+We run this command on changes to the master-branch from inside /modules/typescript to re-publish all changed modules (but not their templates). We set these values in /modules/typescript/updraft.json though.
 `,
-`$ export NPM_TOKEN=<Your NPM token> && updraft publish ./modules/typescript "diff origin/master..."
-Publishes all modules that had their version numbers changed in the folder "modules/typescript" folder compared to the master branch (if you want to do special publish thing in branches other than the master)
+`$ export NPM_TOKEN=<Your NPM token> && updraft publish --include="package.json" "diff origin/master..."
+Publish the module in the current folder, if its package.json file was changed compared to the master branch.
+`,
+`$ updraft publish --include="package.json" --skip-npm-auth "diff origin/master..."
+Publishthe module in the current folder, if its package.json file was changed compared to the master branch and use whatever authentication you setup for NPM (e.g. with npm login).
 `,
 ]
 
@@ -25,15 +28,15 @@ Publishes all modules that had their version numbers changed in the folder "modu
     help: flags.help({char: 'h'}),
     'public-access': flags.boolean({
       default: true,
-      description: 'run the npm publish with the "--access public" flag'
+      description: 'Run the npm publish with the "--access public" flag'
     }),
     'dry-run': flags.boolean({
       default: false,
-      description: 'only check for packages to re-publish, do not actually publish to NPM'
+      description: 'Only check for packages to re-publish, do not actually publish to NPM'
     }),
     'skip-npm-auth': flags.boolean({
       default: false,
-      description: `set this flag to skip NPM authentication (e.g. when you want to use a custom .npmrc instead of setting NPM_TOKEN)`
+      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)`
     }),
     verbose: verboseFlag
   }
@@ -42,16 +45,16 @@ Publishes all modules that had their version numbers changed in the folder "modu
     {
       name: 'diff-cmd',
       required: false,
-      description: 'git command to use to detect changes'
+      description: 'Git command to use to detect changes'
     },
   ]
 
   async run() {
+    const include = this.getConfigValue('include')
+    const exclude = this.getConfigValue('exclude')
     const dryRun = this.getConfigValue('dry-run', false)
     const skipNpmAuth = this.getConfigValue('skip-npm-auth', false)
     const publicAccess = this.getConfigValue('public-access', false)
-    const include = this.getConfigValue('include')
-    const exclude = this.getConfigValue('exclude')
     const diffCmd = this.getConfigValue('diff-cmd', 'show')
 
     const filesToCheck = await listFiles(include, exclude)
