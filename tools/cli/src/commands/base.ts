@@ -5,10 +5,44 @@ import * as chalk from 'chalk'
 import { fileExists } from '../lib/fileHelper'
 
 export default abstract class extends Command {
-  private updraftConfig = {}
-  // static flags = {
+  /**
+   * Flags available in all commands
+   * --> Please don't use the "default" attribute, set them in configDefaults instead!
+   * (This ensures that we can differentiate between flags & args from the command line vs. from defaults)
+   */
+  static flags = {
+    'include': flags.string({
+      description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")'
+    }),
+    'exclude': flags.string({
+      description: 'Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults to "")'
+    })
+  }
 
-  // }
+  private configFile = {}
+  private configValues = {}
+  private configDefaults = {
+    include: './package.json',
+    exclude: '',
+  }
+
+  /**
+   * Returns a config value, gets the value from the following sources (in that order)
+   * 1. Passed in through the commandline (args & flags)
+   * 2. Passed in through updraft.json
+   * 3. configDefaults (see above)
+   * 3. Provided through the "defaultValue" arg
+   * @param key - Flag or attribute key to get
+   * @returns config value or undefined if it's not set anywhere
+   */
+  getConfigValue (key: string, defaultValue = undefined) {
+    const value = this.configValues[key] ||
+                  this.configFile[key] ||
+                  this.configDefaults[key] ||
+                  defaultValue ||
+                  undefined
+    return value
+  }
 
   /**
    * Attempts to load the updraft.json config file.
@@ -26,24 +60,33 @@ export default abstract class extends Command {
     const repoConfigExists = fileExists(repoRootConfigFilePath)
 
     if (cwdConfigExists) {
-      this.updraftConfig = require(cwdConfigFilePath)
+      const configFile = require(cwdConfigFilePath)
       console.log(chalk.yellow('Config file loaded:'), '\n', chalk.gray(cwdConfigFilePath), '\n')
-      return
+      return configFile
     }
 
     if (repoConfigExists) {
-      this.updraftConfig = require(repoRootConfigFilePath)
+      const configFile = require(repoRootConfigFilePath)
       console.log(chalk.yellow('Config file loaded'), '\n', chalk.gray(repoRootConfigFilePath), '\n')
-      return
+      return configFile
     }
 
     console.log(chalk.yellow('No config file found, checked:'))
     console.log(chalk.gray(cwdConfigFilePath))
     console.log(chalk.gray(repoRootConfigFilePath))
+    return {}
   }
 
   async init() {
-    await this.loadConfigFile()
+    const { args, flags } = this.parse(this.constructor)
+    this.configValues = { ...args, ...flags }
+
+    this.configFile = await this.loadConfigFile()
+
+    console.log('------')
+    console.log(JSON.stringify(this.configFile, null, 2))
+    console.log(JSON.stringify(this.configValues, null, 2))
+    console.log('------')
   }
 
 
@@ -55,7 +98,7 @@ export default abstract class extends Command {
     // TODO: Point people to upgrade option or report an issue
     console.log(chalk.red('CLI error:\n'), err.toString())
     console.log('')
-    console.log(chalk.red('This is probably a bug in @updraft/cli, please upvote / create a corresponding issue:'))
+    console.log(chalk.red('This is probably a bug in @updraft/cli, please upvote or create the corresponding issue:'))
     console.log(chalk.bold('https://github.com/aGuyNamedJonas/updraft/labels/cli'))
     process.exit(1)
   }

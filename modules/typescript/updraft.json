@@ -1,0 +1,6 @@
+{
+  "skip-npm-auth": true,
+  "diff-cmd": "diff origin/master...",
+  "include": "./*/package.json",
+  "exclude": "./templates/**"
+}
