@@ -151,6 +151,8 @@ export default abstract class extends Command {
     // TODO: Point people to upgrade option or report an issue
     console.log(chalk.red('CLI error:\n'), err.toString())
     console.log('')
+    console.trace()
+    console.log('')
     console.log(chalk.red('This is probably a bug in @updraft/cli, please upvote or create the corresponding issue:'))
     console.log(chalk.bold('https://github.com/aGuyNamedJonas/updraft/labels/cli'))
     process.exit(1)

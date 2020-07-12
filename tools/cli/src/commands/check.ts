@@ -1,9 +1,11 @@
-import {Command, flags} from '@oclif/command'
+import {flags} from '@oclif/command'
+import Command from './base'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'chalk'
 // import detectPackageJsonUpgrades from '../versionUpgrades'
 import * as colors from 'colors'
+import { validatePackages } from '../lib/validate'
 
 // const templatePackageJson = require('../../../../modules/typescript/creator-templates/templates/typescript-starter/package.json')
 
@@ -302,26 +304,64 @@ Checks the updraft module in the folder "./aws-my-amazing-module"
   ]
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    multimode: flags.boolean({
-      default: false,
-      description: 'runs checks on first layer of subfolders in PATH',
-    })
+    ...Command.globalFlags,
+    ...Command.changedModulesFlags
   }
 
   static args = [
-    {
-      name: 'modulePath',
-      default: './',
-      required: false,
-      description: 'path of the module(s) to check - defaults to current directory'
-    },
+    ...Command.changedModulesArgs
   ]
 
   async run() {
-    const {args, flags} = this.parse(Templates)
-    const { modulePath } = args
-    const { multimode } = flags
+    const validation = this.getConfigValue('validation', null)
+    const changedNpmPackages = await this.getChangedModules()
+
+    if (!validation) {
+      console.log(chalk.yellow('No "validation" attribute found in config. Please create a updraft.config.js with the "validation" property, containing the validation rules for "package.json" and "index.ts"'))
+      process.exit(1)
+    }
+
+    console.log(
+      changedNpmPackages.length > 0
+      ? chalk.yellow(`Found ${changedNpmPackages.length} package${changedNpmPackages.length === 1 ? '' : 's'} to check`)
+      : chalk.yellow(`Found no package to check`)
+    )
+    changedNpmPackages.forEach(({ name, version, fullPath }) => console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath)))
+    console.log('')
+
+    if (changedNpmPackages.length === 0) {
+      process.exit(0)
+    }
+
+    const validatedPackages = validatePackages(changedNpmPackages, validation)
+
+    const { success, failed } = validatedPackages
+    success.forEach(({ name, dir }) => console.log(chalk.bold(name), chalk.green(' valid'), '\n', chalk.grey(dir)))
+    console.log('')
+    failed.forEach(({ name, dir, packageJsonValidation, indexTsValidation }) => {
+      console.log(chalk.bold(name), chalk.red('validation failed'), '\n', chalk.grey(dir))
+
+      if (packageJsonValidation && packageJsonValidation.success) {
+        console.log(chalk.green('package.json valid'))
+      }
+
+      if (packageJsonValidation && !packageJsonValidation.success) {
+        console.log(chalk.red('package.json failed:'), '\n', packageJsonValidation.errorMessage)
+      }
+
+      if (indexTsValidation && indexTsValidation.success) {
+        console.log(chalk.green('index.ts valid'))
+      }
+
+      if (indexTsValidation && !indexTsValidation.success) {
+        console.log(chalk.red('index.ts failed:'), '\n', indexTsValidation.errorMessage)
+      }
+
+      console.log('')
+    })
+    console.log('')
+    console.log(chalk.green('Valid  ' + success.length))
+    console.log(chalk.red('Failed ' + failed.length))
 
     // console.log(`Checking updraft module${multimode ? 's' : ''} in path:`)
     // console.log(chalk.green(path.resolve(modulePath)))
