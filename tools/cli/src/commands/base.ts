@@ -10,7 +10,7 @@ export default abstract class extends Command {
    * Flags that should be available in every command
    *
    * >> FOR ALL SHARED FLAGS: <<
-   * --> Please don't use the "default" attribute, set them in configDefaults instead!
+   * Please don't use the "default" attribute, set them in configDefaults instead!
    * (This ensures that we can differentiate between flags & args from the command line vs. from defaults)
    */
   static globalFlags = {
@@ -80,18 +80,28 @@ export default abstract class extends Command {
     const cwdConfigExists = fileExists(cwdConfigFilePath)
     const repoConfigExists = fileExists(repoRootConfigFilePath)
 
-    if (cwdConfigExists) {
-      const configFile = require(cwdConfigFilePath)
+    const tryToLoadConfigFile = (configFilePath: string) => {
+      let configFile
+      try {
+        configFile = require(configFilePath)
+      } catch (error) {
+        console.log(chalk.red('Error while trying to load config file:\n'), chalk.gray(configFilePath), '\n\n', error.toString())
+        console.trace()
+        console.log('')
+        process.exit(1)
+      }
+
       const { alias } = configFile
       console.log(chalk.yellow(`Config file loaded ${alias ? `(${alias})` : ''}`), '\n', chalk.gray(cwdConfigFilePath), '\n')
       return configFile
     }
 
+    if (cwdConfigExists) {
+      return tryToLoadConfigFile(cwdConfigFilePath)
+    }
+
     if (repoConfigExists) {
-      const configFile = require(repoRootConfigFilePath)
-      const { alias } = configFile
-      console.log(chalk.yellow(`Config file loaded ${alias ? `(${alias})` : ''}`), '\n', chalk.gray(repoRootConfigFilePath), '\n')
-      return configFile
+      return tryToLoadConfigFile(repoRootConfigFilePath)
     }
 
     console.log(chalk.yellow('No config file found, checked:'))
