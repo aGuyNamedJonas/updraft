@@ -22,10 +22,12 @@ export default abstract class extends Command {
    */
   static changedModulesFlags = {
     'include': flags.string({
-      description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")'
+      description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")',
+      required: false,
     }),
     'exclude': flags.string({
-      description: 'Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults to "")'
+      description: 'Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults to "")',
+      required: false,
     })
   }
 
@@ -64,7 +66,7 @@ export default abstract class extends Command {
   }
 
   /**
-   * Attempts to load the updraft.json config file.
+   * Attempts to load the updraft.config.js config file.
    * Any explicitly set options / flags will overwrite values from a config file.
    * The CLI will look in two places (preferring the first over the latter):
    *
@@ -72,21 +74,23 @@ export default abstract class extends Command {
    * 2. Repository basepath
    */
   async loadConfigFile() {
-    const cwdConfigFilePath = path.join(process.cwd(), 'updraft.json')
-    const repoRootConfigFilePath = path.join(await getRepoBasePath(), 'updraft.json')
+    const cwdConfigFilePath = path.join(process.cwd(), 'updraft.config.js')
+    const repoRootConfigFilePath = path.join(await getRepoBasePath(), 'updraft.config.js')
 
     const cwdConfigExists = fileExists(cwdConfigFilePath)
     const repoConfigExists = fileExists(repoRootConfigFilePath)
 
     if (cwdConfigExists) {
       const configFile = require(cwdConfigFilePath)
-      console.log(chalk.yellow('Config file loaded:'), '\n', chalk.gray(cwdConfigFilePath), '\n')
+      const { alias } = configFile
+      console.log(chalk.yellow(`Config file loaded ${alias ? `(${alias})` : ''}`), '\n', chalk.gray(cwdConfigFilePath), '\n')
       return configFile
     }
 
     if (repoConfigExists) {
       const configFile = require(repoRootConfigFilePath)
-      console.log(chalk.yellow('Config file loaded'), '\n', chalk.gray(repoRootConfigFilePath), '\n')
+      const { alias } = configFile
+      console.log(chalk.yellow(`Config file loaded ${alias ? `(${alias})` : ''}`), '\n', chalk.gray(repoRootConfigFilePath), '\n')
       return configFile
     }
 

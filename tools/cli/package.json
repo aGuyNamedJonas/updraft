@@ -8,6 +8,7 @@
   },
   "bugs": "https://github.com/aGuyNamedJonas/updraft/issues",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@microsoft/tsdoc": "^0.12.20",
     "@oclif/command": "^1.6.1",
     "@oclif/config": "^1",
