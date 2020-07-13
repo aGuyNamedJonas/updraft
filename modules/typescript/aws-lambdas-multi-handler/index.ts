@@ -2,6 +2,42 @@
 import { Construct, Duration } from '@aws-cdk/core'
 import * as Lambda from '@aws-cdk/aws-lambda'
 
+/**
+ * @author Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)
+ * @headline
+ * Deploy lambdas from a multi-handler codebase
+ * @description
+ * There's the people who setup a separate project (and package.json) for every lambda,
+ * and then there's those kind of people (including myself) who like to keep all lambdas
+ * in one project from which multiple handlers are exported.
+ *
+ * If you're one of those people, who essentially like to keep a monorepo codebase around
+ * multiple lambda functions, this module is for you.
+ *
+ * @feature Single codebase, multi-handler
+ * @featureDescription Setup your lambda functions as one project, exporting the handlers you want to use
+ *
+ * @feature Environment Variables
+ * @featureDescription Define environment variables for your lambda functions
+ *
+ * @feature Local Code Uploads
+ * @featureDescription Specify the path to your local codebase, and on deploy your code gets automatically deployed to AWS Lambda
+ *
+ * @example
+ * ```typescript
+    const userManagementLambdas = new AwsLambdasMultiHandler(this, 'user-lambdas', {
+      handlerNames: ['createUser', 'getUser', 'getNewUsers', 'updateUser', 'deleteUser'],
+      localCodePath: '../lambdas/dist',
+      timeoutSec: 60,
+      env: {
+        'createUser': [
+          { key: 'MIXPANEL_TOKEN', value: process.env.MIXPANEL_TOKEN }
+        ]
+      }
+    })
+ * ```
+ */
+
 export type LambdasMultiHandlerProps = {
   handlerNames: string[]
   localCodePath: string

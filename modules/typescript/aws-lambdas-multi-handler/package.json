@@ -1,7 +1,7 @@
 {
-  "name": "@updraft/aws-lambdas-multi-handler",
+  "name": "@updraft/aws-lambdas-multi-handler____",
   "version": "1.0.16",
-  "description": "CDK Module for deploying multiple lambda functions from one codebase (multiple handlers are exported from the index file)",
+  "description": "Deploy lambdas from a multi-handler codebase (✓ Single codebase, multi-handler, ✓ Environment Variables, ✓ Local Code Uploads)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -16,5 +16,6 @@
   },
   "devDependencies": {
     "typescript": "^3.9.3"
-  }
+  },
+  "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)"
 }
