@@ -34,7 +34,7 @@ const config = {
       properties: {
         name: {
           type: 'string',
-          regex: /^@updraft\//
+          pattern: '^@updraft\/'
         }
       }
     }

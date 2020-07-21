@@ -8,7 +8,6 @@
   },
   "bugs": "https://github.com/aGuyNamedJonas/updraft/issues",
   "dependencies": {
-    "@exodus/schemasafe": "^1.0.0-beta.4",
     "@hapi/joi": "^17.1.1",
     "@microsoft/tsdoc": "^0.12.20",
     "@oclif/command": "^1.6.1",
@@ -22,6 +21,7 @@
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
     "inquirer": "^7.2.0",
+    "json-schema": "^0.2.5",
     "new-github-issue-url": "^0.2.1",
     "opn": "^6.0.0",
     "parse-diff": "^0.7.0",
