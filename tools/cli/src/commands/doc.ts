@@ -14,6 +14,7 @@ import { exec } from 'child_process'
 // import detectPackageJsonUpgrades from '../versionUpgrades'
 import { verboseFlag } from '../lib/shared'
 import { NpmPackage } from '../lib/npm'
+const Handlebars = require('handlebars')
 const debug = require('debug')
 const logger = debug('doc')
 
@@ -440,38 +441,42 @@ const generateFeatureLine = ({ headline, description, optional }: Feature) => {
   return `- **✓ ${headline}${optional ? ' (optional)' : ''}**${description === '' ? '' : `  \n${description}`}\n`
 }
 
-const renderReadme = ({ author, description, example, features, moduleName }: ModuleData): string | null => `
-# ${moduleName}
-${description}
+const renderReadme = (moduleData: ModuleData): string => {
+  const template = `
+# {{moduleName}}
+{{description}}
 
-${
-  features.length > 0
-  ? `
-## Features
-${features.map(generateFeatureLine).join('')}
-  `
-  : ''
-}
+{{#if features.length}}
+{{#features}}
+**✓ {{headline}}**  
+{{/features}}
+{{/if}}
 
 ## Install
-\`npm install --save ${moduleName}\`
+\`npm install --save {{moduleName}}\`
 
-${
-  example === null
-  ? ''
-  : `
+{{#if example}}
 ## Example
-${example}
-  `
-}
+{{example}}
+{{/if}}
 
 ## Templates
 To see the available quickstart-templates for this module:
 - Install the *updraft* cli:  
 \`npm install --global @updraft/cli\`
 - Run the \`templates\` command:  
-\`updraft templates ${moduleName}\`
-`
+\`updraft templates {{moduleName}}\`
+  `
+
+  const renderer = Handlebars.compile(template, { noEscape: true })
+  const renderedReadme = renderer(moduleData)
+
+  console.log('-----')
+  console.log(renderedReadme)
+  console.log('-----')
+
+  return renderedReadme
+}
 
 const renderPackageJson = ({ author, headline, features }, existingPackageJson: any): any => {
   let updatedPackageJson = existingPackageJson
