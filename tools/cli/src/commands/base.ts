@@ -15,6 +15,10 @@ export default abstract class extends Command {
    */
   static globalFlags = {
     help: flags.help({char: 'h'}),
+    verbose: {
+      default: false,
+      description: 'enable verbose output (=debug output)'
+    }
   }
 
   /**

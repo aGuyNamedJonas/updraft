@@ -13,6 +13,9 @@ const config = {
   'diff-cmd': 'diff origin/master...',
   include: './*/package.json',
   exclude: './templates/**',
+  // auto-commit: true,
+  'readme-template': 'README.md.handlebars',
+  'packagejson-template': 'package.json.handlebars',
 }
 
 module.exports = config

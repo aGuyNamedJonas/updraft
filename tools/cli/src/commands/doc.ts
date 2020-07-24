@@ -7,16 +7,28 @@ import * as path from 'path'
 import * as ts from 'typescript'
 import * as fs from 'fs'
 import * as tsdoc from '@microsoft/tsdoc'
-import { TSDocParser, ParserContext, DocComment } from '@microsoft/tsdoc';
 import { DocNode, DocExcerpt } from '@microsoft/tsdoc';
-import Templates from './check'
 import { exec } from 'child_process'
 // import detectPackageJsonUpgrades from '../versionUpgrades'
-import { verboseFlag } from '../lib/shared'
 import { NpmPackage } from '../lib/npm'
 const Handlebars = require('handlebars')
 const debug = require('debug')
 const logger = debug('doc')
+
+/**
+ * Makes the Array.prototype.join function available in the handlebar templates.
+ * Example use:
+ * <p>
+ *   {{#join companies "<br>"}}
+ *     {{name}}
+ *   {{/join}}
+ * </p>
+ */
+Handlebars.registerHelper( "join", function( array, sep, options ) {
+  return array.map(function( item ) {
+      return options.fn( item )
+  }).join( sep )
+})
 
 /**
  * Returns true if the specified SyntaxKind is part of a declaration form.
@@ -437,55 +449,27 @@ const consolidateModuleData = (parsedTags: ParsedTag[], packageJson: any): Modul
   } as ModuleData
 }
 
-const generateFeatureLine = ({ headline, description, optional }: Feature) => {
-  return `- **✓ ${headline}${optional ? ' (optional)' : ''}**${description === '' ? '' : `  \n${description}`}\n`
-}
-
-const renderReadme = (moduleData: ModuleData): string => {
-  const template = `
-# {{moduleName}}
-{{description}}
-
-{{#if features.length}}
-{{#features}}
-**✓ {{headline}}**  
-{{/features}}
-{{/if}}
-
-## Install
-\`npm install --save {{moduleName}}\`
-
-{{#if example}}
-## Example
-{{example}}
-{{/if}}
-
-## Templates
-To see the available quickstart-templates for this module:
-- Install the *updraft* cli:  
-\`npm install --global @updraft/cli\`
-- Run the \`templates\` command:  
-\`updraft templates {{moduleName}}\`
-  `
+const renderReadme = (moduleData: ModuleData, readmeTemplatePath): string => {
+  const template = fs.readFileSync(readmeTemplatePath, { encoding: 'utf8' })
 
   const renderer = Handlebars.compile(template, { noEscape: true })
   const renderedReadme = renderer(moduleData)
 
-  console.log('-----')
-  console.log(renderedReadme)
-  console.log('-----')
-
   return renderedReadme
 }
 
-const renderPackageJson = ({ author, headline, features }, existingPackageJson: any): any => {
-  let updatedPackageJson = existingPackageJson
-  updatedPackageJson.author = author
-  updatedPackageJson.description = `${headline}${features.length > 0 ? ` (${features.map(({ headline }) => `✓ ${headline}`).join(', ')})` : ''}`
-  return updatedPackageJson
+const renderPackageJson = (moduleData: ModuleData, existingPackageJson: any, packageJsonTemplatePath: string): any => {
+  const template = fs.readFileSync(packageJsonTemplatePath, { encoding: 'utf8' })
+
+  const renderer = Handlebars.compile(template, { noEscape: true })
+  const renderedPackageJsonStr = renderer(moduleData)
+  const renderedPackageJsonObj = JSON.parse(renderedPackageJsonStr)
+
+  const combinedPackageJson = { ...existingPackageJson, ...renderedPackageJsonObj }
+  return combinedPackageJson
 }
 
-const generateDocs = async (npmPackage: NpmPackage, autoCommit = false) => {
+const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeTemplatePath: string, packageJsonTemplatePath: string) => {
   const { name, version, fullPath, dir } = npmPackage
   console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath))
 
@@ -521,7 +505,7 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit = false) => {
 
   let readme = ''
   try {
-    readme = renderReadme(moduleData)
+    readme = renderReadme(moduleData, readmeTemplatePath)
   } catch (error) {
     console.log(colors.red(`Failed to render README:\n${error.toString()}`))
     return
@@ -530,7 +514,7 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit = false) => {
 
   let updatedPackageJson = ''
   try {
-    updatedPackageJson = renderPackageJson(moduleData, packageJson)
+    updatedPackageJson = renderPackageJson(moduleData, packageJson, packageJsonTemplatePath)
   } catch (error) {
     console.log(colors.red(`Failed to render package.json:\n${error.toString()}`))
     return
@@ -583,15 +567,28 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
     'auto-commit': flags.boolean({
       description: 'Set this flag to create a commit with the auto-generated README.md and package.json',
       required: false,
-    })
+    }),
+    'readme-template': flags.string({
+      description: 'Relative path to the README.md.handlebars template file to use',
+      required: false
+    }),
+    'packagejson-template': flags.string({
+      description: 'Relative path to the package.json.handlebars template file to use',
+      required: false
+    }),
   }
 
   static args = [
-    ...Command.changedModulesArgs
+    ...Command.changedModulesArgs,
   ]
 
   async run() {
     const autoCommit = this.getConfigValue('auto-commit', false)
+    const readmeTemplate = this.getConfigValue('readme-template', 'README.md.handlebars')
+    const packageJsonTemplate = this.getConfigValue('packagejson-template', 'package.json.handlebars')
+
+    const readmeTempPath = path.join(process.cwd(), readmeTemplate)
+    const packageJsonTempPath = path.join(process.cwd(), packageJsonTemplate)
 
     const changedNpmPackages = await this.getChangedModules()
     console.log(
@@ -605,7 +602,7 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
     }
 
     for (let npmPackage of changedNpmPackages) {
-      await generateDocs(npmPackage, autoCommit)
+      await generateDocs(npmPackage, autoCommit, readmeTempPath, packageJsonTempPath)
     }
   }
 }
