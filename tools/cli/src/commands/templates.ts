@@ -3,7 +3,6 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as chalk from 'chalk'
 var inquirer = require('inquirer');
-// const newGithubIssueUrl = require('new-github-issue-url')
 const opn = require('opn')
 import { exec } from '../lib/exec'
 import { mkDir, listDirs } from '../lib/fileHelper'
@@ -105,6 +104,13 @@ Installs the "echo" example into your current folder without prompting
     return targetPath
   }
 
+  /**
+   * TODO: Make sure that this command can be used with private registries as well
+   * @param moduleName 
+   * @param selectedTemplate 
+   * @param callerPath 
+   * @param dstPath 
+   */
   async installTemplate(moduleName: string, selectedTemplate: string, callerPath: string, dstPath: string) {
     // TODO: Add extensive debugging to all commands to be able to debug cli interactions with a --verbose or --debug flag
     // TODO: E2E test all user flows that are present in this cli (including submitting a module for PR)

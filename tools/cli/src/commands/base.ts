@@ -1,7 +1,7 @@
 import * as path from 'path'
+import * as chalk from 'chalk'
 import { getRepoBasePath, getDiff } from '../lib/git'
 import Command, {flags} from '@oclif/command'
-import * as chalk from 'chalk'
 import { fileExists, listFiles } from '../lib/fileHelper'
 import { getPackageNameAndVersion, NpmPackage } from '../lib/npm'
 
@@ -9,7 +9,7 @@ export default abstract class extends Command {
   /**
    * Flags that should be available in every command
    *
-   * >> FOR ALL SHARED FLAGS: <<
+   * >> FOR ALL SHARED FLAGS <<
    * Please don't use the "default" attribute, set them in configDefaults instead!
    * (This ensures that we can differentiate between flags & args from the command line vs. from defaults)
    */
@@ -146,13 +146,12 @@ export default abstract class extends Command {
     console.log('------')
   }
 
-
-
+  /**
+   * Handles unexpected errors during execution of the commands.
+   * This catch function should only handle unexpected errors - please use process.exit(1) for any runtime errors
+   * that you can anticipate.
+   */
   async catch(err) {
-    // add any custom logic to handle errors from the command
-    // or simply return the parent class error handling
-    // TODO: Put this into the baseclass instead!
-    // TODO: Point people to upgrade option or report an issue
     console.log(chalk.red('CLI error:\n'), err.toString())
     console.log('')
     console.trace()

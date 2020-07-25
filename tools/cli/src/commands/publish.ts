@@ -2,9 +2,7 @@ import * as chalk from 'chalk'
 import {flags} from '@oclif/command'
 import Command from './base'
 import { verboseFlag } from '../lib/shared'
-import { listFiles } from '../lib/fileHelper'
-import { getDiff } from '../lib/git'
-import { authenticateNpm, publishPackages, getPackageNameAndVersion } from '../lib/npm'
+import { authenticateNpm, publishPackages } from '../lib/npm'
 const debug = require('debug')
 const logger = debug('publish')
 
