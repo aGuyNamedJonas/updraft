@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import * as colors from 'colors'
+import * as chalk from 'chalk'
 import { Feature, ParsedTag, getTagContent, getFeaturesFromTags } from './tsdoc'
 const Handlebars = require('handlebars')
 
@@ -39,7 +39,7 @@ export const consolidateModuleData = (parsedTags: ParsedTag[], packageJson: any)
   }
 
   if (features.length === 0) {
-    console.log(colors.yellow('No @feature or @optionalFeature tags found - consider describing 2-3 features that are special about your udpraft component.'))
+    console.log(chalk.yellow('No @feature or @optionalFeature tags found - consider describing 2-3 features that are special about your udpraft component.'))
   }
 
   const { name: moduleName } = packageJson

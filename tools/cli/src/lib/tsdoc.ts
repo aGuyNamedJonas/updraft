@@ -1,7 +1,7 @@
 import * as os from 'os'
 import * as ts from 'typescript'
 import * as tsdoc from '@microsoft/tsdoc'
-import * as colors from 'colors'
+import * as chalk from 'chalk'
 import { DocNode, DocExcerpt } from '@microsoft/tsdoc'
 
 /**
@@ -122,9 +122,9 @@ function walkCompilerAstAndFindComments(node: ts.Node, indent: string, foundComm
 
     if (comments.length > 0) {
       if (comments.length === 1) {
-        foundCommentsSuffix = colors.cyan(`  (FOUND 1 COMMENT)`);
+        foundCommentsSuffix = chalk.cyan(`  (FOUND 1 COMMENT)`);
       } else {
-        foundCommentsSuffix = colors.cyan(`  (FOUND ${comments.length} COMMENTS)`);
+        foundCommentsSuffix = chalk.cyan(`  (FOUND ${comments.length} COMMENTS)`);
       }
 
       for (const comment of comments) {
@@ -146,8 +146,8 @@ function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string): ParsedNode[] {
   let dumpText: string = '';
   if (docNode instanceof tsdoc.DocExcerpt) {
     const content: string = docNode.content.toString();
-    // console.log(colors.red(`${indent} Content: ${content}`))
-    dumpText += colors.gray(`${indent}* ${docNode.excerptKind}=`) + colors.cyan(JSON.stringify(content));
+    // console.log(chalk.red(`${indent} Content: ${content}`))
+    dumpText += chalk.gray(`${indent}* ${docNode.excerptKind}=`) + chalk.cyan(JSON.stringify(content));
     parsedNodes.push({ type: docNode.excerptKind, content })
   } else {
     dumpText += `${indent}- ${docNode.kind}`;
@@ -163,10 +163,10 @@ function dumpTSDocTree(docNode: tsdoc.DocNode, indent: string): ParsedNode[] {
 }
 
 function parseTSDoc(foundComment: IFoundComment): ParsedNode[] {
-  // console.log(os.EOL + colors.green('Comment to be parsed:') + os.EOL);
-  // console.log(colors.gray('<<<<<<'));
+  // console.log(os.EOL + chalk.green('Comment to be parsed:') + os.EOL);
+  // console.log(chalk.gray('<<<<<<'));
   // console.log(foundComment.textRange.toString());
-  // console.log(colors.gray('>>>>>>'));
+  // console.log(chalk.gray('>>>>>>'));
 
   const customConfiguration: tsdoc.TSDocConfiguration = new tsdoc.TSDocConfiguration();
 
@@ -225,10 +225,10 @@ function parseTSDoc(foundComment: IFoundComment): ParsedNode[] {
   const parserContext: tsdoc.ParserContext = tsdocParser.parseRange(foundComment.textRange);
   const docComment: tsdoc.DocComment = parserContext.docComment;
 
-  // console.log(os.EOL + colors.green('Parser Log Messages:') + os.EOL);
+  // console.log(os.EOL + chalk.green('Parser Log Messages:') + os.EOL);
 
   if (parserContext.log.messages.length === 0) {
-    // console.log(colors.green('No errors or warnings.'))
+    // console.log(chalk.green('No errors or warnings.'))
   } else {
     const sourceFile: ts.SourceFile = foundComment.compilerNode.getSourceFile();
     for (const message of parserContext.log.messages) {
@@ -313,13 +313,13 @@ export const extractTsDoc = (fileName): ParsedTag[] => {
         const location: ts.LineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
         const formattedMessage: string = `${diagnostic.file.fileName}(${location.line + 1},${location.character + 1}):`
           + ` [TypeScript] ${message}`;
-        console.log(colors.red(formattedMessage));
+        console.log(chalk.red(formattedMessage));
       } else {
-        console.log(colors.red(message));
+        console.log(chalk.red(message));
       }
     }
   } else {
-    console.log(colors.green('No compiler errors or warnings.'))
+    console.log(chalk.green('No compiler errors or warnings.'))
   }
 
   const sourceFile: ts.SourceFile | undefined = program.getSourceFile(fileName);
@@ -327,7 +327,7 @@ export const extractTsDoc = (fileName): ParsedTag[] => {
     throw new Error('Error retrieving source file');
   }
 
-  // console.log(os.EOL + colors.green('Scanning compiler AST for first code comment...') + os.EOL);
+  // console.log(os.EOL + chalk.green('Scanning compiler AST for first code comment...') + os.EOL);
 
   const foundComments: IFoundComment[] = [];
   walkCompilerAstAndFindComments(sourceFile, '', foundComments);

@@ -1,7 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as chalk from 'chalk'
-import * as colors from 'colors'
 import { exec } from 'child_process'
 import { flags } from '@oclif/command'
 import { NpmPackage } from '../lib/npm'
@@ -28,74 +27,74 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
     const rawPackageJson = fs.readFileSync(packageJsonPath, { encoding: 'utf8' })
     packageJson = JSON.parse(rawPackageJson)
   } catch (error) {
-    console.log(colors.red(`Failed to load package.json file:\n${packageJsonPath}\n${error.toString()}`))
+    console.log(chalk.red(`Failed to load package.json file:\n${packageJsonPath}\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully loaded package.json file'))
+  console.log(chalk.green('✓ Successfully loaded package.json file'))
 
   const inputFilePath = path.join(dir, 'index.ts')
   let parsedTags = [] as ParsedTag[]
   try {
     parsedTags = extractTsDoc(inputFilePath)
   } catch (error) {
-    console.log(colors.red(`Failed to process component index.ts file:\n${inputFilePath}\n${error.toString()}`))
+    console.log(chalk.red(`Failed to process component index.ts file:\n${inputFilePath}\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully parsed TSDoc tags from index.ts'))
+  console.log(chalk.green('✓ Successfully parsed TSDoc tags from index.ts'))
 
   let moduleData = {} as ModuleData
   try {
     moduleData = consolidateModuleData(parsedTags, packageJson)
   } catch (error) {
-    console.log(colors.red(`Failed to convert the parsed tags to module data\n${error.toString()}`))
+    console.log(chalk.red(`Failed to convert the parsed tags to module data\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Done consolidating module data'))
+  console.log(chalk.green('✓ Done consolidating module data'))
 
   let readme = ''
   try {
     readme = renderReadme(moduleData, readmeTemplatePath)
   } catch (error) {
-    console.log(colors.red(`Failed to render README:\n${error.toString()}`))
+    console.log(chalk.red(`Failed to render README:\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully rendered README'))
+  console.log(chalk.green('✓ Successfully rendered README'))
 
   let updatedPackageJson = ''
   try {
     updatedPackageJson = renderPackageJson(moduleData, packageJson, packageJsonTemplatePath)
   } catch (error) {
-    console.log(colors.red(`Failed to render package.json:\n${error.toString()}`))
+    console.log(chalk.red(`Failed to render package.json:\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully rendered package.json'))
+  console.log(chalk.green('✓ Successfully rendered package.json'))
 
   const readmeFilePath = path.join(dir, 'README.md')
   try {
     fs.writeFileSync(readmeFilePath, readme)
   } catch (error) {
-    console.log(colors.red(`Failed to write README:\n${error.toString()}`))
+    console.log(chalk.red(`Failed to write README:\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully replaced README.md with rendererd README'))
+  console.log(chalk.green('✓ Successfully replaced README.md with rendererd README'))
 
   try {
     fs.writeFileSync(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2))
   } catch (error) {
-    console.log(colors.red(`Failed to write package.json:\n${error.toString()}`))
+    console.log(chalk.red(`Failed to write package.json:\n${error.toString()}`))
     return
   }
-  console.log(colors.green('✓ Successfully wrote updated package.json'))
+  console.log(chalk.green('✓ Successfully wrote updated package.json'))
 
   if (autoCommit) {
     try {
       process.cwd()
       await exec(`cd ${dir} && git add package.json README.md && git commit -m "Auto-generate update of package.json and README.md for ${packageJson.name}"`)
     } catch (error) {
-      console.log(colors.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
+      console.log(chalk.red(`Error while trying to commit changes to README.md and package.json:\n${error.toString()}`))
       return
     }
-    console.log(colors.green('✓ Successfully committed changes to package.json & README.md'))
+    console.log(chalk.green('✓ Successfully committed changes to package.json & README.md'))
   }
 
   console.log('')

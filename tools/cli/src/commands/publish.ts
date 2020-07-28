@@ -1,7 +1,6 @@
 import * as chalk from 'chalk'
 import {flags} from '@oclif/command'
 import Command from './base'
-import { verboseFlag } from '../lib/shared'
 import { authenticateNpm, publishPackages } from '../lib/npm'
 const debug = require('debug')
 const logger = debug('publish')
@@ -35,8 +34,7 @@ Publishthe module in the current folder, if its package.json file was changed co
     'skip-npm-auth': flags.boolean({
       description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)`,
       required: false,
-    }),
-    verbose: verboseFlag
+    })
   }
 
   static args = [...Command.changedModulesArgs]
