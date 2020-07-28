@@ -1,10 +1,14 @@
 {
-  "name": "@updraft/aws-lambdas-multi-handler____",
+  "name": "@updraft/aws-lambdas-multi-handler",
   "version": "1.0.16",
-  "description": "Deploy lambdas from a multi-handler codebase (✓ Single codebase, multi-handler, ✓ Environment Variables, ✓ Local Code Uploads)",
+  "description": "Deploy lambdas from a multi-handler codebase (✓ Single codebase, multi-handler ✓ Environment Variables ✓ Local Code Uploads ✓ Testfeature)",
+  "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)",
+  "homepage": "https://github.com/aGuyNamedJonas/updraft",
+  "repositoryBasepath": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/",
+  "license": "MIT",
+  "licensePath": "https://github.com/aGuyNamedJonas/updraft/blob/master/LICENSE",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
@@ -16,6 +20,5 @@
   },
   "devDependencies": {
     "typescript": "^3.9.3"
-  },
-  "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)"
+  }
 }
