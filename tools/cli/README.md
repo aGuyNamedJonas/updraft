@@ -76,6 +76,8 @@ EXAMPLE
   Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
 ```
 
+_See code: [lib/commands/docs.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.13/lib/commands/docs.js)_
+
 ## `updraft help [COMMAND]`
 
 display help for updraft

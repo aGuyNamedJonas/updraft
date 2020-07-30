@@ -9,11 +9,11 @@
 
 const config = {
   alias: 'Typescript Components Config',
+  // The NPM_TOKEN environment variable is set through CircleCI
   'skip-npm-auth': true,
   'diff-cmd': 'diff origin/master...',
   include: './*/package.json',
-  exclude: './templates/**',
-  // auto-commit: true,
+  'auto-commit': true,
   'readme-template': 'README.md.handlebars',
   'packagejson-template': 'package.json.handlebars',
 }
