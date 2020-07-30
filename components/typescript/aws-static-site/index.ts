@@ -51,6 +51,7 @@ import { Construct } from '@aws-cdk/core';
 
 export interface AwsStaticSiteProps {
   domainName: string;
+  region: string;
   siteContent?: string;
   siteSubDomain?: string;
 }
@@ -98,8 +99,15 @@ class AwsStaticSite extends Construct {
           },
           originConfigs: [
               {
-                  s3OriginSource: {
-                      s3BucketSource: siteBucket
+                  // S3 bucket unfortunately uses a wrong URL
+                  // Needs to be "http://axelspringertech.com.s3-website.eu-central-1.amazonaws.com/"
+                  // Instead is "http://axelspringertech.com.s3.eu-central-1.amazonaws.com/"
+                  // Which breaks the ability to call up subfolders (e.g. example.com/subpage)
+                  // s3OriginSource: {
+                  //     s3BucketSource: siteBucket
+                  // },
+                  customOriginSource: {
+                    domainName: `https://${siteDomain}.s3-website.${props.region}.amazonaws.com`
                   },
                   behaviors : [ {isDefaultBehavior: true}],
               }
