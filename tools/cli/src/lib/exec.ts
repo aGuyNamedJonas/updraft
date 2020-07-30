@@ -10,6 +10,8 @@ export const exec = async (cmd: string, cb = (data: string) => {}): Promise<{ st
     env: process.env,
   }
 
+  console.log(chalk.grey(`Executing $ ${cmd}`))
+
   const childProc = spawn(cmd, defaultOpts)
   let stdout = ''
   let stderr = ''

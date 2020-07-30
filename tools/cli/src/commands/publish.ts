@@ -1,6 +1,6 @@
 import * as chalk from 'chalk'
 import {flags} from '@oclif/command'
-import Command from './base'
+import Command from '../lib/base'
 import { authenticateNpm, publishPackages } from '../lib/npm'
 const debug = require('debug')
 const logger = debug('publish')
@@ -24,15 +24,15 @@ Publishthe module in the current folder, if its package.json file was changed co
     ...Command.globalFlags,
     ...Command.changedModulesFlags,
     'public-access': flags.boolean({
-      description: 'Run the npm publish with the "--access public" flag',
+      description: 'Run the npm publish with the "--access public" flag (default false)',
       required: false,
     }),
     'dry-run': flags.boolean({
-      description: 'Only check for packages to re-publish, do not actually publish to NPM',
+      description: 'Only check for packages to re-publish, do not actually publish to NPM (default false)',
       required: false,
     }),
     'skip-npm-auth': flags.boolean({
-      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)`,
+      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login) (default false)`,
       required: false,
     })
   }

@@ -4,7 +4,7 @@ import * as chalk from 'chalk'
 import { exec } from 'child_process'
 import { flags } from '@oclif/command'
 import { NpmPackage } from '../lib/npm'
-import Command from './base'
+import Command from '../lib/base'
 import { ParsedTag, extractTsDoc } from '../lib/tsdoc'
 import { ModuleData, consolidateModuleData, renderReadme, renderPackageJson } from '../lib/render'
 const debug = require('debug')
@@ -37,7 +37,7 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
   try {
     parsedTags = extractTsDoc(inputFilePath)
   } catch (error) {
-    console.log(chalk.red(`Failed to process component index.ts file:\n${inputFilePath}\n${error.toString()}`))
+    console.log(chalk.red(`Failed to process index.ts file:\n${inputFilePath}\n${error.toString()}`))
     return
   }
   console.log(chalk.green('✓ Successfully parsed TSDoc tags from index.ts'))
@@ -46,10 +46,10 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
   try {
     moduleData = consolidateModuleData(parsedTags, packageJson)
   } catch (error) {
-    console.log(chalk.red(`Failed to convert the parsed tags to module data\n${error.toString()}`))
+    console.log(chalk.red(`Failed to convert the parsed tags to component data\n${error.toString()}`))
     return
   }
-  console.log(chalk.green('✓ Done consolidating module data'))
+  console.log(chalk.green('✓ Done consolidating component data'))
 
   let readme = ''
   try {
@@ -84,7 +84,7 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
     console.log(chalk.red(`Failed to write package.json:\n${error.toString()}`))
     return
   }
-  console.log(chalk.green('✓ Successfully wrote updated package.json'))
+  console.log(chalk.green('✓ Successfully merged rendered package.json into package.json'))
 
   if (autoCommit) {
     try {
@@ -101,7 +101,7 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
 }
 
 export default class Doc extends Command {
-  static description = 'Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts\n\nAuto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while you can focus on optimizing the user experience of your own updraft modules.\n\nRun "$ updraft templates @updraft/templates updraft-module-ts" to download the latest example on how to use the tsdoc fields.'
+  static description = 'Auto-Generates the README and some package.json fields for your updraft component by parsing the tsdoc in your index.ts\n\nAuto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while you can focus on optimizing the user experience of your own updraft modules.\n\nRun "$ updraft init to download the latest example on how to use the tsdoc fields.'
 
   static examples = [
     `$ updraft doc
@@ -113,15 +113,15 @@ Takes the tsdoc from your index.ts and turns it into a README and some package.j
     ...Command.globalFlags,
     ...Command.changedModulesFlags,
     'auto-commit': flags.boolean({
-      description: 'Set this flag to create a commit with the auto-generated README.md and package.json',
+      description: 'Create a commit with the auto-generated README.md and package.json (default: false)',
       required: false,
     }),
     'readme-template': flags.string({
-      description: 'Relative path to the README.md.handlebars template file to use',
+      description: 'Relative path to the README.md.handlebars template file to use (default: "README.md.handlebars")',
       required: false
     }),
     'packagejson-template': flags.string({
-      description: 'Relative path to the package.json.handlebars template file to use',
+      description: 'Relative path to the package.json.handlebars template file to use (default: "package.json.handlebars")',
       required: false
     }),
   }

@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.12 darwin-x64 node-v14.3.0
+@updraft/cli/0.0.13 darwin-x64 node-v14.3.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
@@ -28,29 +28,19 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`updraft base`](#updraft-base)
-* [`updraft doc [DIFF-CMD]`](#updraft-doc-diff-cmd)
+* [`updraft docs [DIFF-CMD]`](#updraft-docs-diff-cmd)
 * [`updraft help [COMMAND]`](#updraft-help-command)
 * [`updraft init`](#updraft-init)
 * [`updraft publish [DIFF-CMD]`](#updraft-publish-diff-cmd)
 * [`updraft templates MODULE [TEMPLATE] [PATH]`](#updraft-templates-module-template-path)
 
-## `updraft base`
+## `updraft docs [DIFF-CMD]`
+
+Auto-Generates the README and some package.json fields for your updraft component by parsing the tsdoc in your index.ts
 
 ```
 USAGE
-  $ updraft base
-```
-
-_See code: [lib/commands/base.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.12/lib/commands/base.js)_
-
-## `updraft doc [DIFF-CMD]`
-
-Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts
-
-```
-USAGE
-  $ updraft doc [DIFF-CMD]
+  $ updraft docs [DIFF-CMD]
 
 ARGUMENTS
   DIFF-CMD  Git command to use to detect changes
@@ -58,34 +48,33 @@ ARGUMENTS
 OPTIONS
   -h, --help                                   show CLI help
 
-  --auto-commit                                Set this flag to create a commit with the auto-generated README.md and
-                                               package.json
+  --auto-commit                                Create a commit with the auto-generated README.md and package.json
+                                               (default: false)
 
   --exclude=exclude                            Glob pattern specifying which files to exclude from consideration for
-                                               publish, check, doc (defaults to "")
+                                               publish & docs (default to "")
 
-  --include=include                            Glob pattern specifying which files to consider for publish, check, doc
-                                               (defaults to "./package.json")
+  --include=include                            Glob pattern specifying which files to consider for publish & docs
+                                               (default "./package.json")
 
   --packagejson-template=packagejson-template  Relative path to the package.json.handlebars template file to use
+                                               (default: "package.json.handlebars")
 
-  --readme-template=readme-template            Relative path to the README.md.handlebars template file to use
+  --readme-template=readme-template            Relative path to the README.md.handlebars template file to use (default:
+                                               "README.md.handlebars")
 
-  --verbose                                    enable verbose output (=debug output)
+  --verbose                                    Enable verbose output (=debug output)
 
 DESCRIPTION
   Auto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while 
   you can focus on optimizing the user experience of your own updraft modules.
 
-  Run "$ updraft templates @updraft/templates updraft-module-ts" to download the latest example on how to use the tsdoc 
-  fields.
+  Run "$ updraft init to download the latest example on how to use the tsdoc fields.
 
 EXAMPLE
   $ updraft doc
   Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
 ```
-
-_See code: [lib/commands/doc.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.12/lib/commands/doc.js)_
 
 ## `updraft help [COMMAND]`
 
@@ -120,7 +109,7 @@ EXAMPLE
   Shows you a list of templates that you can use to initialize a new updraft component.
 ```
 
-_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.12/lib/commands/init.js)_
+_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.13/lib/commands/init.js)_
 
 ## `updraft publish [DIFF-CMD]`
 
@@ -135,19 +124,19 @@ ARGUMENTS
 
 OPTIONS
   -h, --help         show CLI help
-  --dry-run          Only check for packages to re-publish, do not actually publish to NPM
+  --dry-run          Only check for packages to re-publish, do not actually publish to NPM (default false)
 
-  --exclude=exclude  Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults
-                     to "")
+  --exclude=exclude  Glob pattern specifying which files to exclude from consideration for publish & docs (default to
+                     "")
 
-  --include=include  Glob pattern specifying which files to consider for publish, check, doc (defaults to
-                     "./package.json")
+  --include=include  Glob pattern specifying which files to consider for publish & docs (default "./package.json")
 
-  --public-access    Run the npm publish with the "--access public" flag
+  --public-access    Run the npm publish with the "--access public" flag (default false)
 
   --skip-npm-auth    Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)
+                     (default false)
 
-  --verbose          enable verbose output (=debug output)
+  --verbose          Enable verbose output (=debug output)
 
 DESCRIPTION
   You only need to use this, if you're planning to use updraft to manage your internal CDK component library. Check out 
@@ -167,7 +156,7 @@ EXAMPLES
   whatever authentication you setup for NPM (e.g. with npm login).
 ```
 
-_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.12/lib/commands/publish.js)_
+_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.13/lib/commands/publish.js)_
 
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
@@ -178,13 +167,16 @@ USAGE
   $ updraft templates MODULE [TEMPLATE] [PATH]
 
 ARGUMENTS
-  MODULE    updraft module from which to get the template from
-  TEMPLATE  name of the template to download
-  PATH      local path to install the template to
+  MODULE    Updraft component from which to get the template from (needs to include scope - e.g.
+            @updraft/aws-static-site)
+
+  TEMPLATE  Name of the template to download (will be prompted if not provided)
+
+  PATH      Local path to install the template to (default ".")
 
 OPTIONS
   -h, --help  show CLI help
-  --verbose   enable verbose output (=debug output)
+  --verbose   Enable verbose output (=debug output)
 
 EXAMPLES
   $ updraft templates @updraft
@@ -197,5 +189,5 @@ EXAMPLES
   Installs the "echo" example into your current folder without prompting.
 ```
 
-_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.12/lib/commands/templates.js)_
+_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.13/lib/commands/templates.js)_
 <!-- commandsstop -->

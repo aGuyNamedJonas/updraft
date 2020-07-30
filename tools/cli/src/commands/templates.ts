@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as chalk from 'chalk'
-import Command from './base'
+import Command from '../lib/base'
 import { retrieveTemplates, promptTemplateSelection, promptDestination, installTemplate } from '../lib/templates'
 
 export default class Templates extends Command {
@@ -26,17 +26,17 @@ Installs the "echo" example into your current folder without prompting.
     {
       name: 'module',
       required: true,
-      description: 'updraft module from which to get the template from'
+      description: 'Updraft component from which to get the template from (needs to include scope - e.g. @updraft/aws-static-site)'
     },
     {
       name: 'template',
       required: false,
-      description: 'name of the template to download'
+      description: 'Name of the template to download (will be prompted if not provided)'
     },
     {
       name: 'path',
       required: false,
-      description: `local path to install the template to`
+      description: `Local path to install the template to (default ".")`
     },
   ]
 

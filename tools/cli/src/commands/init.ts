@@ -1,5 +1,5 @@
 import * as chalk from 'chalk'
-import {Command} from '@oclif/command'
+import Command from '../lib/base'
 import { getTemplatesHandler } from './templates'
 export default class InitCommand extends Command {
   static description = 'Start creating a new updraft component (either for submission to updraft or your own library.\nAlias for updraft templates @updraft/templates'

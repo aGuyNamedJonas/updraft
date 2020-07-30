@@ -11,5 +11,6 @@ module.exports = {
   // Use last commit for publication (on squash-merge to master)
   'diff-cmd': 'show',
   include: './package.json',
-  exclude: './templates/**'
+  exclude: './templates/**',
+  'public-access': true,
 }

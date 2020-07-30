@@ -1,9 +1,9 @@
 import * as path from 'path'
 import * as chalk from 'chalk'
-import { getRepoBasePath, getDiff } from '../lib/git'
+import { getRepoBasePath, getDiff } from './git'
 import Command, {flags} from '@oclif/command'
-import { fileExists, listFiles } from '../lib/fileHelper'
-import { getPackageNameAndVersion, NpmPackage } from '../lib/npm'
+import { fileExists, listFiles } from './fileHelper'
+import { getPackageNameAndVersion, NpmPackage } from './npm'
 
 export default abstract class extends Command {
   /**
@@ -17,7 +17,7 @@ export default abstract class extends Command {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({
       default: false,
-      description: 'enable verbose output (=debug output)'
+      description: 'Enable verbose output (=debug output)'
     })
   }
 
@@ -26,11 +26,11 @@ export default abstract class extends Command {
    */
   static changedModulesFlags = {
     'include': flags.string({
-      description: 'Glob pattern specifying which files to consider for publish, check, doc (defaults to "./package.json")',
+      description: 'Glob pattern specifying which files to consider for publish & docs (default "./package.json")',
       required: false,
     }),
     'exclude': flags.string({
-      description: 'Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults to "")',
+      description: 'Glob pattern specifying which files to exclude from consideration for publish & docs (default to "")',
       required: false,
     })
   }
