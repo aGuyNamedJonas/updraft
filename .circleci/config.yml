@@ -19,7 +19,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: sudo npm install --global @updraft/cli
-            - run: cd /home/circleci/project/tools/ && updraft publish
+            - run: cd /home/circleci/project/tools/cli/ && updraft publish
   republish-typescript-templates:
     executor:
       name: node/default
