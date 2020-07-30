@@ -20,6 +20,15 @@ jobs:
           steps:
             - run: sudo npm install --global @updraft/cli
             - run: cd /home/circleci/project/tools/ && updraft publish
+  republish-typescript-templates:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: sudo npm install --global @updraft/cli
+            - run: cd /home/circleci/project/templates/typescript/ && updraft publish
   generate-docs:
     executor:
       name: node/default
@@ -40,6 +49,12 @@ workflows:
                 - master
           context: updraft
       - republish-cli:
+          filters:
+            branches:
+              only:
+                - master
+          context: updraft
+      - republish-typescript-templates:
           filters:
             branches:
               only:
