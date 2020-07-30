@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  republish-typescript-modules:
+  republish-typescript-components:
     executor:
       name: node/default
     steps:
@@ -10,7 +10,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: sudo npm install --global @updraft/cli
-            - run: cd /home/circleci/project/modules/typescript/ && updraft publish
+            - run: cd /home/circleci/project/components/typescript/ && updraft publish
   republish-cli:
     executor:
       name: node/default
@@ -37,12 +37,12 @@ jobs:
       - node/with-cache:
           steps:
             - run: sudo npm install --global @updraft/cli
-            - run: cd /home/circleci/project/modules/typescript/ && updraft docs
+            - run: cd /home/circleci/project/components/typescript/ && updraft docs
             - run: git push -q -u https://${GITHUB_PERSONAL_TOKEN}@github.com/aGuyNamedJonas/updraft.git ${CIRCLE_BRANCH}
 workflows:
   respublish-modules-and-tools:
     jobs:
-      - republish-typescript-modules:
+      - republish-typescript-components:
           filters:
             branches:
               only:
