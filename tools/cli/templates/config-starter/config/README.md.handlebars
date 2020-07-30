@@ -1,0 +1,24 @@
+# {{moduleName}}
+{{description}}
+
+{{#if features.length}}
+## Features
+{{#features}}
+**✓ {{headline}}**{{#if optional}} (optional){{/if}}{{#if description}} - {{description}}{{/if}}  
+{{/features}}
+{{/if}}
+
+## Install
+`npm install --save {{moduleName}}`
+
+{{#if example}}
+## Example
+{{example}}
+{{/if}}
+
+## Templates
+To see the available quickstart-templates for this module:
+- Install the *updraft* cli:  
+`npm install --global @updraft/cli`
+- Run the `templates` command:  
+`updraft templates {{moduleName}}`

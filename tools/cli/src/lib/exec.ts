@@ -1,5 +1,6 @@
-import * as fs from 'fs'
 import { spawn } from 'child_process'
+const chalk = require('chalk')
+const debug = require('debug')
 
 export const exec = async (cmd: string, cb = (data: string) => {}): Promise<{ stdout: string, stderr: string }> => {
   // Default args as defined by https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
@@ -8,6 +9,8 @@ export const exec = async (cmd: string, cb = (data: string) => {}): Promise<{ st
     cwd: undefined,
     env: process.env,
   }
+
+  console.log(chalk.grey(`Executing $ ${cmd}`))
 
   const childProc = spawn(cmd, defaultOpts)
   let stdout = ''
@@ -33,24 +36,6 @@ export const exec = async (cmd: string, cb = (data: string) => {}): Promise<{ st
       }
 
       reject(new Error(`Command failed with exit code ${code}:\n${stderr}`))
-    })
-  })
-}
-
-export const mkDir = (path: string) => {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path)
-  }
-}
-
-export const listDirs = (path: string) => {
-  return new Promise((resolve, reject) => {
-    fs.readdir(path, (err, files) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(files)
-      }
     })
   })
 }

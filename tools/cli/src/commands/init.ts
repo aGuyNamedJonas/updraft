@@ -1,23 +1,21 @@
 import * as chalk from 'chalk'
-import {Command} from '@oclif/command'
+import Command from '../lib/base'
+import { getTemplatesHandler } from './templates'
 export default class InitCommand extends Command {
-  static description = 'Create your own updraft module to contribute to updraft or use internally\n\nFunny story actually: This command is just here as a reminder that you can create your own updraft module by using the templates from @updraft/creator-templates (see examples below).'
+  static description = 'Start creating a new updraft component (either for submission to updraft or your own library.\nAlias for updraft templates @updraft/templates'
 
   static examples = [
-    `$ updraft templates @updraft/creator-templates
-Get a list of the creator-templates that help you get started with a fresh updraft module
-`,
-    `$ updraft templates @updraft/creator-templates typescript-starter
-Get started with a typescript udpraft module
+    `$ updraft init
+Shows you a list of templates that you can use to initialize a new updraft component.
 `]
 
   async run() {
+    console.log('Hello there!')
+    console.log('Thanks for starting a new updraft component.')
+    console.log('Just fyi: "updraft init" is just an alias.')
+    console.log('You can still use it of course, just letting you know!')
     console.log('')
-    console.log('Use our creator-templates to get started with a new updraft module:')
-    console.log(chalk.green(`$ updraft templates @updraft/creator-templates`))
-    console.log('')
-    console.log(chalk.blue(`Want to share your module with the world? Check out our guide:`))
-    console.log(chalk.underline('https://github.com/aGuyNamedJonas/updraft/blob/master/CONTRIBUTING.md'))
-    console.log('')
+    console.log(chalk.yellow('Calling "updraft templates @updraft/templates"...'))
+    await getTemplatesHandler('@updraft/templates')
   }
 }

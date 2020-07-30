@@ -1,11 +1,8 @@
 version: 2.1
-dependencies:
-  pre:
-    - 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc'
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  republish-typescript-module:
+  republish-typescript-components:
     executor:
       name: node/default
     steps:
@@ -13,7 +10,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: sudo npm install --global @updraft/cli
-            - run: cd /home/circleci/project/modules/typescript/ && updraft publish --multimode
+            - run: cd /home/circleci/project/components/typescript/ && updraft publish
   republish-cli:
     executor:
       name: node/default
@@ -23,7 +20,7 @@ jobs:
           steps:
             - run: sudo npm install --global @updraft/cli
             - run: cd /home/circleci/project/tools/ && updraft publish
-  check-module-submission:
+  republish-typescript-templates:
     executor:
       name: node/default
     steps:
@@ -31,13 +28,21 @@ jobs:
       - node/with-cache:
           steps:
             - run: sudo npm install --global @updraft/cli
-            - run: cd /home/circleci/project/modules/typescript/ && updraft check --multimode
-            - run: cd /home/circleci/project/modules/typescript/ && updraft doc --multimode
+            - run: cd /home/circleci/project/templates/typescript/ && updraft publish
+  generate-docs:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: sudo npm install --global @updraft/cli
+            - run: cd /home/circleci/project/components/typescript/ && updraft docs
             - run: git push -q -u https://${GITHUB_PERSONAL_TOKEN}@github.com/aGuyNamedJonas/updraft.git ${CIRCLE_BRANCH}
 workflows:
   respublish-modules-and-tools:
     jobs:
-      - republish-typescript-module:
+      - republish-typescript-components:
           filters:
             branches:
               only:
@@ -49,6 +54,12 @@ workflows:
               only:
                 - master
           context: updraft
-      - check-module-submission:
+      - republish-typescript-templates:
+          filters:
+            branches:
+              only:
+                - master
+          context: updraft
+      - generate-docs:
           context: updraft
 

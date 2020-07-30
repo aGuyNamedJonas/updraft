@@ -1,135 +1,92 @@
 import * as chalk from 'chalk'
-import * as path from 'path'
-import {Command, flags} from '@oclif/command'
-import getVersionUpgrades from '../versionUpgrades'
-import { exec } from '../shared'
-
-type ModuleChange = {
-  name: string,
-  version: string,
-  modulePackage: string,
-  path: string,
-}
-
-type PrintModuleProps = {
-  name: string,
-  version: string,
-  modulePackage: string,
-  successMessage?: string | undefined,
-  errorMessage?: string | undefined
-}
-
-const printModuleAndVersion = ({ name, version, modulePackage, successMessage = undefined, errorMessage = undefined }: PrintModuleProps) => {
-  console.log(name, chalk.green('~> ' + version))
-  console.log(chalk.grey(modulePackage))
-
-  if (successMessage) {
-    console.log(chalk.green(successMessage))
-  }
-
-  if (errorMessage) {
-    console.log(chalk.red(errorMessage))
-  }
-
-  console.log('')
-}
-
-// TODO: Add error when NPM_TOKEN is not set
-const authenticateNpm = async () => exec('echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc')
-
-const publishVersionChanges = async (moduleChanges, publicAccess: boolean) => {
-  const publishPackageToNpm = async ({ name, version, modulePackage, path: modulePath }: ModuleChange) => {
-    try {
-      await exec(`cd ${modulePath} && npm install && npm run build && npm publish ${publicAccess ? '--access public' : ''}`)
-    } catch (error) {
-      printModuleAndVersion({ name, version, modulePackage, errorMessage: `Failed publishing to NPM:\n${error.toString()}` })
-      throw new Error(error)
-    }
-
-    printModuleAndVersion({ name, version, modulePackage, successMessage: 'Successfully published to NPM' })
-  }
-
-  const publishing = moduleChanges.map(publishPackageToNpm)
-  try {
-    await Promise.all(publishing)
-  } catch (error) {
-    throw new Error('Some or all publishing to NPM failed:\n' + error.toString())
-  }
-
-  console.log(chalk.yellow(moduleChanges.length === 0 ? '' : `${moduleChanges.length} modules successfully published to NPM`))
-}
-
-const publish = async (moduleChanges: ModuleChange[], publicAccess: boolean) => {
-  await authenticateNpm()
-  moduleChanges.forEach(printModuleAndVersion)
-  await publishVersionChanges(moduleChanges, publicAccess)
-}
+import {flags} from '@oclif/command'
+import Command from '../lib/base'
+import { authenticateNpm, publishPackages } from '../lib/npm'
+const debug = require('debug')
+const logger = debug('publish')
 
 export default class PublishCommand extends Command {
-  static description = 'publish your changed (updraft) modules to a package registry DO NOT USE THIS!\n\nDo not use this - Unless you want to use this to manage your internal updraft module library (e.g. at your company). This command is used by our CI/CD job to publish your modules to the NPM registry.\n\nBefore publishing modules, you might want to run updraft check to run some basic sanity checks across your udpraft modules.'
+  static description = `Publish all changed node modules for which the package.json was modified\nYou only need to use this, if you're planning to use updraft to manage your internal CDK component library. Check out the updraft build scripts for inspiration how we use this command to publish to the public @updraft component library on NPM.`
 
   static examples = [
-    `$ export NPM_TOKEN=<Your NPM token> && updraft publish
-Publishes all (node) modules in the first subfolder of the current folder for which the version number was changed in the last commit (e.g. after a pull-request was merged)\n\nHow we use it: updraft publish ./modules/typescript
+    `$ export NPM_TOKEN=<Your NPM token> && updraft publish --include="./*/package.json" --exclude=""./templates/**""
+We run this command on changes to the master-branch from inside /modules/typescript to re-publish all changed modules (but not their templates). We set these values in /modules/typescript/updraft.json though.
 `,
-`$ export NPM_TOKEN=<Your NPM token> && updraft publish ./modules/typescript "diff origin/master..."
-Publishes all modules that had their version numbers changed in the folder "modules/typescript" folder compared to the master branch (if you want to do special publish thing in branches other than the master)
+`$ export NPM_TOKEN=<Your NPM token> && updraft publish --include="package.json" "diff origin/master..."
+Publish the module in the current folder, if its package.json file was changed compared to the master branch.
+`,
+`$ updraft publish --include="package.json" --skip-npm-auth "diff origin/master..."
+Publishthe module in the current folder, if its package.json file was changed compared to the master branch and use whatever authentication you setup for NPM (e.g. with npm login).
 `,
 ]
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    publicaccess: flags.boolean({
-      default: true,
-      description: 'run the npm publish with the "--access public" flag'
+    ...Command.globalFlags,
+    ...Command.changedModulesFlags,
+    'public-access': flags.boolean({
+      description: 'Run the npm publish with the "--access public" flag (default false)',
+      required: false,
+    }),
+    'dry-run': flags.boolean({
+      description: 'Only check for packages to re-publish, do not actually publish to NPM (default false)',
+      required: false,
+    }),
+    'skip-npm-auth': flags.boolean({
+      description: `Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login) (default false)`,
+      required: false,
     })
   }
 
-  static args = [
-    {
-      name: 'modulePath',
-      default: './',
-      required: false,
-      description: 'path of the module(s) to check - defaults to current directory'
-    },
-    {
-      name: 'diffCmd',
-      default: 'show',
-      required: false,
-      description: 'updraft publish will run "git <diffCmd>" to detect changes to modules in "modulePath".\n\nSee examples for ways of how you can use this!'
-    }
-  ]
+  static args = [...Command.changedModulesArgs]
 
   async run() {
-    const { args, flags } = this.parse(PublishCommand)
-    const { modulePath, diffCmd } = args
-    const { publicaccess } = flags
+    const dryRun = this.getConfigValue('dry-run', false)
+    const skipNpmAuth = this.getConfigValue('skip-npm-auth', false)
+    const publicAccess = this.getConfigValue('public-access', false)
 
-    console.log(`Checking for changed modules in path:`)
-    console.log(chalk.green(path.resolve(modulePath)))
-    console.log('')
-    console.log(chalk.yellow(`Checking for changes using "git ${diffCmd}"`))
-    console.log('')
+    const changedNpmPackages = await this.getChangedModules()
 
-    const moduleChanges = await getVersionUpgrades(process.cwd(), diffCmd)
-    console.log(moduleChanges.length > 0
-                ? chalk.green(`${moduleChanges.length} module change${moduleChanges.length > 1 ? 's' : ''} detected`)
-                : chalk.yellow('No module changes detected.')
-                )
-    console.log('')
+    console.log(
+      changedNpmPackages.length > 0
+      ? chalk.yellow(`Found ${changedNpmPackages.length} package${changedNpmPackages.length === 1 ? '' : 's'} to publish`)
+      : chalk.yellow(`Found no package to publish`)
+    )
+    changedNpmPackages.forEach(({ name, version, fullPath }) => console.log(chalk.bold(name), chalk.green('~> ' + version), '\n', chalk.gray(fullPath)))
 
-    if (moduleChanges.length === 0) {
+    if (changedNpmPackages.length === 0) {
       process.exit(0)
     }
 
-    try {
-      await publish(moduleChanges, publicaccess)
-    } catch (error) {
-      console.log(chalk.red(`Publication failed:\n${error.toString()}`))
+    if (dryRun) {
+      console.log(chalk.yellow('\nExiting without publication (--dry-run)\n'))
+      process.exit(0)
+    }
+
+    if (!skipNpmAuth) {
+      try {
+        await authenticateNpm()
+      } catch (error) {
+        console.log(chalk.red('\nError while trying to authenticate with NPM:\n'), error.toString())
+        process.exit(1)
+      }
+    } else {
+      console.log(chalk.yellow('\nSkipping NPM authentication (--skip-npm-auth)\n'))
+    }
+
+    const publishedPackages = await publishPackages(changedNpmPackages, publicAccess)
+
+    const { success, failed } = publishedPackages
+    success.forEach(({ name, version, fullPath }) => console.log(name, chalk.green('~> ' + version + ' published'), '\n', chalk.grey(fullPath)))
+    console.log('')
+    failed.forEach(({ name, version, fullPath, errorMessage }) => console.log(name, chalk.red('~> ' + version + ' publication failed'), '\n', chalk.grey(fullPath), '\n', errorMessage, '\n'))
+    console.log('')
+    console.log(chalk.green('Published ' + success.length))
+    console.log(chalk.red('Failed    ' + failed.length))
+
+    if (failed.length > 0) {
       process.exit(1)
     }
 
-    console.log(chalk.green('Publication successfully completed.'))
     process.exit(0)
   }
 }
