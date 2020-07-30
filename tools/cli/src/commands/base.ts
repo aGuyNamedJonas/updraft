@@ -140,10 +140,10 @@ export default abstract class extends Command {
 
     this.configFile = await this.loadConfigFile()
 
-    console.log('------')
+    console.log('Running @updraft/cli with options:')
     console.log(JSON.stringify(this.configFile, null, 2))
     console.log(JSON.stringify(this.configValues, null, 2))
-    console.log('------')
+    console.log('')
   }
 
   /**
