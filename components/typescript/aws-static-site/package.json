@@ -1,7 +1,7 @@
 {
   "name": "@updraft/aws-static-site",
   "version": "0.0.5",
-  "description": "Easily setup a static site on AWS under your own domain (✓ Custom Domain, ✓ Invalidates on Redeploy, ✓ Local Sources, ✓ Subdomain Support)",
+  "description": "Easily setup a static site on AWS under your own domain (✓ Custom Domain ✓ Invalidates on Redeploy ✓ Local Sources ✓ Subdomain Support)",
   "repository": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/aws-static-site",
   "homepage": "https://github.com/aGuyNamedJonas/updraft",
   "main": "lib/index.js",
@@ -9,9 +9,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
-    "check": "updraft check",
-    "doc": "updraft doc"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@aws-cdk/aws-certificatemanager": "^1.51.0",
@@ -26,5 +24,7 @@
     "@updraft/cli": "^0.0.10",
     "typescript": "^3.9.6"
   },
-  "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)"
+  "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)",
+  "repositoryBasepath": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/",
+  "licensePath": "https://github.com/aGuyNamedJonas/updraft/blob/master/LICENSE"
 }
