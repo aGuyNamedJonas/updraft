@@ -1,6 +1,6 @@
 {
   "name": "@updraft/aws-lambdas-multi-handler",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Deploy lambdas from a multi-handler codebase (✓ Single codebase, multi-handler ✓ Environment Variables ✓ Local Code Uploads ✓ Testfeature)",
   "author": "Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)",
   "homepage": "https://github.com/aGuyNamedJonas/updraft",
