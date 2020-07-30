@@ -15,10 +15,10 @@ export default abstract class extends Command {
    */
   static globalFlags = {
     help: flags.help({char: 'h'}),
-    verbose: {
+    verbose: flags.boolean({
       default: false,
       description: 'enable verbose output (=debug output)'
-    }
+    })
   }
 
   /**
@@ -135,8 +135,8 @@ export default abstract class extends Command {
   }
 
   async init() {
-    const { args, flags } = this.parse(this.constructor)
-    this.configValues = { ...args, ...flags }
+    const { args, flags } = this.parse(this.constructor as any)
+    this.configValues = { ...args, ...flags as Object }
 
     this.configFile = await this.loadConfigFile()
 

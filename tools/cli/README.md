@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.10 darwin-x64 node-v14.3.0
+@updraft/cli/0.0.11 darwin-x64 node-v14.3.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
@@ -28,55 +28,50 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`updraft check [MODULEPATH]`](#updraft-check-modulepath)
-* [`updraft doc [MODULEPATH]`](#updraft-doc-modulepath)
+* [`updraft base`](#updraft-base)
+* [`updraft doc [DIFF-CMD]`](#updraft-doc-diff-cmd)
 * [`updraft help [COMMAND]`](#updraft-help-command)
 * [`updraft init`](#updraft-init)
-* [`updraft publish [MODULEPATH] [DIFFCMD]`](#updraft-publish-modulepath-diffcmd)
+* [`updraft publish [DIFF-CMD]`](#updraft-publish-diff-cmd)
 * [`updraft templates MODULE [TEMPLATE] [PATH]`](#updraft-templates-module-template-path)
 
-## `updraft check [MODULEPATH]`
-
-Get your updraft module ready for PR submission
+## `updraft base`
 
 ```
 USAGE
-  $ updraft check [MODULEPATH]
-
-ARGUMENTS
-  MODULEPATH  [default: ./] path of the module(s) to check - defaults to current directory
-
-OPTIONS
-  -h, --help   show CLI help
-  --multimode  runs checks on first layer of subfolders in PATH
-
-DESCRIPTION
-  This command is used to green-light your module submissions.
-
-EXAMPLES
-  $ updraft check
-  Checks the updraft module in the current directory
-
-  $ updraft templates ./aws-my-amazing-module
-  Checks the updraft module in the folder "./aws-my-amazing-module"
+  $ updraft base
 ```
 
-_See code: [lib/commands/check.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.10/lib/commands/check.js)_
+_See code: [lib/commands/base.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.11/lib/commands/base.js)_
 
-## `updraft doc [MODULEPATH]`
+## `updraft doc [DIFF-CMD]`
 
 Auto-Generates the README and some package.json fields for your updraft module by parsing the tsdoc in your index.ts
 
 ```
 USAGE
-  $ updraft doc [MODULEPATH]
+  $ updraft doc [DIFF-CMD]
 
 ARGUMENTS
-  MODULEPATH  [default: ./] path of the module(s) to check - defaults to current directory
+  DIFF-CMD  Git command to use to detect changes
 
 OPTIONS
-  -h, --help   show CLI help
-  --multimode  runs checks on first layer of subfolders in PATH
+  -h, --help                                   show CLI help
+
+  --auto-commit                                Set this flag to create a commit with the auto-generated README.md and
+                                               package.json
+
+  --exclude=exclude                            Glob pattern specifying which files to exclude from consideration for
+                                               publish, check, doc (defaults to "")
+
+  --include=include                            Glob pattern specifying which files to consider for publish, check, doc
+                                               (defaults to "./package.json")
+
+  --packagejson-template=packagejson-template  Relative path to the package.json.handlebars template file to use
+
+  --readme-template=readme-template            Relative path to the README.md.handlebars template file to use
+
+  --verbose                                    enable verbose output (=debug output)
 
 DESCRIPTION
   Auto-generated READMEs allow us to optimize the user-experience around the overall updraft project as a whole, while 
@@ -90,7 +85,7 @@ EXAMPLE
   Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
 ```
 
-_See code: [lib/commands/doc.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.10/lib/commands/doc.js)_
+_See code: [lib/commands/doc.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.11/lib/commands/doc.js)_
 
 ## `updraft help [COMMAND]`
 
@@ -111,65 +106,68 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0
 
 ## `updraft init`
 
-Create your own updraft module to contribute to updraft or use internally
+Start creating a new updraft component (either for submission to updraft or your own library.
 
 ```
 USAGE
   $ updraft init
 
 DESCRIPTION
-  Funny story actually: This command is just here as a reminder that you can create your own updraft module by using the 
-  templates from @updraft/creator-templates (see examples below).
+  Alias for updraft templates @updraft/templates
 
-EXAMPLES
-  $ updraft templates @updraft/creator-templates
-  Get a list of the creator-templates that help you get started with a fresh updraft module
-
-  $ updraft templates @updraft/creator-templates typescript-starter
-  Get started with a typescript udpraft module
+EXAMPLE
+  $ updraft init
+  Shows you a list of templates that you can use to initialize a new updraft component.
 ```
 
-_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.10/lib/commands/init.js)_
+_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.11/lib/commands/init.js)_
 
-## `updraft publish [MODULEPATH] [DIFFCMD]`
+## `updraft publish [DIFF-CMD]`
 
-publish your changed (updraft) modules to a package registry DO NOT USE THIS!
+Publish all changed node modules for which the package.json was modified
 
 ```
 USAGE
-  $ updraft publish [MODULEPATH] [DIFFCMD]
+  $ updraft publish [DIFF-CMD]
 
 ARGUMENTS
-  MODULEPATH  [default: ./] path of the module(s) to check - defaults to current directory
-
-  DIFFCMD     [default: show] updraft publish will run "git <diffCmd>" to detect changes to modules in "modulePath".
-
-              See examples for ways of how you can use this!
+  DIFF-CMD  Git command to use to detect changes
 
 OPTIONS
-  -h, --help      show CLI help
-  --publicaccess  run the npm publish with the "--access public" flag
+  -h, --help         show CLI help
+  --dry-run          Only check for packages to re-publish, do not actually publish to NPM
+
+  --exclude=exclude  Glob pattern specifying which files to exclude from consideration for publish, check, doc (defaults
+                     to "")
+
+  --include=include  Glob pattern specifying which files to consider for publish, check, doc (defaults to
+                     "./package.json")
+
+  --public-access    Run the npm publish with the "--access public" flag
+
+  --skip-npm-auth    Set this flag to skip NPM authentication (e.g. when using a custom .npmrc or using npm login)
+
+  --verbose          enable verbose output (=debug output)
 
 DESCRIPTION
-  Do not use this - Unless you want to use this to manage your internal updraft module library (e.g. at your company). 
-  This command is used by our CI/CD job to publish your modules to the NPM registry.
-
-  Before publishing modules, you might want to run updraft check to run some basic sanity checks across your udpraft 
-  modules.
+  You only need to use this, if you're planning to use updraft to manage your internal CDK component library. Check out 
+  the updraft build scripts for inspiration how we use this command to publish to the public @updraft component library 
+  on NPM.
 
 EXAMPLES
-  $ export NPM_TOKEN=<Your NPM token> && updraft publish
-  Publishes all (node) modules in the first subfolder of the current folder for which the version number was changed in 
-  the last commit (e.g. after a pull-request was merged)
+  $ export NPM_TOKEN=<Your NPM token> && updraft publish --include="./*/package.json" --exclude=""./templates/**""
+  We run this command on changes to the master-branch from inside /modules/typescript to re-publish all changed modules 
+  (but not their templates). We set these values in /modules/typescript/updraft.json though.
 
-  How we use it: updraft publish ./modules/typescript
+  $ export NPM_TOKEN=<Your NPM token> && updraft publish --include="package.json" "diff origin/master..."
+  Publish the module in the current folder, if its package.json file was changed compared to the master branch.
 
-  $ export NPM_TOKEN=<Your NPM token> && updraft publish ./modules/typescript "diff origin/master..."
-  Publishes all modules that had their version numbers changed in the folder "modules/typescript" folder compared to the 
-  master branch (if you want to do special publish thing in branches other than the master)
+  $ updraft publish --include="package.json" --skip-npm-auth "diff origin/master..."
+  Publishthe module in the current folder, if its package.json file was changed compared to the master branch and use 
+  whatever authentication you setup for NPM (e.g. with npm login).
 ```
 
-_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.10/lib/commands/publish.js)_
+_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.11/lib/commands/publish.js)_
 
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
@@ -186,17 +184,18 @@ ARGUMENTS
 
 OPTIONS
   -h, --help  show CLI help
+  --verbose   enable verbose output (=debug output)
 
 EXAMPLES
   $ updraft templates @updraft
-  Get a list of templates that you can use to get started with updraft
+  Get a list of templates to get started with building your own custom @updraft components.
 
-  $ updraft templates @updraft/aws-lambdas-multi-handler
-  Opens an interactive prompt, letting you choose which template to download from that updraft module
+  $ updraft templates @updraft/aws-static-site
+  Opens an interactive prompt, letting you choose which template to download for the @updraft/aws-static-site component.
 
   $ updraft templates @updraft/aws-lambdas-multi-handler echo .
-  Installs the "echo" example into your current folder without prompting
+  Installs the "echo" example into your current folder without prompting.
 ```
 
-_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.10/lib/commands/templates.js)_
+_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.11/lib/commands/templates.js)_
 <!-- commandsstop -->
