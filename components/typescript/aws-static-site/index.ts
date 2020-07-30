@@ -99,15 +99,22 @@ class AwsStaticSite extends Construct {
           },
           originConfigs: [
               {
-                  // S3 bucket unfortunately uses a wrong URL
-                  // Needs to be "http://axelspringertech.com.s3-website.eu-central-1.amazonaws.com/"
-                  // Instead is "http://axelspringertech.com.s3.eu-central-1.amazonaws.com/"
-                  // Which breaks the ability to call up subfolders (e.g. example.com/subpage)
-                  // s3OriginSource: {
-                  //     s3BucketSource: siteBucket
-                  // },
+                  /**
+                   * Alright, so this is an interesting one: When I used S3 as an origin and added a index.html to a subfolder (e.g. example.com/about)
+                   * I got an "access denied" error.
+                   *
+                   * The workaround I found quite a bit, is to actually add the S3 website URL, instead of just the S3 bucket, as the origin to CloudFront.
+                   * This workaround actually does work, when entering the URL manually in the CloudFront UI, so I'm also adding it here.
+                   * Can be changed in the future if we find a better solution.
+                   *
+                   * The AWS documentation on using S3 buckets as origins for CloudFront distributions tell us
+                   * that in order to use the S3-website URL we need to use a CustomOriginConfig:
+                   *
+                   * "Note: If you use the CloudFront API to create your distribution with an Amazon S3 bucket that is configured as a website endpoint, you must configure it by using CustomOriginConfig, even though the website is hosted in an Amazon S3 bucket. For more information about creating distributions by using the CloudFront API, see CreateDistribution in the Amazon CloudFront API Reference."
+                   * https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistS3AndCustomOrigins.html
+                   */
                   customOriginSource: {
-                    domainName: `https://${siteDomain}.s3-website.${props.region}.amazonaws.com`
+                    domainName: `${siteDomain}.s3-website.${props.region}.amazonaws.com`
                   },
                   behaviors : [ {isDefaultBehavior: true}],
               }
