@@ -7,6 +7,7 @@ import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
+import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
 
 /**
  * @author Jonas Peeck <hi@aGuyNamedJonas.com> (https://aGuyNamedJonas.com)
@@ -114,7 +115,8 @@ class AwsStaticSite extends Construct {
                    * https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistS3AndCustomOrigins.html
                    */
                   customOriginSource: {
-                    domainName: `${siteDomain}.s3-website.${props.region}.amazonaws.com`
+                    domainName: `${siteDomain}.s3-website.${props.region}.amazonaws.com`,
+                    originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
                   },
                   behaviors : [ {isDefaultBehavior: true}],
               }
