@@ -6,6 +6,8 @@
 
 > The values of how we interact with each other in and around this project are described in our [Code of Conduct](../CODE_OF_CONDUCT.md).
 
+> If this vision, the mission, or the values resonate with you and you want to share your own story around them, please feel free to share them in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52).
+
 # Vision
 Empower people to deliver their apps to a global audience
 
@@ -18,7 +20,7 @@ Provide building blocks to effortlessly build complex cloud-infrastructure with 
 
 **Simplicity** Simplicity is the high art of making the complex easy. It's a continuous effort, and only when something is easy to understand and easy to use does it start to be *simple*.
 
-**No entry barriers** We strive to make it so easy for any developer to use modern, scalable cloud-infrastructure [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make CDK and updraft modules available for as many developers, programming languages and infrastructure providers as maintainably possible.
+**No entry barriers** We strive to make it so easy for any developer to use modern, scalable cloud-infrastructure [that a caveman can do it](https://www.youtube.com/watch?v=0trj6jCsm6E&list=PL54009BDBDE3A8C8D). We also strive to help make CDK and updraft components available for as many developers, programming languages and infrastructure providers as maintainably possible.
 
 # The Stories behind the values
 The following stories are my personal reasons why I think the above values and *updraft* itself, is important. My hope is that they help you identify with what *updraft* is trying to accomplish. If you have any reactions, thoughts, or your own personal story that you would like to respond with, please leave them in the [comment section](https://github.com/aGuyNamedJonas/updraft/issues/52).
