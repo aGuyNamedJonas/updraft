@@ -2,15 +2,21 @@
   <img src="https://raw.githubusercontent.com/aGuyNamedJonas/updraft/master/design/updraft-logo-text-color.svg" alt="Sublime's custom image"/>
 </p>
 
+[![Gitter](https://badges.gitter.im/aGuyNamedJonas-updraft/community.svg)](https://gitter.im/aGuyNamedJonas-updraft/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](./CONTRIBUTING.md)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
-> An open collection of cloud-infrastructure components (powered by CDK)  
+> Components based infrastructure-development (powered by CDK)  
 
 *updraft* is a CLI and an open collection of *CDK components* (or "constructs" as AWS refers to them) that makes it easy for any developer to build their own cloud-infrastructure.  
 
 We want to bring the power of *components based development* to the world of cloud-infrastructure.
 
 Think of *updraft* components like *react components* - just for building infrastructure, instead of UIs.
+
+> **BETA**  
+*updraft* is a raw diamond 💎 at the moment.  
+Help us to polish it by [reporting bugs](https://github.com/aGuyNamedJonas/updraft/labels/bug), through your [contributions](./CONTRIBUTING.md) and by providing [feedback on gitter](https://gitter.im/aGuyNamedJonas-updraft/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Example
 ```typescript
@@ -82,3 +88,4 @@ Have a great idea for an awesome reusable *updraft* component?
 👉🏾 Check out our [contribution guide](./CONTRIBUTING.md)
 
 ## License
+*updraft* is [MIT licensed.](./LICENSE)
