@@ -69,11 +69,16 @@ You should be greeted by a friendly "Hello World".
 
 We build *updraft* to empower every developer around the world to run their apps on highly scalable cloud-infrastructure with ease.  
 
-We believe in the power of building complex things by plugging together easy to use components. Our hope is that by building updraft, we can popularize components-based development for the cloud.  
+We believe in the power of building complex things by plugging together easy to use components.  
 
-👉🏻 Read more: [Vision, Values, Mission](/docs/VisionValuesMission.md)
+Our hope is that updraft can do both - help people worldwide bring their ideas to a global audience, and popularize a simpler, components-centric approach to building cloud-infrastructure.
+
+👉🏿 Read more: [Vision, Values, Mission](/docs/VisionValuesMission.md)
 
 ## Contribute
-We'd love your help in building *updraft* into an awesome collection of cloud-components.  
+Recently built something with CDK that you're really proud of?  
+Have a great idea for an awesome reusable *updraft* component?  
 
-Check out the [contribution guide](./CONTRIBUTING.md) for getting started.
+👉🏾 Check out our [contribution guide](./CONTRIBUTING.md)
+
+## License
