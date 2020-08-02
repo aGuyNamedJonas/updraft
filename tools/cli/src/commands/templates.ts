@@ -83,8 +83,8 @@ Installs the "echo" example into your current folder without prompting.
 
   async run() {
     const module = this.getConfigValue('module')
-    const templateName = this.getConfigValue('name')
-    const dstPath = this.getConfigValue('path', '.')
+    const templateName = this.getConfigValue('template')
+    const dstPath = this.getConfigValue('path')
 
     await getTemplatesHandler(module, templateName, dstPath)
   }
