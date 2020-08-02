@@ -79,7 +79,13 @@ export default abstract class extends Command {
    */
   async loadConfigFile() {
     const cwdConfigFilePath = path.join(process.cwd(), 'updraft.config.js')
-    const repoRootConfigFilePath = path.join(await getRepoBasePath(), 'updraft.config.js')
+    let repoBasePath = ''
+    try {
+      repoBasePath = await getRepoBasePath()
+    } catch (error) {
+      console.log(chalk.yellow('Could not find repository base path (not a git repo)'))
+    }
+    const repoRootConfigFilePath = path.join(repoBasePath, 'updraft.config.js')
 
     const cwdConfigExists = fileExists(cwdConfigFilePath)
     const repoConfigExists = fileExists(repoRootConfigFilePath)

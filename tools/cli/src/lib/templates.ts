@@ -5,6 +5,7 @@ var inquirer = require('inquirer')
 import { exec } from '../lib/exec'
 import chalk = require('chalk')
 const fsExtra = require('fs-extra')
+const os = require('os')
 
 /**
  * Retrieves a module from NPM, stores it in the TMPDIR and then returns the contained templates.
@@ -15,7 +16,7 @@ export const retrieveTemplates = async (module: string) => {
   const moduleName = module === '@updraft' ? '@updraft/templates' : module
   console.log('')
   console.log(`Retrieving templates for:\n${chalk.green(moduleName)}\n`)
-  const tmpDir = path.join(process.env.TMPDIR, 'updraft')
+  const tmpDir = path.join(os.tmpdir(), 'updraft')
   mkDir(tmpDir)
   process.chdir(tmpDir)
   await exec(`npm install --prefix ${tmpDir} ${moduleName}`)
@@ -74,7 +75,7 @@ export const promptDestination = async (defaultValue?: string) => {
     // TODO: E2E test all user flows that are present in this cli (including submitting a module for PR)
     // console.log(chalk.yellow('Installing module...'), JSON.stringify({ moduleName, selectedTemplate, callerPath, dstPath }))
     console.log(chalk.yellow('Installing module...'))
-    const exampleSourcePath = path.join(process.env.TMPDIR, 'updraft', 'node_modules', moduleName, 'templates', selectedTemplate)
+    const exampleSourcePath = path.join(os.tmpdir(), 'updraft', 'node_modules', moduleName, 'templates', selectedTemplate)
     const exampleDestinationPath = path.join(callerPath, dstPath)
     process.chdir(callerPath)
 
