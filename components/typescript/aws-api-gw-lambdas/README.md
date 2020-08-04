@@ -69,8 +69,11 @@ new AwsApiGwMultiLambda(this, 'todo-api', {
 ```
 
 ## Templates
-To see the available quickstart-templates for this module:
-- Install the *updraft* cli:  
-`npm install --global @updraft/cli`
-- Run the `templates` command:  
-`updraft templates @updraft/aws-api-gw-lambdas`
+**No quick-start templates available for this component yet 😢**  
+To see if other *updraft* components have quick-start templates, just the templates command:  
+`updraft templates @updraft/aws-static-site`
+
+Quick Start templates for *updraft* components provide you with runnable examples.    
+So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
+
+(Run `npm i -g @updraft/cli` if you don't have the CLI yet)
