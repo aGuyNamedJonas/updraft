@@ -16,8 +16,9 @@ import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
  * @description
  * Easily setup a static site on AWS under your own domain.
  *
- * Uses your local code, so you don't have to upload into a bucket prior to deploying changes.
- * TODO: Add SPA support
+ * Uses your local code, so you don't have to upload into a bucket prior to deploying changes.  
+ * 
+ * Does currently not support Single Page Applications (SPA). [WIP]
  *
  * @feature Custom Domain
  * @featureDescription Setup any Route53 managed domain to point to this website
