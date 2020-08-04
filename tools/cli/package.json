@@ -1,7 +1,7 @@
 {
   "name": "@updraft/cli",
   "description": "Easily get started with building your own updraft components (use init), download runnable examples for updraft components (use templates), or setup a private updraft component library (use doc & publish).",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "author": "aGuyNamedJonas @aGuyNamedJonas",
   "bin": {
     "updraft": "./bin/run"
