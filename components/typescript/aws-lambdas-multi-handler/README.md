@@ -10,7 +10,6 @@ multiple lambda functions, this module is for you.
 **✓ Single codebase, multi-handler** - Setup your lambda functions as one project, exporting the handlers you want to use  
 **✓ Environment Variables** - Define environment variables for your lambda functions  
 **✓ Local Code Uploads** - Specify the path to your local codebase, and on deploy your code gets automatically deployed to AWS Lambda  
-**✓ Testfeature** (optional) - blablablabla  
 
 ## Install
 `npm install --save @updraft/aws-lambdas-multi-handler`
@@ -30,8 +29,11 @@ multiple lambda functions, this module is for you.
 ```
 
 ## Templates
-To see the available quickstart-templates for this module:
-- Install the *updraft* cli:  
-`npm install --global @updraft/cli`
-- Run the `templates` command:  
-`updraft templates @updraft/aws-lambdas-multi-handler`
+**No quick-start templates available for this component yet 😢**  
+To see if other *updraft* components have quick-start templates, just the templates command:  
+`updraft templates @updraft/aws-static-site`
+
+Quick Start templates for *updraft* components provide you with runnable examples.    
+So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
+
+(Run `npm i -g @updraft/cli` if you don't have the CLI yet)
