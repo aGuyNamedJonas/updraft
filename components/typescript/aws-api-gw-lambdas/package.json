@@ -520,7 +520,7 @@
   "518": "}",
   "519": "\n",
   "name": "@updraft/aws-api-gw-lambdas",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Easy to use API GW component with Lambda integration (✓ Simple API schema ✓ CORS Support ✓ Custom Domains)",
   "repository": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/aws-api-gw-multi-lambda",
   "homepage": "https://github.com/aGuyNamedJonas/updraft",
