@@ -19,7 +19,7 @@ $ npm install -g @updraft/cli
 $ updraft COMMAND
 running command...
 $ updraft (-v|--version|version)
-@updraft/cli/0.0.17 linux-x64 node-v14.7.0
+@updraft/cli/0.0.19 linux-x64 node-v14.7.0
 $ updraft --help [COMMAND]
 USAGE
   $ updraft COMMAND
