@@ -3,47 +3,6 @@ import * as chalk from 'chalk'
 import Command from '../lib/base'
 import { retrieveTemplates, promptTemplateSelection, promptDestination, installTemplate } from '../lib/templates'
 
-/**
-  --- Error to fix ---
-  --------------------
-  ➜  temp updraft templates @updraft
-  Executing $ git rev-parse --show-toplevel
-  CLI error:
-  Error: Command failed with exit code 128:
-  fatal: not a git repository (or any parent up to mount point /mnt)
-  Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
-
-  ➜  updraft-component-test git:(master) updraft templates @updraft
-  Executing $ git rev-parse --show-toplevel
-  No config file found, checked:
-  /mnt/c/dev/temp/updraft-component-test/updraft.config.js
-  /mnt/c/dev/temp/updraft-component-test/updraft.config.js
-  Running @updraft/cli with options:
-  {}
-  {
-    "module": "@updraft",
-    "verbose": false
-  }
-
-
-  Retrieving templates for:
-  @updraft/templates
-
-  CLI error:
-  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
-
-  Trace
-      at Templates.catch (/usr/lib/node_modules/@updraft/cli/lib/lib/base.js:110:17)
-      at Templates._run (/usr/lib/node_modules/@updraft/cli/node_modules/@oclif/command/lib/command.js:47:29)
-      at async Config.runCommand (/usr/lib/node_modules/@updraft/cli/node_modules/@oclif/config/lib/config.js:173:24)
-      at async Main.run (/usr/lib/node_modules/@updraft/cli/node_modules/@oclif/command/lib/main.js:22:9)
-      at async Main._run (/usr/lib/node_modules/@updraft/cli/node_modules/@oclif/command/lib/command.js:43:20)
-
-  This is probably a bug in @updraft/cli, please upvote or create the corresponding issue:
-  https://github.com/aGuyNamedJonas/updraft/labels/cli
-  ➜  updraft-component-test git:(master) 
- */
-
 export default class Templates extends Command {
   static description = 'Get up & running with templates - runnable examples for updraft modules, installed directly into your codebase.'
 

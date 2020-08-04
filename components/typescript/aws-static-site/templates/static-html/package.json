@@ -1,5 +1,6 @@
 {
   "name": "static-html",
+  "description": "Static HTML quickstart-template - perfect for use with static site generators (e.g. Hugo, Nuxt, Next, Gridsome,...)",
   "version": "0.1.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

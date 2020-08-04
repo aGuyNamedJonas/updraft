@@ -1,6 +1,10 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import * as chalk from 'chalk'
 import { Feature, ParsedTag, getTagContent, getFeaturesFromTags } from './tsdoc'
+import { listTemplatesInDir } from './templates'
+import { template } from '@babel/core'
+import { fileExists } from './fileHelper'
 const Handlebars = require('handlebars')
 
 /**
@@ -18,16 +22,22 @@ Handlebars.registerHelper( "join", function( array, sep, options ) {
   }).join( sep )
 })
 
+export type Template = {
+  name: string,
+  description: string,
+}
+
 export type ModuleData = {
   author: string,
   headline: string,
   description: string,
   features: Feature[],
   example: string,
-  moduleName: string
+  moduleName: string,
+  templates: Template[],
 }
 
-export const consolidateModuleData = (parsedTags: ParsedTag[], packageJson: any): ModuleData => {
+export const consolidateModuleData = async (parsedTags: ParsedTag[], packageJson: any, modulePath: string): ModuleData => {
   const author = getTagContent(parsedTags, '@author')
   const headline = getTagContent(parsedTags, '@headline')
   const description = getTagContent(parsedTags, '@description')
@@ -44,13 +54,29 @@ export const consolidateModuleData = (parsedTags: ParsedTag[], packageJson: any)
 
   const { name: moduleName } = packageJson
 
+  const templatesPath = path.join(modulePath, 'templates')
+  let templates = []
+
+  if (fs.existsSync(templatesPath)) {
+    const rawTemplateData = await listTemplatesInDir(templatesPath)
+    templates = rawTemplateData.map(({ path: templatePath, packageJson }) => {
+      const name = path.basename(templatePath)
+      const { description } = packageJson as any
+      return {
+        name,
+        description: description || '',
+      } as Template
+    })
+  }
+
   return {
     author,
     headline,
     description,
     features,
     example,
-    moduleName
+    moduleName,
+    templates
   } as ModuleData
 }
 

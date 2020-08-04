@@ -16,8 +16,9 @@ import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
  * @description
  * Easily setup a static site on AWS under your own domain.
  *
- * Uses your local code, so you don't have to upload into a bucket prior to deploying changes.
- * TODO: Add SPA support
+ * Uses your local code, so you don't have to upload into a bucket prior to deploying changes.  
+ * 
+ * Does currently not support Single Page Applications (SPA). [WIP]
  *
  * @feature Custom Domain
  * @featureDescription Setup any Route53 managed domain to point to this website
@@ -34,20 +35,28 @@ import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
  *
  * @example
  * ```typescript
- *   // Setup a regular website
- *   new AwsStaticSite(this, 'my-awesome-website', {
- *     domainName: 'example.com',
- *     siteContent: './default-website'
- *   })
+ * import * as cdk from '@aws-cdk/core'
+ * import StaticSite from '@updraft/aws-static-site'
+ * 
+ * class StaticHtml extends cdk.Stack {
+ *   constructor(scope: cdk.Construct, id: string, props) {
+ *     super(scope, id, props)
+ *     new StaticSite(this, 'static-site', {
+ *       domainName: 'example.com',
+ *       region: 'eu-central-1',
+ *       siteContent: './website',
+ *     })
+ *   }
+ * }
  *
- *   // Setup a static host - e.g. for images, user uploads etc.
- *   new AwsStaticSite(this, 'my-static-host', {
- *     domainName: 'example.com',
- *     siteSubDomain: 'static',
- *     // In that case you can still define an index and a 404 handler
- *     siteContent: './default-website'
- *   })
- * ```
+ * const cdkApp = new cdk.App()
+ * new StaticHtml(cdkApp, 'my-static-page', {
+ *   env: {
+ *     account: '1234567890',
+ *     region: 'eu-central-1'
+ *   }
+ * })
+ *```
  */
 
 export interface AwsStaticSiteProps {
