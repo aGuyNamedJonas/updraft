@@ -44,12 +44,15 @@ const generateDocs = async (npmPackage: NpmPackage, autoCommit: boolean, readmeT
 
   let moduleData = {} as ModuleData
   try {
-    moduleData = consolidateModuleData(parsedTags, packageJson)
+    moduleData = await consolidateModuleData(parsedTags, packageJson, dir)
   } catch (error) {
     console.log(chalk.red(`Failed to convert the parsed tags to component data\n${error.toString()}`))
     return
   }
   console.log(chalk.green('✓ Done consolidating component data'))
+  console.log('------')
+  console.log(JSON.stringify(moduleData, null, 2))
+  console.log('------')
 
   let readme = ''
   try {

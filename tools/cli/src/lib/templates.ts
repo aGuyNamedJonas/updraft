@@ -1,9 +1,10 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { mkDir, listDirs } from '../lib/fileHelper'
+import { mkDir, listDirs, fileExists } from '../lib/fileHelper'
 var inquirer = require('inquirer')
 import { exec } from '../lib/exec'
 import chalk = require('chalk')
+import { StringLiteral } from 'typescript'
 const fsExtra = require('fs-extra')
 const os = require('os')
 
@@ -28,6 +29,36 @@ export const retrieveTemplates = async (module: string) => {
   }
 
   return availableTemplates
+}
+
+/**
+ * Lists all the templates in searchDir. Templates in this case are all the folders
+ * in the searchDir that contain a package.json.
+ * @param searchDir - Folder where to look for Templates
+ * @returns List of templates
+ */
+type Template = {
+  path: string
+  packageJson: Object
+}
+export const listTemplatesInDir = async (searchDir: string): Promise<Template[]> => {
+  const availableTemplates = await listDirs(searchDir) as any []
+  const templatesWithPackageJson = availableTemplates.map((templateName) => {
+    const templatePath = path.join(searchDir, templateName)
+    const packageJsonPath = path.join(templatePath, 'package.json')
+    let packageJson = {}
+    if (fileExists(packageJsonPath)) {
+      const packageJsonStr = fs.readFileSync(packageJsonPath, { encoding: 'utf-8' })
+      packageJson = JSON.parse(packageJsonStr)
+    }
+
+    return {
+      path: templatePath,
+      packageJson,
+    } as Template
+  })
+
+  return templatesWithPackageJson
 }
 
 export const promptTemplateSelection = async (templates: string[]) => {
