@@ -1,6 +1,6 @@
 {
   "name": "@updraft/aws-static-site",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Easily setup a static site on AWS under your own domain (✓ Custom Domain ✓ Invalidates on Redeploy ✓ Local Sources ✓ Subdomain Support)",
   "repository": "https://github.com/aGuyNamedJonas/updraft/tree/master/modules/typescript/aws-static-site",
   "homepage": "https://github.com/aGuyNamedJonas/updraft",
