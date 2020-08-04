@@ -35,7 +35,7 @@ new StaticHtml(cdkApp, 'my-static-page', {
     account: '1234567890',
     region: 'eu-central-1'
   }
-}
+})
 ```
 
 ## Templates
