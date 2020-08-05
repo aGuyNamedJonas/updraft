@@ -37,7 +37,7 @@ export type ModuleData = {
   templates: Template[],
 }
 
-export const consolidateModuleData = async (parsedTags: ParsedTag[], packageJson: any, modulePath: string): ModuleData => {
+export const consolidateModuleData = async (parsedTags: ParsedTag[], packageJson: any, modulePath: string): Promise<ModuleData> => {
   const author = getTagContent(parsedTags, '@author')
   const headline = getTagContent(parsedTags, '@headline')
   const description = getTagContent(parsedTags, '@description')

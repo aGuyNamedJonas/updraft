@@ -76,6 +76,8 @@ EXAMPLE
   Takes the tsdoc from your index.ts and turns it into a README and some package.json fields
 ```
 
+_See code: [lib/commands/docs.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.19/lib/commands/docs.js)_
+
 ## `updraft help [COMMAND]`
 
 display help for updraft
@@ -108,6 +110,8 @@ EXAMPLE
   $ updraft init
   Shows you a list of templates that you can use to initialize a new updraft component.
 ```
+
+_See code: [lib/commands/init.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.19/lib/commands/init.js)_
 
 ## `updraft publish [DIFF-CMD]`
 
@@ -154,6 +158,8 @@ EXAMPLES
   whatever authentication you setup for NPM (e.g. with npm login).
 ```
 
+_See code: [lib/commands/publish.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.19/lib/commands/publish.js)_
+
 ## `updraft templates MODULE [TEMPLATE] [PATH]`
 
 Get up & running with templates - runnable examples for updraft modules, installed directly into your codebase.
@@ -184,4 +190,6 @@ EXAMPLES
   $ updraft templates @updraft/aws-lambdas-multi-handler echo .
   Installs the "echo" example into your current folder without prompting.
 ```
+
+_See code: [lib/commands/templates.js](https://github.com/aGuyNamedJonas/updraft/blob/v0.0.19/lib/commands/templates.js)_
 <!-- commandsstop -->
