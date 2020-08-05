@@ -9,4 +9,4 @@ export AWS_ACCOUNT_ID=""
 export AWS_REGION=""
 
 # The Route53 managed domain that you want to use (e.g. agnj.me)
-export URL=""
+export DOMAIN=""

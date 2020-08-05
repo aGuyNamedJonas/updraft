@@ -28,13 +28,14 @@ multiple lambda functions, this module is for you.
     })
 ```
 
-## Templates
-**No quick-start templates available for this component yet 😢**  
-To see if other *updraft* components have quick-start templates, just use the *templates* command:  
-`updraft templates @updraft/aws-static-site`
+## Quickstart Templates
+**No quickstart templates available for this component yet 😢**  
 
+<br/><br/>
+**What are *updraft* templates?**  
+> Quickstart templates for *updraft* components provide you with runnable examples for that component.  
+Speed up your development workflow by getting started with templates.  
 
-Quick Start templates for *updraft* components provide you with runnable examples.    
-So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
+> List available templates: `updraft templates @updraft/aws-static-site` (replace `aws-static-site` with the componentof your choice)
 
-(Run `npm i -g @updraft/cli` if you don't have the CLI yet)
+> Install CLI: `npm i -g @updraft/cli`
