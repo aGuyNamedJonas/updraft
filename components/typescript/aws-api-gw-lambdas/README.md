@@ -70,8 +70,9 @@ new AwsApiGwMultiLambda(this, 'todo-api', {
 
 ## Templates
 **No quick-start templates available for this component yet 😢**  
-To see if other *updraft* components have quick-start templates, just the templates command:  
+To see if other *updraft* components have quick-start templates, just use the *templates* command:  
 `updraft templates @updraft/aws-static-site`
+
 
 Quick Start templates for *updraft* components provide you with runnable examples.    
 So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
