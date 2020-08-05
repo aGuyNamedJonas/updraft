@@ -1,6 +1,6 @@
 # {{moduleName}}
 {{#if templates.length}}
-> Available Quickstart-Templates (scroll down for instructions 👇🏾)  
+> Available Quickstart Templates (scroll down for instructions 👇🏾)  
 {{#join templates ", "}}**{{name}}**{{/join}}  
 
 {{/if}}
@@ -21,24 +21,24 @@
 {{example}}
 {{/if}}
 
-## Templates
+## Quickstart Templates
 {{#if templates.length}}
-| Template Name | Install | Description |
-|---------------|---------|-------------|
-{{!-- {{#join templates "\n  "}}
-| {{name}} | `updraft templates {{moduleName}} {{name}}` | {{description}} |
-{{/join}}   --}}
-{{#each}}
-{{this.name}}
-{{/each}}
+Get started with `{{moduleName}}` by using one of the available quickstart templates 👇🏼  
+{{#join templates "\n  "}}
+### {{name}}  
+`$ updraft templates {{../moduleName}} {{name}}`  
+{{description}}  
+
+{{/join}}  
 {{else}}
-**No quick-start templates available for this component yet 😢**  
-To see if other *updraft* components have quick-start templates, just use the *templates* command:  
-`updraft templates @updraft/aws-static-site`
+**No quickstart templates available for this component yet 😢**  
 {{/if}}
 
+<br/><br/>
+**What are *updraft* templates?**  
+> Quickstart templates for *updraft* components provide you with runnable examples for that component.  
+Speed up your development workflow by getting started with templates.  
 
-Quick Start templates for *updraft* components provide you with runnable examples.    
-So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
+> List available templates: `updraft templates @updraft/aws-static-site` (replace `aws-static-site` with the componentof your choice)
 
-(Run `npm i -g @updraft/cli` if you don't have the CLI yet)
+> Install CLI: `npm i -g @updraft/cli`
