@@ -10,10 +10,8 @@
 const config = {
   alias: 'Typescript Components Config',
   // Use last commit for publication (on squash-merge to master)
-  // 'diff-cmd': 'show',
-  'diff-cmd': 'diff origin/master...',
-  // 'auto-commit': true,
-  'auto-commit': false,
+  'diff-cmd': 'show',
+  'auto-commit': true,
   'public-access': true,
   include: './*/package.json',
   'readme-template': 'README.md.handlebars',
