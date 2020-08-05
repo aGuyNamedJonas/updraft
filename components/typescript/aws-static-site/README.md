@@ -1,5 +1,5 @@
 # @updraft/aws-static-site
-> Available Quickstart-Templates (scroll down for instructions 👇🏾)  
+> Available Quickstart Templates (scroll down for instructions 👇🏾)  
 **static-html**  
 
 Easily setup a static site on AWS under your own domain.
@@ -42,13 +42,18 @@ new StaticHtml(cdkApp, 'my-static-page', {
 })
 ```
 
-## Templates
-| Template Name | Install | Description |
-|---------------|---------|-------------|
-| static-html | `updraft templates  static-html` | Static HTML quickstart-template - perfect for use with static site generators (e.g. Hugo, Nuxt, Next, Gridsome,...) |
+## Quickstart Templates
+Get started with `@updraft/aws-static-site` by using one of the available quickstart templates 👇🏼  
+### static-html  
+`$ updraft templates @updraft/aws-static-site static-html`  
+Static HTML quickstart-template - perfect for use with static site generators (e.g. Hugo, Nuxt, Next, Gridsome,...)  
 
 
-Quick Start templates for *updraft* components provide you with runnable examples.    
-So Instead of having to copy'n'paste example code, you can instead get a runnable example setup, and just start hacking away 🙌🏻  
+<br/><br/>
+**What are *updraft* templates?**  
+> Quickstart templates for *updraft* components provide you with runnable examples for that component.  
+Speed up your development workflow by getting started with templates.  
 
-(Run `npm i -g @updraft/cli` if you don't have the CLI yet)
+> List available templates: `updraft templates @updraft/aws-static-site` (replace `aws-static-site` with the componentof your choice)
+
+> Install CLI: `npm i -g @updraft/cli`
