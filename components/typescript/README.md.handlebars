@@ -25,9 +25,12 @@
 {{#if templates.length}}
 | Template Name | Install | Description |
 |---------------|---------|-------------|
-{{#join templates "\n  "}}
+{{!-- {{#join templates "\n  "}}
 | {{name}} | `updraft templates {{moduleName}} {{name}}` | {{description}} |
-{{/join}}  
+{{/join}}   --}}
+{{#each}}
+{{this.name}}
+{{/each}}
 {{else}}
 **No quick-start templates available for this component yet 😢**  
 To see if other *updraft* components have quick-start templates, just use the *templates* command:  
