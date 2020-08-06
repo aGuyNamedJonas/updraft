@@ -8,6 +8,11 @@ Uses your local code, so you don't have to upload into a bucket prior to deployi
 
 Does currently not support Single Page Applications (SPA). [WIP]
 
+> **How would you feel if you could no longer use this npm module?**  
+<a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827331" target="_blank" rel="nofollow">Very disappointed</a>  
+<a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827332" target="_blank" rel="nofollow">Somewhat disappointed</a>  
+<a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827333" target="_blank" rel="nofollow">Not disappointed (your product is not useful)</a>  
+
 ## Features
 **✓ Custom Domain** - Setup any Route53 managed domain to point to this website  
 **✓ Invalidates on Redeploy** - When you run `npm deploy` with this module, your local source files for your website are automatically re-uploaded, and a CloudFront invalidation is triggered.  
