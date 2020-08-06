@@ -20,10 +20,12 @@ import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
  * 
  * Does currently not support Single Page Applications (SPA). [WIP]
  * 
- * > **How would you feel if you could no longer use this npm module?**  
- * <a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827331" target="_blank" rel="nofollow">Very disappointed</a>  
- * <a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827332" target="_blank" rel="nofollow">Somewhat disappointed</a>  
- * <a href="https://survey.survicate.com/f2c60276543506ee/?aid=1827333" target="_blank" rel="nofollow">Not disappointed (your product is not useful)</a>  
+ * > **Did this component (`@updraft/aws-static-site`) solve your problem?**<br/>  
+ * <a href="https://survey.survicate.com/c6452d74d5784347/?aid=1827370" target="_blank" rel="nofollow">Yes!</a><br/>  
+ * <a href="https://survey.survicate.com/c6452d74d5784347/?aid=1827371" target="_blank" rel="nofollow">No :(</a><br/>  
+ * <a href="https://survey.survicate.com/c6452d74d5784347/?aid=1827374" target="_blank" rel="nofollow">Dude, I'm just playing around</a><br/>  
+ * 
+ * 
  *
  * @feature Custom Domain
  * @featureDescription Setup any Route53 managed domain to point to this website
