@@ -1,8 +1,14 @@
 {
   "name": "@updraft/aws-static-site-https",
+  "description": "Setup HTTPs only static site on AWS (✓ HTTPs only ✓ SPA & Subfolder support ✓ Route53 support ✓ Local Sources)",
   "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aGuyNamedJonas/updraft.git",
+    "directory": "packages/aws-static-site-https"
+  },
   "devDependencies": {
     "@aws-cdk/assert": "1.100.0",
     "@types/jest": "^26.0.10",

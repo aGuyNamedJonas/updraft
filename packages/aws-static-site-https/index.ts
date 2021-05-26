@@ -60,15 +60,15 @@ export interface StaticSiteHttpsProps {
    * to each edge region - that's also why the logs are local!
    * @see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-testing-debugging.html#lambda-edge-testing-debugging-determine-region
    * 
-   * @defaultValue LambdaEdgeMode.NONE
+   * @defaultValue RoutingMode.FORWARD_TO_S3
    */
-  lambdaEdgeMode?: LambdaEdgeMode
+  routingMode?: RoutingMode
 }
 
-export enum LambdaEdgeMode {
+export enum RoutingMode {
+  FORWARD_TO_S3 = 'FORWARD_TO_S3',
   ENABLE_SUBFOLDERS = 'ENABLE_SUBFOLDERS',
   SPA = 'SPA',
-  NONE = 'NONE',
 }
 
 // TODO: Add tests
@@ -79,7 +79,7 @@ export class StaticSiteHttps extends Construct {
     websiteIndexDocument = 'index.html',
     websiteErrorDocument = 'error.html',
     localPathSiteAssets = undefined,
-    lambdaEdgeMode = LambdaEdgeMode.NONE,
+    routingMode = RoutingMode.FORWARD_TO_S3,
   }: StaticSiteHttpsProps) {
     super(parent, name);
 
@@ -106,7 +106,7 @@ export class StaticSiteHttps extends Construct {
 
     // Create Lambda Edge function (if requested)
     let edgeFn = undefined
-    if (lambdaEdgeMode === LambdaEdgeMode.ENABLE_SUBFOLDERS) {
+    if (routingMode === RoutingMode.ENABLE_SUBFOLDERS) {
       const edgeFnCode = fs.readFileSync(path.join(__dirname, 'lambda-edge', 'subfolders.js'), { encoding: 'utf-8' })
       edgeFn = new cloudfront.experimental.EdgeFunction(this, 'enable-subfolders-fn', {
         runtime: lambda.Runtime.NODEJS_12_X,
@@ -115,7 +115,7 @@ export class StaticSiteHttps extends Construct {
       })
     }
 
-    if (lambdaEdgeMode === LambdaEdgeMode.SPA) {
+    if (routingMode === RoutingMode.SPA) {
       const edgeFnCode = fs.readFileSync(path.join(__dirname, 'lambda-edge', 'spa.js'), { encoding: 'utf-8' })
       edgeFn = new cloudfront.experimental.EdgeFunction(this, 'spa-fn', {
         runtime: lambda.Runtime.NODEJS_12_X,
