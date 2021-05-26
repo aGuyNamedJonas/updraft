@@ -15,8 +15,9 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "prepublish": "tsc"
+    "copy-static-assets": "copyfiles ./lambda-edge/* ./dist",
+    "build": "tsc && npm run copy-static-assets",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "@aws-cdk/aws-cloudfront-origins": "^1.105.0",
