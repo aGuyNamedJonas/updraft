@@ -1,7 +1,7 @@
 {
   "name": "@updraft/aws-static-site-https",
   "description": "Setup HTTPs only static site on AWS (✓ HTTPs only ✓ SPA & Subfolder support ✓ Route53 support ✓ Local Sources)",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -10,14 +10,15 @@
     "directory": "packages/aws-static-site-https"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.100.0",
-    "@types/jest": "^26.0.10",
-    "@types/node": "10.17.27",
-    "aws-cdk": "1.105.0",
-    "jest": "^26.4.2",
-    "ts-jest": "^26.2.0",
-    "ts-node": "^9.0.0",
-    "typescript": "~3.9.7"
+    "@aws-cdk/assert": "1.108.1",
+    "@types/jest": "^26.0.23",
+    "@types/node": "15.12.2",
+    "aws-cdk": "1.108.1",
+    "copyfiles": "^2.4.1",
+    "jest": "^27.0.4",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.0.0",
+    "typescript": "~4.3.2"
   },
   "scripts": {
     "test": "jest",
@@ -26,15 +27,15 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@aws-cdk/aws-cloudfront-origins": "^1.105.0",
-    "@aws-cdk/aws-ec2": "^1.105.0",
-    "@aws-cdk/aws-eks": "^1.105.0",
-    "@aws-cdk/aws-iam": "^1.105.0",
-    "@aws-cdk/aws-route53-targets": "^1.105.0",
-    "@aws-cdk/aws-s3-deployment": "^1.105.0",
-    "@aws-cdk/core": "1.105.0",
-    "dotenv": "^8.2.0",
-    "source-map-support": "^0.5.16"
+    "@aws-cdk/aws-cloudfront-origins": "^1.108.1",
+    "@aws-cdk/aws-ec2": "^1.108.1",
+    "@aws-cdk/aws-eks": "^1.108.1",
+    "@aws-cdk/aws-iam": "^1.108.1",
+    "@aws-cdk/aws-route53-targets": "^1.108.1",
+    "@aws-cdk/aws-s3-deployment": "^1.108.1",
+    "@aws-cdk/core": "1.108.1",
+    "dotenv": "^10.0.0",
+    "source-map-support": "^0.5.19"
   },
   "license": "MIT"
 }
