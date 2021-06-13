@@ -4,5 +4,7 @@
 
 > Practical & Tested cloud components for your CDK stacks.
 
+> Still WIP. Please check back soon!
+
 ## License
 [MIT](./LICENSE)
