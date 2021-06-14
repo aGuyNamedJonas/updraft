@@ -2,7 +2,7 @@
 
 # Features
 **✓ HTTPs only** - S3 bucket is private  
-**✓ SPA & Subfolder support** - Supports Single Page Apps & Hosting a static site (see `RoutingMode`)  
+**✓ SPA & Subfolder support** - Supports Single Page Apps & Hosting a static site via lambda edge (see `RoutingMode`)  
 **✓ Route53 support** - Setup any Route53 (sub)domain to point to this site  
 **✓ Local Sources** - Directly deploy your website from your local codebase
 
