@@ -1,0 +1,36 @@
+{
+  "name": "ts-starter",
+  "version": "1.0.0",
+  "description": "Typescript starter with nodemon & jest",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "npx ts-node ./src/index.ts",
+    "build": "npx tsc",
+    "watch": "nodemon",
+    "test": "jest",
+    "west": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.108.1",
+    "@aws-cdk/aws-certificatemanager": "^1.108.1",
+    "@aws-cdk/aws-lambda": "^1.108.1",
+    "@aws-cdk/aws-route53": "^1.108.1",
+    "@aws-cdk/aws-route53-targets": "^1.108.1",
+    "nodemon": "^2.0.7",
+    "npx": "^10.2.2",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/jest": "^26.0.23",
+    "babel-jest": "^27.0.2",
+    "jest": "^27.0.4"
+  }
+}
